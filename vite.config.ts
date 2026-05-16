@@ -4,7 +4,7 @@ import { seoPlugin } from "./vite-plugin-seo";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-  /** GitHub Pages: set `VITE_BASE_PATH=/Homewebsite/` in CI or `.env.production` */
+  /** GitHub Pages: set `VITE_BASE_PATH=/home-website/` in CI or `.env.production` */
   const base = env.VITE_BASE_PATH || "/";
 
   return {

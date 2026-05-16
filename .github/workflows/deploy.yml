@@ -33,8 +33,8 @@ jobs:
       - name: Build for GitHub Pages
         run: npm run build
         env:
-          VITE_SITE_URL: https://aadityapa.github.io/Homewebsite
-          VITE_BASE_PATH: /Homewebsite/
+          VITE_SITE_URL: https://aadityapa.github.io/home-website
+          VITE_BASE_PATH: /home-website/
 
       - name: SPA fallback for client-side routes
         run: cp dist/index.html dist/404.html

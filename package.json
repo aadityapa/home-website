@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "build:pages": "tsc && vite build",
     "preview": "vite preview",
-    "preview:pages": "vite preview --base /Homewebsite/",
+    "preview:pages": "vite preview --base /home-website/",
     "deploy:vercel": "vercel",
     "deploy:vercel:prod": "vercel --prod"
   },

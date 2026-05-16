@@ -38,20 +38,20 @@ Uses the [Vercel plugin for Cursor](https://vercel.com/docs/agent-resources/verc
 4. Set env in Vercel dashboard (see `.env.vercel.example`): `VITE_BASE_PATH=/`, then `VITE_SITE_URL` to your `*.vercel.app` or custom domain.
 5. Preview: `npm run deploy:vercel` · Production: `npm run deploy:vercel:prod`
 
-Or import [github.com/aadityapa/Homewebsite](https://github.com/aadityapa/Homewebsite) in [vercel.com/new](https://vercel.com/new) — `vercel.json` is already configured for Vite + React Router SPA.
+Or import [github.com/aadityapa/home-website](https://github.com/aadityapa/home-website) in [vercel.com/new](https://vercel.com/new) — `vercel.json` is already configured for Vite + React Router SPA.
 
 ## Deploy (GitHub Pages)
 
-Repository: [github.com/aadityapa/Homewebsite](https://github.com/aadityapa/Homewebsite)
+Repository: [github.com/aadityapa/home-website](https://github.com/aadityapa/home-website)
 
 1. Push to `main` — the [Deploy workflow](.github/workflows/deploy.yml) builds and publishes `dist/`.
 2. In the repo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. Live URL: **https://aadityapa.github.io/Homewebsite/**
+3. Live URL: **https://aadityapa.github.io/home-website/**
 
 Set these in CI (already in the workflow) or `.env.production`:
 
-- `VITE_SITE_URL=https://aadityapa.github.io/Homewebsite`
-- `VITE_BASE_PATH=/Homewebsite/`
+- `VITE_SITE_URL=https://aadityapa.github.io/home-website`
+- `VITE_BASE_PATH=/home-website/`
 
 ## Content & catalog
 
