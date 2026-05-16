@@ -11,7 +11,7 @@ export function HeroCanvas() {
       quality={quality}
       className="h-full w-full touch-none"
       shadows
-      camera={{ position: [0, 0.35, 7.5], fov: 42 }}
+      camera={{ position: [0.5, 0.25, 8], fov: 40 }}
       background="#faf3e8"
       fog={["#f5e8d0", 12, 24]}
     >

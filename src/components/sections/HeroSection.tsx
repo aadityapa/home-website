@@ -81,8 +81,14 @@ export function HeroSection() {
           <Suspense fallback={<HeroFallback />}><HeroCanvas /></Suspense>
         )}
       </div>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-clay-50/98 via-clay-50/25 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-clay-50/85 via-transparent to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-clay-50/98 via-clay-50/30 to-transparent" />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(105deg, #fdf8f0 0%, #fdf8f0 42%, rgba(253,248,240,0.92) 52%, rgba(253,248,240,0.45) 68%, transparent 85%)",
+        }}
+      />
 
       <m.div
         className="relative z-10 mx-auto flex min-h-[100dvh] max-w-6xl flex-col justify-end px-4 pb-24 pt-28 sm:px-6 md:px-10 md:pb-32"

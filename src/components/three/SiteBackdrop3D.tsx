@@ -11,7 +11,7 @@ export function SiteBackdrop3D() {
   if (quality === "off") return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-[2] opacity-[0.42] mix-blend-multiply">
+    <div className="pointer-events-none fixed inset-0 -z-[2] opacity-[0.12]">
       <Suspense fallback={null}>
         <SiteBackdropCanvas quality={quality} />
       </Suspense>
