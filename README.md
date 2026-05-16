@@ -28,6 +28,18 @@ npm run build
 npm run preview:pages
 ```
 
+## Deploy (Vercel) — recommended
+
+Uses the [Vercel plugin for Cursor](https://vercel.com/docs/agent-resources/vercel-plugin) (`npx plugins add vercel/vercel-plugin --target cursor -y`). **Restart Cursor** after installing so skills and `/vercel-plugin:deploy` load.
+
+1. Install CLI: `npm i -g vercel` (or use `npx vercel`).
+2. Log in: `vercel login`
+3. Link project (once): `vercel link`
+4. Set env in Vercel dashboard (see `.env.vercel.example`): `VITE_BASE_PATH=/`, then `VITE_SITE_URL` to your `*.vercel.app` or custom domain.
+5. Preview: `npm run deploy:vercel` · Production: `npm run deploy:vercel:prod`
+
+Or import [github.com/aadityapa/Homewebsite](https://github.com/aadityapa/Homewebsite) in [vercel.com/new](https://vercel.com/new) — `vercel.json` is already configured for Vite + React Router SPA.
+
 ## Deploy (GitHub Pages)
 
 Repository: [github.com/aadityapa/Homewebsite](https://github.com/aadityapa/Homewebsite)
