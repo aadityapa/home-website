@@ -1,55 +1,16 @@
 import { motion } from "framer-motion";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, lazy, Suspense } from "react";
 import { BRAND } from "../data/brand";
 import { whatsappUrl } from "../lib/order";
 import { Stagger, StaggerItem } from "../components/motion/Stagger";
 import { transitionSection, viewportReveal } from "../lib/motion";
-import { Canvas } from "@react-three/fiber";
-import { Float, Sparkles } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
-import type { Mesh } from "three";
+import { use3DQuality } from "../hooks/use3DQuality";
 
-/* ── 3D contact banner scene ── */
-function EnvelopeShape() {
-  const ref = useRef<Mesh>(null);
-  useFrame(s => {
-    if (!ref.current) return;
-    ref.current.rotation.x = s.clock.elapsedTime * 0.15;
-    ref.current.rotation.y = s.clock.elapsedTime * 0.25;
-  });
-  return (
-    <Float speed={0.8} floatIntensity={0.5}>
-      <mesh ref={ref} castShadow>
-        <boxGeometry args={[1.4, 0.9, 0.08]} />
-        <meshStandardMaterial color="#c45f00" roughness={0.3} metalness={0.4} emissive="#7a3000" emissiveIntensity={0.1} />
-      </mesh>
-    </Float>
-  );
-}
-
-function ContactScene3D() {
-  return (
-    <Canvas camera={{ position: [0, 0, 5], fov: 48 }} dpr={[1, 1.2]} gl={{ antialias: false }}>
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[4, 6, 3]} intensity={1.2} color="#fff4e0" />
-      {[
-        { pos: [-2.2, 0.4, 0] as [number, number, number] },
-        { pos: [2.2, -0.4, 0] as [number, number, number] },
-        { pos: [0, 1.4, -0.5] as [number, number, number] },
-      ].map((s, i) => (
-        <Float key={i} speed={0.9 + i * 0.2} floatIntensity={0.5}>
-          <mesh position={s.pos}>
-            <icosahedronGeometry args={[0.22, 0]} />
-            <meshStandardMaterial color={["#e6a01a", "#c45f00", "#d97706"][i]} roughness={0.3} metalness={0.35} emissive={["#b47000", "#7a3000", "#a05000"][i]} emissiveIntensity={0.12} />
-          </mesh>
-        </Float>
-      ))}
-      <EnvelopeShape />
-      <Sparkles count={20} scale={4} size={1.5} speed={0.3} color="#ffd899" opacity={0.5} />
-    </Canvas>
-  );
-}
+const ContactBannerScene = lazy(() =>
+  import("../components/three/ContactBannerScene").then((m) => ({
+    default: m.ContactBannerScene,
+  })),
+);
 
 function InputField({ label, name, type = "text", placeholder, required }: { label: string; name: string; type?: string; placeholder: string; required?: boolean }) {
   const [focused, setFocused] = useState(false);
@@ -78,6 +39,7 @@ const WHATSAPP_MSG = `Hello — I'd like to enquire about ${BRAND.name} (${BRAND
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
+  const quality = use3DQuality();
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -90,7 +52,15 @@ export default function ContactPage() {
     <div className="min-h-screen bg-clay-50 pt-20">
       {/* 3D banner */}
       <section className="relative h-56 overflow-hidden bg-gradient-to-br from-amber-900 via-saffron-800 to-amber-700 md:h-72">
-        <div className="absolute inset-0"><ContactScene3D /></div>
+        <div className="absolute inset-0">
+          {quality !== "off" ? (
+            <Suspense fallback={<div className="h-full w-full bg-amber-900/80" />}>
+              <ContactBannerScene quality={quality} />
+            </Suspense>
+          ) : (
+            <div className="h-full w-full bg-gradient-to-br from-amber-900 to-saffron-800" />
+          )}
+        </div>
         <div className="absolute inset-0 bg-gradient-to-r from-amber-900/85 to-transparent" />
         <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-16">
           <motion.p className="font-sans text-xs font-semibold uppercase tracking-[0.45em] text-amber-300/80"
@@ -195,3 +165,4 @@ export default function ContactPage() {
     </div>
   );
 }
+

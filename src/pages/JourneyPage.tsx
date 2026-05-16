@@ -1,7 +1,7 @@
 import { Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 import { transitionSection, viewportReveal } from "../lib/motion";
-import { useReduced3D } from "../hooks/useReduced3D";
+import { use3DQuality } from "../hooks/use3DQuality";
 import { SECTION_BACKGROUNDS } from "../data/backgrounds";
 import { InternetBackdrop } from "../components/ui/InternetBackdrop";
 import { Link } from "react-router-dom";
@@ -24,7 +24,8 @@ function JourneyFallback() {
 }
 
 export default function JourneyPage() {
-  const reduced = useReduced3D();
+  const quality = use3DQuality();
+  const reduced = quality === "off";
 
   return (
     <div className="min-h-screen bg-clay-100 pt-20">

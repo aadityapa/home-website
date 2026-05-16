@@ -8,6 +8,7 @@ import { CartDrawer } from "./components/cart/CartDrawer";
 import { StickyCartFab } from "./components/cart/StickyCartFab";
 import { CartToast } from "./components/ui/CartToast";
 import { AmbientBackground } from "./components/ui/AmbientBackground";
+import { SiteBackdrop3D } from "./components/three/SiteBackdrop3D";
 import { AppHeader } from "./components/layout/Header";
 import { LoadingScreen } from "./components/ui/LoadingScreen";
 import { Footer } from "./components/sections/Footer";
@@ -71,6 +72,7 @@ export default function App() {
       <ScrollProvider>
         <SeoJsonLd />
         <AmbientBackground />
+        <SiteBackdrop3D />
         <div className="page-grain" aria-hidden />
         {!loaderDone && <LoadingScreen onDone={() => setLoaderDone(true)} />}
         <AppHeader />

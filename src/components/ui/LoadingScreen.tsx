@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { BRAND } from "../../data/brand";
 import { easeOut } from "../../lib/motion";
+import { preload3DAssets } from "../../lib/preload3d";
 
 type Props = { onDone: () => void };
 
@@ -28,6 +29,7 @@ export function LoadingScreen({ onDone }: Props) {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
+    preload3DAssets();
     let step = 0;
     intervalRef.current = setInterval(() => {
       step += 1;

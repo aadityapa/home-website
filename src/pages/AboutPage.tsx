@@ -1,51 +1,15 @@
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { useRef } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Float, Sparkles } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import type { Mesh } from "three";
+import { lazy, Suspense, useRef } from "react";
 import { BRAND } from "../data/brand";
 import { transitionSection, viewportReveal } from "../lib/motion";
 import { Link } from "react-router-dom";
+import { use3DQuality } from "../hooks/use3DQuality";
 
-/* ── 3D About Scene — floating geometric shapes ── */
-function FloatingShape({ pos, shape, color, speed = 1 }: { pos: [number, number, number]; shape: "oct" | "tet" | "icos"; color: string; speed?: number }) {
-  const ref = useRef<Mesh>(null);
-  useFrame(s => {
-    if (!ref.current) return;
-    const t = s.clock.elapsedTime * speed;
-    ref.current.rotation.x = t * 0.18;
-    ref.current.rotation.y = t * 0.25;
-  });
-  return (
-    <Float speed={1.0 * speed} floatIntensity={0.55} rotationIntensity={0.3}>
-      <mesh ref={ref} position={pos} castShadow>
-        {shape === "oct"  && <octahedronGeometry args={[0.28, 0]} />}
-        {shape === "tet"  && <tetrahedronGeometry args={[0.32, 0]} />}
-        {shape === "icos" && <icosahedronGeometry args={[0.26, 0]} />}
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.35} emissive={color} emissiveIntensity={0.1} />
-      </mesh>
-    </Float>
-  );
-}
-
-function AboutScene3D() {
-  return (
-    <Canvas camera={{ position: [0, 0, 5], fov: 48 }} dpr={[1, 1.3]} gl={{ antialias: false }}>
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[5, 8, 4]} intensity={1.2} color="#fff4e0" />
-      <pointLight position={[-3, 1, -2]} intensity={0.6} color="#ffb347" />
-      {[
-        { pos: [-1.8, 0.8, 0] as [number, number, number],  shape: "oct" as const,  color: "#c45f00", speed: 0.9  },
-        { pos: [1.8, -0.6, 0] as [number, number, number],  shape: "icos" as const, color: "#e6a01a", speed: 1.1 },
-        { pos: [0, 1.3, -1] as [number, number, number],    shape: "tet" as const,  color: "#d97706", speed: 0.75 },
-        { pos: [-1.0, -1.0, 0.5] as [number, number, number], shape: "oct" as const, color: "#b45309", speed: 1.2 },
-        { pos: [1.0, 0.9, 0.8] as [number, number, number], shape: "icos" as const, color: "#f59e0b", speed: 0.85 },
-      ].map((s, i) => <FloatingShape key={i} {...s} />)}
-      <Sparkles count={25} scale={4} size={1.5} speed={0.3} color="#ffd899" opacity={0.5} />
-    </Canvas>
-  );
-}
+const AboutBannerScene = lazy(() =>
+  import("../components/three/AboutBannerScene").then((m) => ({
+    default: m.AboutBannerScene,
+  })),
+);
 
 /* ── Timeline card ── */
 function TimelineStep({ year, title, body, index }: { year: string; title: string; body: string; index: number }) {
@@ -77,12 +41,21 @@ export default function AboutPage() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const yText = useTransform(scrollYProgress, [0, 1], [40, -40]);
   const reduce = useReducedMotion();
+  const quality = use3DQuality();
 
   return (
     <div className="min-h-screen bg-clay-50 pt-20">
       {/* Hero banner with 3D scene */}
       <section className="relative h-72 overflow-hidden bg-gradient-to-br from-amber-800 to-saffron-700 md:h-96">
-        <div className="absolute inset-0"><AboutScene3D /></div>
+        <div className="absolute inset-0">
+          {quality !== "off" ? (
+            <Suspense fallback={<div className="h-full w-full bg-amber-900/80" />}>
+              <AboutBannerScene quality={quality} />
+            </Suspense>
+          ) : (
+            <div className="h-full w-full bg-gradient-to-br from-amber-800 to-saffron-700" />
+          )}
+        </div>
         <div className="absolute inset-0 bg-gradient-to-r from-amber-900/85 to-amber-800/40" />
         <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-16">
           <motion.p className="font-sans text-xs font-semibold uppercase tracking-[0.45em] text-amber-300/80"

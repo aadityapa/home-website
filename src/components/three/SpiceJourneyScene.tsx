@@ -3,6 +3,9 @@ import { Float, ScrollControls, useScroll, Sparkles } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import type { Group } from "three";
 import * as THREE from "three";
+import { KitchenBackdrop } from "./shared/KitchenBackdrop";
+import { FloatingImagePlane } from "./shared/FloatingImagePlane";
+import { HERO_PRODUCT_IMAGES } from "../../lib/product3d";
 
 type IngredientKind = "elaichi" | "kesar" | "mango" | "spice" | "star";
 
@@ -207,12 +210,36 @@ function JourneyContent() {
     );
   });
 
+  const journeyProducts = useMemo(
+    () =>
+      HERO_PRODUCT_IMAGES.map((url, i) => ({
+        url,
+        pos: [
+          Math.cos((i / 4) * Math.PI * 2) * 2.8,
+          0.5 + i * 0.35,
+          Math.sin((i / 4) * Math.PI * 2) * 2.8 - 1,
+        ] as [number, number, number],
+      })),
+    [],
+  );
+
   return (
     <group ref={root}>
+      <KitchenBackdrop opacity={0.38} />
       <ambientLight intensity={0.5} />
       <directionalLight position={[4, 6, 2]} intensity={1.2} color="#fff1dd" />
       <pointLight position={[-2, 1, 2]} intensity={0.7} color="#fbbf24" />
       <pointLight position={[3, -2, -3]} intensity={0.4} color="#f97316" />
+
+      {journeyProducts.map((p) => (
+        <FloatingImagePlane
+          key={p.url}
+          imageUrl={p.url}
+          position={p.pos}
+          scale={0.68}
+          speed={0.8}
+        />
+      ))}
 
       <SpiceDNA />
 

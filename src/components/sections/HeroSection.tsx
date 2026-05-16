@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import { SECTION_BACKGROUNDS } from "../../data/backgrounds";
 import { PureVegMark } from "../brand/PureVegMark";
 import { BRAND } from "../../data/brand";
-import { useReduced3D } from "../../hooks/useReduced3D";
+import { use3DQuality } from "../../hooks/use3DQuality";
 import { InternetBackdrop } from "../ui/InternetBackdrop";
 import { heroItem, heroStagger } from "../../lib/motion";
 import { Link } from "react-router-dom";
@@ -56,7 +56,8 @@ function ScrollHint() {
 }
 
 export function HeroSection() {
-  const reduced = useReduced3D();
+  const quality = use3DQuality();
+  const reduced = quality === "off";
   const reduceMotion = useReducedMotion();
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
