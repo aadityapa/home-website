@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import gsap from "gsap";
@@ -18,32 +18,72 @@ const featured = PRODUCT_CATEGORIES.flatMap((c) =>
 export default function ImmersiveHomePage() {
   const showcaseRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const runwayRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const heroWords = useMemo(() => BRAND.name.split(" "), []);
 
   useEffect(() => {
-    if (reduce || !pinRef.current || !showcaseRef.current) return;
+    if (reduce || !pinRef.current || !showcaseRef.current || !heroRef.current) return;
 
     const ctx = gsap.context(() => {
+      const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
+      heroTl
+        .fromTo(
+          heroRef.current!.querySelectorAll("[data-kinetic-word]"),
+          { yPercent: 130, rotateX: 40, opacity: 0 },
+          { yPercent: 0, rotateX: 0, opacity: 1, stagger: 0.06, duration: 1.35 },
+        )
+        .fromTo(
+          heroRef.current!.querySelectorAll("[data-kinetic-sub]"),
+          { y: 22, opacity: 0, filter: "blur(14px)" },
+          { y: 0, opacity: 1, filter: "blur(0px)", stagger: 0.08, duration: 0.8 },
+          "-=0.7",
+        );
+
       ScrollTrigger.create({
         trigger: pinRef.current,
         start: "top top",
-        end: "+=120%",
+        end: "+=180%",
         pin: true,
         pinSpacing: true,
+        scrub: 0.6,
       });
 
-      gsap.from(showcaseRef.current!.querySelectorAll("[data-reveal]"), {
-        scrollTrigger: {
-          trigger: showcaseRef.current,
-          start: "top 70%",
-          end: "bottom 20%",
-          scrub: 1,
-        },
-        y: 80,
-        opacity: 0,
-        stagger: 0.08,
-        ease: "power3.out",
-      });
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: showcaseRef.current,
+            start: "top top",
+            end: "bottom+=80% top",
+            scrub: 1.2,
+          },
+        })
+        .fromTo(
+          showcaseRef.current!.querySelectorAll("[data-story-line]"),
+          { y: 60, opacity: 0 },
+          { y: 0, opacity: 1, stagger: 0.1, duration: 0.8 },
+          0,
+        )
+        .fromTo(
+          showcaseRef.current!.querySelectorAll("[data-orbit-card]"),
+          { y: 90, opacity: 0, rotateX: 14, scale: 0.96 },
+          { y: 0, opacity: 1, rotateX: 0, scale: 1, stagger: 0.08, duration: 1 },
+          0.06,
+        );
+
+      if (runwayRef.current) {
+        gsap.to(runwayRef.current, {
+          xPercent: -22,
+          ease: "none",
+          scrollTrigger: {
+            trigger: runwayRef.current,
+            start: "top 82%",
+            end: "bottom top",
+            scrub: 1.1,
+          },
+        });
+      }
     });
 
     return () => ctx.revert();
@@ -56,24 +96,41 @@ export default function ImmersiveHomePage() {
       {/* Hero copy */}
       <section className="relative z-10 flex min-h-[100dvh] flex-col justify-end px-6 pb-28 pt-32 md:px-14 md:pb-36">
         <motion.div
+          ref={heroRef}
           className="max-w-2xl"
           initial={{ opacity: 0, y: 48 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
         >
-          <p className="font-sans text-[10px] font-medium uppercase tracking-[0.55em] text-amber-400/80">
+          <p
+            data-kinetic-sub
+            className="font-sans text-[10px] font-medium uppercase tracking-[0.55em] text-amber-400/80"
+          >
             Immersive experience · Telhara
           </p>
-          <h1 className="mt-4 font-display text-5xl leading-[1.02] tracking-tight text-white md:text-7xl lg:text-8xl">
-            {BRAND.name.split(" ").slice(0, 2).join(" ")}
-            <span className="block bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
-              {BRAND.name.split(" ").slice(2).join(" ")}
+          <h1 className="mt-4 font-display text-5xl leading-[1.02] tracking-tight md:text-7xl lg:text-8xl">
+            <span className="kinetic-line block overflow-hidden text-white">
+              {heroWords.slice(0, 2).map((word) => (
+                <span key={word} data-kinetic-word className="kinetic-word inline-block pr-[0.25em]">
+                  {word}
+                </span>
+              ))}
+            </span>
+            <span className="kinetic-line block overflow-hidden bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
+              {heroWords.slice(2).map((word) => (
+                <span key={word} data-kinetic-word className="kinetic-word inline-block pr-[0.25em]">
+                  {word}
+                </span>
+              ))}
             </span>
           </h1>
-          <p className="mt-6 max-w-md font-sans text-base font-light leading-relaxed text-noir-200/90 md:text-lg">
+          <p
+            data-kinetic-sub
+            className="mt-6 max-w-md font-sans text-base font-light leading-relaxed text-noir-200/90 md:text-lg"
+          >
             {BRAND.tagline} — cinematic craft from Maharashtra, presented in real-time 3D.
           </p>
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div data-kinetic-sub className="mt-10 flex flex-wrap gap-4">
             <Magnetic>
               <Link
                 href="/shop"
@@ -99,37 +156,38 @@ export default function ImmersiveHomePage() {
         </motion.div>
       </section>
 
-      {/* Pinned showcase — property-style product grid */}
+      {/* Pinned cinematic runway */}
       <div ref={pinRef} className="relative z-10">
-        <section
-          ref={showcaseRef}
-          className="relative min-h-[100dvh] px-6 py-24 md:px-14"
-        >
-          <div className="mb-16 max-w-xl" data-reveal>
+        <section ref={showcaseRef} className="relative min-h-[100dvh] overflow-hidden px-6 py-24 md:px-14">
+          <div className="mb-16 max-w-xl">
             <p className="font-sans text-xs uppercase tracking-[0.45em] text-amber-500/90">
               3D Showcase
             </p>
-            <h2 className="mt-3 font-display text-4xl text-white md:text-5xl">
+            <h2 data-story-line className="mt-3 font-display text-4xl text-white md:text-5xl">
               Curated <span className="text-amber-400">selection</span>
             </h2>
-            <p className="mt-4 font-sans text-sm text-noir-300">
-              Each product rendered live — drag, explore, and order.
+            <p data-story-line className="mt-4 max-w-lg font-sans text-sm text-noir-300">
+              Scroll through a cinematic runway where each product appears as an illuminated object,
+              not a static card. Hover to activate spotlight cues and open immersive details.
             </p>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div ref={runwayRef} className="-ml-6 flex w-[130%] gap-8 pr-8 md:-ml-14">
             {featured.map((item, i) => (
               <GlassCard key={item.id} delay={i * 0.05}>
-                <div data-reveal>
+                <div data-orbit-card className="cinematic-card group relative w-[320px] shrink-0 md:w-[360px]">
                   <Link href={`/shop/${item.id}`} className="block">
-                    <div className="mb-4 aspect-[4/3] overflow-hidden rounded-xl">
+                    <div className="cinematic-glow mb-4 aspect-[4/3] overflow-hidden rounded-xl">
                       <ProductCard3D image={item.image} alt={item.name} />
                     </div>
                     <p className="text-[10px] uppercase tracking-[0.35em] text-amber-500/80">
                       {item.category}
                     </p>
                     <h3 className="mt-2 font-display text-2xl text-white">{item.name}</h3>
-                    <p className="mt-2 font-display text-xl text-amber-400">{item.price}</p>
+                    <p className="mt-2 font-display text-xl tabular-nums text-amber-300">{item.price}</p>
+                    <p className="mt-2 font-sans text-xs text-noir-300">
+                      Hover and drag to inspect form, texture, and highlights.
+                    </p>
                   </Link>
                 </div>
               </GlassCard>
@@ -167,12 +225,12 @@ export default function ImmersiveHomePage() {
             {[
               { v: "100%", l: "Vegetarian" },
               { v: "FSSAI", l: "Licensed" },
-              { v: "3D", l: "Live renders" },
+              { v: "60 FPS", l: "Adaptive render" },
               { v: "Telhara", l: "Origin" },
             ].map((s) => (
               <div
                 key={s.l}
-                className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-md"
+                className="rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.06] to-white/[0.01] p-6 backdrop-blur-md"
               >
                 <p className="font-display text-3xl text-amber-400">{s.v}</p>
                 <p className="mt-1 font-sans text-xs uppercase tracking-widest text-noir-400">

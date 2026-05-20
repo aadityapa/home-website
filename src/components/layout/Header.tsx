@@ -102,12 +102,17 @@ export function AppHeader() {
                 <Link
                   key={l.href}
                   href={l.href}
-                  className={`relative rounded-lg px-3 py-2 font-sans text-sm font-medium transition duration-200 ${
+                  className={`group relative rounded-lg px-3 py-2 font-sans text-sm font-medium transition duration-300 ${
                     active
                       ? "text-amber-400"
                       : "text-noir-200 hover:bg-white/5 hover:text-amber-300"
                   }`}
                 >
+                  <span
+                    className={`pointer-events-none absolute inset-0 rounded-lg transition duration-300 ${
+                      active ? "bg-amber-500/10" : "bg-transparent group-hover:bg-white/5"
+                    }`}
+                  />
                   {l.label}
                   {active && (
                     <motion.span
@@ -153,15 +158,16 @@ export function AppHeader() {
 
             <motion.button
               type="button"
-              className="flex h-10 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 font-sans text-xs font-medium uppercase tracking-wider text-noir-100 lg:px-4"
+              className="group relative flex h-10 items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-white/5 px-3 font-sans text-xs font-medium uppercase tracking-wider text-noir-100 lg:px-4"
               onClick={() => setMenuOpen(true)}
               whileTap={{ scale: 0.93 }}
               aria-label="Open menu"
             >
+              <span className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 transition group-hover:opacity-100" />
               <span className="hidden sm:inline">Menu</span>
               <span className="flex flex-col gap-1" aria-hidden>
-                <span className="block h-px w-4 bg-current" />
-                <span className="block h-px w-4 bg-current" />
+                <span className="block h-px w-4 origin-center bg-current transition-transform duration-300 group-hover:translate-y-[1px] group-hover:rotate-6" />
+                <span className="block h-px w-4 origin-center bg-current transition-transform duration-300 group-hover:-translate-y-[1px] group-hover:-rotate-6" />
               </span>
             </motion.button>
           </div>

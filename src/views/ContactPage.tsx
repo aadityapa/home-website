@@ -6,6 +6,7 @@ import { Stagger, StaggerItem } from "../components/motion/Stagger";
 import { transitionSection, viewportReveal } from "../lib/motion";
 import { use3DQuality } from "../hooks/use3DQuality";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
+import { Magnetic } from "../components/immersive/Magnetic";
 
 const ContactBannerScene = lazy(() =>
   import("../components/three/ContactBannerScene").then((m) => ({
@@ -13,30 +14,47 @@ const ContactBannerScene = lazy(() =>
   })),
 );
 
-function InputField({ label, name, type = "text", placeholder, required }: { label: string; name: string; type?: string; placeholder: string; required?: boolean }) {
+function InputField({
+  label,
+  name,
+  type = "text",
+  placeholder,
+  required,
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  placeholder: string;
+  required?: boolean;
+}) {
   const [focused, setFocused] = useState(false);
   return (
     <label className="block">
       <motion.span
         className="block font-sans text-xs font-medium uppercase tracking-wider"
-        animate={{ color: focused ? "#b45309" : "#9b9b8e" }}
-        transition={{ duration: 0.2 }}>
+        animate={{ color: focused ? "#fbbf24" : "#a0a1ad" }}
+        transition={{ duration: 0.2 }}
+      >
         {label}
       </motion.span>
       <motion.input
-        required={required} name={name} type={type} placeholder={placeholder}
-        onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-        className="mt-2 w-full rounded-xl border bg-white/90 px-4 py-3 font-sans text-sm text-ink transition-all duration-300 focus:outline-none"
+        required={required}
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        className="mt-2 w-full rounded-xl border bg-white/[0.06] px-4 py-3 font-sans text-sm text-white placeholder:text-noir-400 transition-all duration-300 focus:outline-none"
         animate={{
-          borderColor: focused ? "rgba(180,83,9,0.6)" : "rgba(180,163,140,0.4)",
-          boxShadow: focused ? "0 0 0 3px rgba(245,158,11,0.12)" : "none",
+          borderColor: focused ? "rgba(245,158,11,0.7)" : "rgba(255,255,255,0.16)",
+          boxShadow: focused ? "0 0 0 3px rgba(245,158,11,0.14)" : "none",
         }}
       />
     </label>
   );
 }
 
-const WHATSAPP_MSG = `Hello — I'd like to enquire about ${BRAND.name} (${BRAND.company}) products from Telhara.`;
+const WHATSAPP_MSG = `Hello - I'd like to enquire about ${BRAND.name} (${BRAND.company}) products from Telhara.`;
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
@@ -51,47 +69,58 @@ export default function ContactPage() {
 
   return (
     <ImmersivePageLayout className="pt-20">
-      {/* 3D banner */}
-      <section className="relative h-56 overflow-hidden bg-gradient-to-br from-amber-900 via-saffron-800 to-amber-700 md:h-72">
+      <section className="relative h-64 overflow-hidden bg-gradient-to-br from-[#1b0c06] via-[#2b1208] to-[#090a12] md:h-80">
         <div className="absolute inset-0">
           {quality !== "off" ? (
-            <Suspense fallback={<div className="h-full w-full bg-amber-900/80" />}>
+            <Suspense fallback={<div className="h-full w-full bg-[#1f0f0b]" />}>
               <ContactBannerScene quality={quality} />
             </Suspense>
           ) : (
-            <div className="h-full w-full bg-gradient-to-br from-amber-900 to-saffron-800" />
+            <div className="h-full w-full bg-gradient-to-br from-[#2c1308] to-[#100b0b]" />
           )}
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-900/85 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-transparent" />
         <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-16">
-          <motion.p className="font-sans text-xs font-semibold uppercase tracking-[0.45em] text-amber-300/80"
-            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          <motion.p
+            className="font-sans text-xs font-semibold uppercase tracking-[0.45em] text-amber-300/80"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
             {BRAND.company}
           </motion.p>
-          <motion.h1 className="mt-2 font-display text-4xl text-white md:text-5xl"
-            initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}
-            style={{ textShadow: "0 4px 24px rgba(0,0,0,0.4)" }}>
-            Let&apos;s talk orders
+          <motion.h1
+            className="mt-2 font-display text-4xl text-white md:text-5xl"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18 }}
+            style={{ textShadow: "0 4px 24px rgba(0,0,0,0.45)" }}
+          >
+            Let&apos;s design your order flow
           </motion.h1>
-          <motion.p className="mt-2 font-sans text-sm text-amber-100/80"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.28 }}>
-            Wholesale · gifting · everyday orders
+          <motion.p
+            className="mt-2 font-sans text-sm text-amber-100/80"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.28 }}
+          >
+            Retail, gifting, and wholesale with premium support
           </motion.p>
         </div>
       </section>
 
-      {/* Main grid */}
       <div className="mx-auto grid max-w-6xl gap-14 px-4 py-20 sm:px-6 md:grid-cols-2 md:gap-20 md:px-10">
-        {/* Info */}
         <motion.div
-          initial={{ opacity: 0, x: -28 }} whileInView={{ opacity: 1, x: 0 }}
-          viewport={viewportReveal} transition={transitionSection}
+          initial={{ opacity: 0, x: -28 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={viewportReveal}
+          transition={transitionSection}
         >
           <Stagger className="space-y-5" slow>
             <StaggerItem>
-              <motion.div className="glass-panel rounded-2xl p-6" whileHover={{ y: -3 }}>
-                <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-clay-500">📞 Phone</p>
-                <a href={`tel:+91${BRAND.phone}`} className="mt-1 block font-display text-2xl text-saffron-700 hover:text-saffron-600">
+              <motion.div className="rounded-2xl border border-white/[0.12] bg-white/[0.05] p-6" whileHover={{ y: -3 }}>
+                <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-noir-400">Phone</p>
+                <a href={`tel:+91${BRAND.phone}`} className="mt-1 block font-display text-2xl text-amber-300 hover:text-amber-200">
                   {BRAND.phoneDisplay}
                 </a>
               </motion.div>
@@ -99,13 +128,15 @@ export default function ContactPage() {
             <StaggerItem>
               <motion.a
                 href={whatsappUrl(BRAND.whatsappE164, WHATSAPP_MSG)}
-                target="_blank" rel="noreferrer"
-                className="glass-panel flex items-center justify-between gap-4 rounded-2xl border border-emerald-600/15 bg-gradient-to-r from-emerald-50/95 to-white/80 p-6 transition"
-                whileHover={{ y: -3, borderColor: "rgba(22,163,74,0.35)" }}>
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-between gap-4 rounded-2xl border border-emerald-500/25 bg-gradient-to-r from-emerald-500/15 to-white/[0.03] p-6 transition"
+                whileHover={{ y: -3, borderColor: "rgba(16,185,129,0.45)" }}
+              >
                 <div>
-                  <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-clay-500">💬 WhatsApp</p>
-                  <p className="mt-1 font-sans text-base font-medium text-ink">Quick message for orders</p>
-                  <p className="mt-0.5 font-sans text-sm text-clay-500">Replies in business hours</p>
+                  <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-noir-400">WhatsApp</p>
+                  <p className="mt-1 font-sans text-base font-medium text-white">Instant order conversation</p>
+                  <p className="mt-0.5 font-sans text-sm text-noir-300">Responses in business hours</p>
                 </div>
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#25D366] text-white shadow">
                   <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
@@ -115,49 +146,68 @@ export default function ContactPage() {
               </motion.a>
             </StaggerItem>
             <StaggerItem>
-              <motion.div className="glass-panel rounded-2xl p-6" whileHover={{ y: -3 }}>
-                <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-clay-500">📍 Location</p>
-                <p className="mt-1 font-sans text-lg text-ink">{BRAND.location}</p>
+              <motion.div className="rounded-2xl border border-white/[0.12] bg-white/[0.05] p-6" whileHover={{ y: -3 }}>
+                <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-noir-400">Location</p>
+                <p className="mt-1 font-sans text-lg text-white">{BRAND.location}</p>
               </motion.div>
             </StaggerItem>
             <StaggerItem>
-              <div className="rounded-2xl border border-saffron-200/50 bg-saffron-50/80 p-4">
-                <p className="font-sans text-sm text-saffron-800">✅ {BRAND.certification}</p>
-                <p className="mt-1 font-sans text-xs text-clay-500">Retail & wholesale · COD / UPI / card</p>
+              <div className="rounded-2xl border border-amber-500/25 bg-amber-500/10 p-4">
+                <p className="font-sans text-sm text-amber-200">{BRAND.certification}</p>
+                <p className="mt-1 font-sans text-xs text-noir-300">Retail and wholesale support with flexible fulfillment</p>
               </div>
             </StaggerItem>
           </Stagger>
         </motion.div>
 
-        {/* Form */}
         <motion.form
           onSubmit={onSubmit}
-          className="glass-panel relative overflow-hidden rounded-3xl p-8 md:p-10"
-          initial={{ opacity: 0, x: 28 }} whileInView={{ opacity: 1, x: 0 }}
-          viewport={viewportReveal} transition={{ ...transitionSection, delay: 0.08 }}>
-          <div className="pointer-events-none absolute -right-12 -top-8 h-40 w-40 rounded-full bg-saffron-200/35 blur-3xl" />
-          <h2 className="mb-6 font-display text-2xl text-ink">Send a message</h2>
+          className="relative overflow-hidden rounded-3xl border border-white/[0.12] bg-gradient-to-b from-white/[0.08] via-white/[0.05] to-black/30 p-8 md:p-10"
+          initial={{ opacity: 0, x: 28 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={viewportReveal}
+          transition={{ ...transitionSection, delay: 0.08 }}
+        >
+          <div className="pointer-events-none absolute -right-12 -top-8 h-40 w-40 rounded-full bg-amber-400/20 blur-3xl" />
+          <h2 className="mb-6 font-display text-2xl text-white">Send your order brief</h2>
           <Stagger className="relative space-y-5">
-            <StaggerItem><InputField label="Name" name="name" placeholder="Your name" required /></StaggerItem>
-            <StaggerItem><InputField label="Phone" name="phone" type="tel" placeholder="10-digit mobile" required /></StaggerItem>
+            <StaggerItem>
+              <InputField label="Name" name="name" placeholder="Your name" required />
+            </StaggerItem>
+            <StaggerItem>
+              <InputField label="Phone" name="phone" type="tel" placeholder="10-digit mobile" required />
+            </StaggerItem>
             <StaggerItem>
               <label className="block">
-                <motion.span className="block font-sans text-xs font-medium uppercase tracking-wider text-clay-400">Message</motion.span>
-                <textarea name="message" rows={4} required placeholder="Tell us what you need"
-                  className="mt-2 w-full resize-none rounded-xl border border-clay-200/60 bg-white/90 px-4 py-3 font-sans text-sm text-ink transition focus:outline-none focus:ring-2 focus:ring-saffron-500/30" />
+                <motion.span className="block font-sans text-xs font-medium uppercase tracking-wider text-noir-400">Message</motion.span>
+                <textarea
+                  name="message"
+                  rows={4}
+                  required
+                  placeholder="Tell us quantities, products, and location"
+                  className="mt-2 w-full resize-none rounded-xl border border-white/[0.16] bg-white/[0.06] px-4 py-3 font-sans text-sm text-white placeholder:text-noir-400 transition focus:outline-none focus:ring-2 focus:ring-amber-500/35"
+                />
               </label>
             </StaggerItem>
             <StaggerItem>
-              <motion.button type="submit"
-                className="relative w-full overflow-hidden rounded-full bg-gradient-to-r from-amber-800 to-saffron-600 py-3.5 font-sans text-sm font-semibold text-white shadow-lg shadow-saffron-500/25"
-                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
-                Send message
-              </motion.button>
+              <Magnetic>
+                <motion.button
+                  type="submit"
+                  className="glass-btn-primary relative w-full overflow-hidden rounded-full py-3.5 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-noir-950"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Send message
+                </motion.button>
+              </Magnetic>
             </StaggerItem>
             {sent && (
-              <motion.div className="rounded-2xl border border-emerald-500/25 bg-emerald-50/90 p-4 text-center"
-                initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}>
-                <p className="font-sans text-sm text-emerald-800">✓ We&apos;ll call you back shortly!</p>
+              <motion.div
+                className="rounded-2xl border border-emerald-500/35 bg-emerald-500/12 p-4 text-center"
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+              >
+                <p className="font-sans text-sm text-emerald-200">We&apos;ll call you back shortly.</p>
               </motion.div>
             )}
           </Stagger>
@@ -166,4 +216,3 @@ export default function ContactPage() {
     </ImmersivePageLayout>
   );
 }
-

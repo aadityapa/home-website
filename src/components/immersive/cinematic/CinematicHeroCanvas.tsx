@@ -45,9 +45,10 @@ export function CinematicHeroCanvas() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(105deg, #06060c 0%, #06060c 38%, rgba(6,6,12,0.75) 55%, transparent 78%)",
+            "linear-gradient(105deg, #06060c 0%, #06060c 34%, rgba(6,6,12,0.78) 52%, transparent 80%), radial-gradient(ellipse 60% 35% at 72% 38%, rgba(245,158,11,0.16), transparent 75%)",
         }}
       />
+      <div className="pointer-events-none absolute inset-0 cinematic-noise-mask" />
     </div>
   );
 }

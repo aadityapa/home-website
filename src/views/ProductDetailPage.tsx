@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo, useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { PRODUCT_CATEGORIES } from "../data/brand";
 import { useCart } from "../context/CartContext";
 import { transitionSection } from "../lib/motion";
@@ -9,6 +10,7 @@ import { productAccent } from "../lib/product3d";
 import { use3DQuality } from "../hooks/use3DQuality";
 import { ProductCard3D } from "../components/three/ProductCard3D";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
+import { Magnetic } from "../components/immersive/Magnetic";
 
 const ProductViewerCanvas = lazy(() =>
   import("../components/three/ProductViewerCanvas").then((m) => ({
@@ -64,20 +66,22 @@ export default function ProductDetailPage() {
 
   const related = category.items.filter((i) => i.id !== id);
   const accent = productAccent(item.id);
+  const priceRaw = parseInt(item.price.replace(/\D/g, ""), 10) || 0;
+  const totalPrice = (priceRaw * qty).toLocaleString("en-IN");
 
   return (
     <ImmersivePageLayout className="pt-20">
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 md:px-10">
-        <nav className="flex items-center gap-2 font-sans text-xs text-clay-500">
-          <Link href="/" className="hover:text-saffron-600 transition">
+        <nav className="flex items-center gap-2 font-sans text-xs text-noir-400">
+          <Link href="/" className="transition hover:text-amber-300">
             Home
           </Link>
           <span>/</span>
-          <Link href="/shop" className="hover:text-saffron-600 transition">
+          <Link href="/shop" className="transition hover:text-amber-300">
             Shop
           </Link>
           <span>/</span>
-          <span className="text-ink">{item.name}</span>
+          <span className="text-noir-100">{item.name}</span>
         </nav>
       </div>
 
@@ -88,7 +92,7 @@ export default function ProductDetailPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={transitionSection}
         >
-          <div className="relative h-96 overflow-hidden rounded-3xl border border-white/60 bg-gradient-to-br from-amber-50 to-orange-50 shadow-2xl shadow-clay-400/15 md:h-[520px]">
+          <div className="relative h-96 overflow-hidden rounded-3xl border border-white/[0.14] bg-gradient-to-br from-[#1f1110] via-[#0e1019] to-[#09090f] shadow-2xl shadow-black/45 md:h-[520px]">
             {quality !== "off" ? (
               <Suspense
                 fallback={
@@ -106,14 +110,16 @@ export default function ProductDetailPage() {
                 />
               </Suspense>
             ) : (
-              <img
+              <Image
                 src={item.image}
                 alt={item.name}
+                width={1200}
+                height={900}
                 className="h-full w-full object-cover"
               />
             )}
-            <div className="pointer-events-none absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1.5 font-sans text-xs font-medium text-saffron-700 backdrop-blur-sm shadow-sm">
-              Interactive 3D · drag to orbit
+            <div className="pointer-events-none absolute left-4 top-4 rounded-full border border-white/[0.2] bg-black/30 px-3 py-1.5 font-sans text-xs font-medium text-amber-200 backdrop-blur-md">
+              Cinematic 3D viewer · drag to orbit
             </div>
           </div>
         </motion.div>
@@ -123,48 +129,51 @@ export default function ProductDetailPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ ...transitionSection, delay: 0.1 }}
         >
-          <p className="font-sans text-xs font-semibold uppercase tracking-[0.4em] text-saffron-600">
+          <p className="font-sans text-xs font-semibold uppercase tracking-[0.4em] text-amber-400/90">
             {category.title}
           </p>
           <h1
-            className="mt-2 font-display text-4xl text-ink md:text-5xl"
-            style={{ textShadow: "0 2px 16px rgba(180,83,9,0.12)" }}
+            className="mt-2 font-display text-4xl text-white md:text-5xl"
+            style={{ textShadow: "0 4px 24px rgba(0,0,0,0.35)" }}
           >
             {item.name}
           </h1>
-          <p className="mt-4 font-sans text-base leading-relaxed text-clay-600">
+          <p className="mt-4 font-sans text-base leading-relaxed text-noir-300">
             {item.description}
           </p>
 
-          <div className="mt-8 rounded-2xl border border-saffron-200/60 bg-gradient-to-br from-saffron-50/90 to-amber-50/50 p-5">
-            <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-clay-500">
+          <div className="mt-8 rounded-2xl border border-white/[0.12] bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-5">
+            <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-noir-400">
               MRP (incl. taxes)
             </p>
-            <p className="font-display text-4xl tabular-nums text-saffron-800 mt-1">
+            <p className="mt-1 font-display text-4xl tabular-nums text-amber-300">
               {item.price}
             </p>
             {item.unit && (
-              <p className="mt-1 font-sans text-sm text-clay-600">{item.unit}</p>
+              <p className="mt-1 font-sans text-sm text-noir-300">{item.unit}</p>
             )}
+            <p className="mt-3 font-sans text-xs uppercase tracking-[0.22em] text-noir-400">
+              Total for {qty} · Rs {totalPrice}
+            </p>
           </div>
 
           <div className="mt-6 flex items-center gap-4">
-            <p className="font-sans text-sm text-clay-600">Quantity</p>
-            <div className="flex items-center gap-2 rounded-full border border-clay-200 bg-white/80">
+            <p className="font-sans text-sm text-noir-300">Quantity</p>
+            <div className="flex items-center gap-2 rounded-full border border-white/[0.18] bg-white/[0.04]">
               <button
                 type="button"
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
-                className="flex h-9 w-9 items-center justify-center rounded-full font-sans text-lg text-clay-600 hover:bg-clay-100"
+                className="flex h-9 w-9 items-center justify-center rounded-full font-sans text-lg text-noir-100 hover:bg-white/[0.09]"
               >
                 −
               </button>
-              <span className="w-8 text-center font-display text-lg text-ink">
+              <span className="w-8 text-center font-display text-lg text-white">
                 {qty}
               </span>
               <button
                 type="button"
                 onClick={() => setQty((q) => q + 1)}
-                className="flex h-9 w-9 items-center justify-center rounded-full font-sans text-lg text-clay-600 hover:bg-clay-100"
+                className="flex h-9 w-9 items-center justify-center rounded-full font-sans text-lg text-noir-100 hover:bg-white/[0.09]"
               >
                 +
               </button>
@@ -172,25 +181,29 @@ export default function ProductDetailPage() {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <motion.button
-              type="button"
-              onClick={handleAdd}
-              className="btn-primary flex-1"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              {added ? "✓ Added!" : "Add to cart"}
-            </motion.button>
-            <motion.a
-              href={`https://wa.me/91${process.env.NEXT_PUBLIC_PHONE ?? "9423431674"}?text=Hi, I want to order ${qty}x ${item.name}`}
-              target="_blank"
-              rel="noreferrer"
-              className="flex-1 text-center btn-secondary"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              WhatsApp order
-            </motion.a>
+            <Magnetic>
+              <motion.button
+                type="button"
+                onClick={handleAdd}
+                className="glass-btn-primary flex-1 rounded-full px-8 py-3.5 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-noir-950"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                {added ? "Added to cart" : "Add to cart"}
+              </motion.button>
+            </Magnetic>
+            <Magnetic strength={0.24}>
+              <motion.a
+                href={`https://wa.me/91${process.env.NEXT_PUBLIC_PHONE ?? "9423431674"}?text=Hi, I want to order ${qty}x ${item.name}`}
+                target="_blank"
+                rel="noreferrer"
+                className="glass-btn-ghost flex-1 rounded-full px-8 py-3.5 text-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-white"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                WhatsApp order
+              </motion.a>
+            </Magnetic>
           </div>
 
           <motion.div className="mt-8 space-y-2">
@@ -202,9 +215,9 @@ export default function ProductDetailPage() {
             ].map((f) => (
               <div
                 key={f}
-                className="flex items-center gap-2 font-sans text-sm text-clay-600"
+                className="flex items-center gap-2 font-sans text-sm text-noir-300"
               >
-                <span className="text-emerald-500">✓</span> {f}
+                <span className="text-amber-400">✦</span> {f}
               </div>
             ))}
           </motion.div>
@@ -212,9 +225,9 @@ export default function ProductDetailPage() {
       </div>
 
       {related.length > 0 && (
-        <section className="border-t border-clay-200/60 bg-clay-100/60 py-16">
+        <section className="border-t border-white/[0.08] bg-white/[0.02] py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-10">
-            <h2 className="font-display text-2xl text-ink mb-8">
+            <h2 className="mb-8 font-display text-2xl text-white">
               More from {category.title}
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -222,14 +235,14 @@ export default function ProductDetailPage() {
                 <motion.div key={r.id} whileHover={{ y: -4 }}>
                   <Link
                     href={`/shop/${r.id}`}
-                    className="group block overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-md"
+                    className="group block overflow-hidden rounded-2xl border border-white/[0.12] bg-white/[0.04] shadow-2xl shadow-black/30"
                   >
                     <motion.div className="h-48">
                       <ProductCard3D image={r.image} alt={r.name} />
                     </motion.div>
                     <div className="p-4">
-                      <p className="font-display text-lg text-ink">{r.name}</p>
-                      <p className="font-display text-xl text-saffron-700 mt-1">
+                      <p className="font-display text-lg text-white">{r.name}</p>
+                      <p className="mt-1 font-display text-xl text-amber-300">
                         {r.price}
                       </p>
                     </div>

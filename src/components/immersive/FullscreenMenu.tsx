@@ -38,6 +38,15 @@ export function FullscreenMenu({ open, onClose }: Props) {
                 "radial-gradient(circle at 70% 30%, rgba(245,158,11,0.2), transparent 55%)",
             }}
           />
+          <motion.div
+            className="pointer-events-none absolute inset-0 opacity-30"
+            style={{
+              background:
+                "linear-gradient(110deg, transparent 15%, rgba(139,92,246,0.18) 45%, rgba(245,158,11,0.16) 72%, transparent 100%)",
+            }}
+            animate={{ x: ["-4%", "4%", "-4%"] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          />
 
           <div className="relative flex items-center justify-between px-6 py-6 md:px-12">
             <p className="font-sans text-xs uppercase tracking-[0.4em] text-amber-500/80">
@@ -53,7 +62,8 @@ export function FullscreenMenu({ open, onClose }: Props) {
             </button>
           </div>
 
-          <nav className="relative flex flex-1 flex-col justify-center gap-2 px-8 md:px-16">
+          <div className="relative grid flex-1 items-center gap-10 px-8 py-4 md:grid-cols-[1.1fr_0.9fr] md:px-16">
+          <nav className="relative flex flex-col justify-center gap-2">
             {links.map((l, i) => {
               const active = l.exact
                 ? pathname === l.href
@@ -69,18 +79,53 @@ export function FullscreenMenu({ open, onClose }: Props) {
                   <Link
                     href={l.href}
                     onClick={onClose}
-                    className={`block font-display text-4xl transition md:text-6xl ${
+                    className={`group relative inline-block overflow-hidden font-display text-4xl transition md:text-6xl ${
                       active
                         ? "text-amber-400"
                         : "text-white/90 hover:text-amber-300"
                     }`}
                   >
-                    {l.label}
+                    <span className="block translate-y-0 transition-transform duration-500 group-hover:-translate-y-full">
+                      {l.label}
+                    </span>
+                    <span
+                      aria-hidden
+                      className="absolute left-0 top-full block text-amber-300 transition-transform duration-500 group-hover:-translate-y-full"
+                    >
+                      {l.label}
+                    </span>
+                    <span className="pointer-events-none absolute -bottom-1 left-0 h-px w-0 bg-gradient-to-r from-amber-400/90 to-transparent transition-all duration-500 group-hover:w-full" />
                   </Link>
                 </motion.div>
               );
             })}
           </nav>
+          <motion.aside
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 16 }}
+            transition={{ delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="hidden rounded-3xl border border-white/[0.1] bg-white/[0.03] p-6 md:block"
+          >
+            <p className="font-sans text-[10px] uppercase tracking-[0.36em] text-amber-400/85">
+              Immersive Commerce
+            </p>
+            <h3 className="mt-3 font-display text-3xl text-white">
+              Cinematic navigation surface
+            </h3>
+            <p className="mt-4 font-sans text-sm leading-relaxed text-noir-300">
+              Designed for fluid route discovery with tactile transitions, premium typography, and motion-led hierarchy.
+            </p>
+            <div className="mt-6 space-y-3">
+              {["3D ready routes", "Luxury interaction language", "Conversion-focused flow"].map((point) => (
+                <div key={point} className="flex items-center gap-2 text-noir-200">
+                  <span className="text-amber-400">✦</span>
+                  <span className="font-sans text-sm">{point}</span>
+                </div>
+              ))}
+            </div>
+          </motion.aside>
+          </div>
 
           <div className="relative border-t border-white/[0.06] px-8 py-8 md:px-16">
             <p className="font-display text-xl text-white">{BRAND.name}</p>

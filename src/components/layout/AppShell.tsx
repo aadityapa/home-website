@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { motion } from "framer-motion";
 import { AppHeader } from "./Header";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { StickyCartFab } from "@/components/cart/StickyCartFab";
@@ -14,6 +13,7 @@ import { SeoJsonLd } from "@/components/seo/SeoJsonLd";
 import { CustomCursor } from "@/components/immersive/CustomCursor";
 import { AmbientBackground } from "@/components/ui/AmbientBackground";
 import { SiteBackdrop3D } from "@/components/three/SiteBackdrop3D";
+import { RouteTransitionLayer } from "@/components/immersive/RouteTransitionLayer";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -38,14 +38,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <CartToast />
       <StickyCartFab />
       {isHome && loaderDone && <CustomCursor />}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: loaderDone ? 1 : 0 }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: loaderDone ? 0.05 : 0 }}
-      >
-        {children}
-        {!isHome && <Footer />}
-      </motion.div>
+      <div style={{ opacity: loaderDone ? 1 : 0, transition: "opacity 0.6s cubic-bezier(0.16,1,0.3,1)" }}>
+        <RouteTransitionLayer routeKey={pathname}>
+          {children}
+          {!isHome && <Footer />}
+        </RouteTransitionLayer>
+      </div>
     </>
   );
 }
