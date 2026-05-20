@@ -213,3 +213,65 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #f59e0b, #c45f00);
 }
+
+/* ─── Immersive / Lusion-style dark theme ─── */
+.theme-immersive {
+  cursor: none;
+}
+
+.theme-immersive a,
+.theme-immersive button {
+  cursor: none;
+}
+
+@media (pointer: coarse) {
+  .theme-immersive,
+  .theme-immersive a,
+  .theme-immersive button {
+    cursor: auto;
+  }
+}
+
+.glass-btn-primary {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #b45309 100%);
+  box-shadow:
+    0 0 40px -8px rgba(245, 158, 11, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.35) inset;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s;
+}
+
+.glass-btn-primary:hover {
+  box-shadow:
+    0 0 56px -6px rgba(245, 158, 11, 0.7),
+    0 1px 0 rgba(255, 255, 255, 0.45) inset;
+}
+
+.glass-btn-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.glass-btn-ghost:hover {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-immersive .page-grain {
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+}
+
+body:has(.theme-immersive) {
+  background: #06060c;
+  color: #f4f4f8;
+}
+
+body:has(.theme-immersive) ::-webkit-scrollbar-track {
+  background: #0c0c14;
+}
+
+body:has(.theme-immersive) ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d97706, #78350f);
+}

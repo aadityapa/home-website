@@ -25,6 +25,7 @@ export function AppHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const scrolled = scroll > 48;
+  const immersive = location.pathname === "/";
 
   // Close mobile menu on route change
   useEffect(() => setMobileOpen(false), [location.pathname]);
@@ -42,9 +43,13 @@ export function AppHeader() {
     <>
       <motion.header
         className={`fixed left-0 right-0 top-0 z-50 border-b transition-[background-color,box-shadow,border-color] duration-500 ease-out ${
-          scrolled
-            ? "border-clay-200/90 bg-clay-50/[0.97] shadow-[0_8px_28px_-12px_rgba(55,35,15,0.14)] backdrop-blur-2xl"
-            : "border-clay-200/45 bg-clay-50/80 backdrop-blur-md"
+          immersive
+            ? scrolled
+              ? "border-white/[0.08] bg-noir-950/80 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.5)] backdrop-blur-2xl"
+              : "border-transparent bg-transparent backdrop-blur-sm"
+            : scrolled
+              ? "border-clay-200/90 bg-clay-50/[0.97] shadow-[0_8px_28px_-12px_rgba(55,35,15,0.14)] backdrop-blur-2xl"
+              : "border-clay-200/45 bg-clay-50/80 backdrop-blur-md"
         }`}
         initial={{ y: -28, opacity: 0 }}
         animate={{ y: reduceMotion ? 0 : hidden ? -80 : 0, opacity: 1 }}
@@ -64,11 +69,11 @@ export function AppHeader() {
           {/* Logo */}
           <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.18 }}>
             <Link to="/" className="group flex min-w-0 flex-col focus:outline-none rounded-md">
-              <span className="font-display text-lg tracking-[0.1em] text-ink transition duration-300 group-hover:text-saffron-600 md:text-xl">
+              <span className={`font-display text-lg tracking-[0.1em] transition duration-300 md:text-xl ${immersive ? "text-white group-hover:text-amber-400" : "text-ink group-hover:text-saffron-600"}`}>
                 {BRAND.name}
               </span>
               <span className="flex items-center gap-2">
-                <span className="text-[10px] font-sans font-light uppercase tracking-[0.35em] text-clay-500">{BRAND.company} · Telhara</span>
+                <span className={`text-[10px] font-sans font-light uppercase tracking-[0.35em] ${immersive ? "text-noir-300" : "text-clay-500"}`}>{BRAND.company} · Telhara</span>
                 <PureVegMark size="sm" className="scale-90" />
               </span>
             </Link>
@@ -83,7 +88,9 @@ export function AppHeader() {
                 end={l.exact}
                 className={({ isActive }) =>
                   `relative flex items-center rounded-lg px-3 py-2 font-sans text-sm font-medium transition duration-200 ${
-                    isActive ? "text-saffron-600" : "text-clay-600 hover:text-saffron-600 hover:bg-saffron-50/60"
+                    isActive
+                      ? immersive ? "text-amber-400" : "text-saffron-600"
+                      : immersive ? "text-noir-200 hover:text-amber-300 hover:bg-white/5" : "text-clay-600 hover:text-saffron-600 hover:bg-saffron-50/60"
                   }`
                 }
               >

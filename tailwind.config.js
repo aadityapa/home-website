@@ -24,6 +24,14 @@ export default {
           600: "#6f5843",
         },
         ink: "#1c1410",
+        noir: {
+          50: "#f4f4f8",
+          100: "#c8c8d4",
+          200: "#8a8a9a",
+          300: "#5c5c6e",
+          400: "#3a3a4a",
+          950: "#06060c",
+        },
       },
       fontFamily: {
         display: ["Cormorant Garamond", "Georgia", "serif"],

@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+// useLocation also used in App root for immersive home
 import { AnimatePresence, motion } from "framer-motion";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CartProvider } from "./context/CartContext";
@@ -9,13 +10,14 @@ import { StickyCartFab } from "./components/cart/StickyCartFab";
 import { CartToast } from "./components/ui/CartToast";
 import { AmbientBackground } from "./components/ui/AmbientBackground";
 import { SiteBackdrop3D } from "./components/three/SiteBackdrop3D";
+import { CustomCursor } from "./components/immersive/CustomCursor";
 import { AppHeader } from "./components/layout/Header";
 import { LoadingScreen } from "./components/ui/LoadingScreen";
 import { Footer } from "./components/sections/Footer";
 import { SeoJsonLd } from "./components/seo/SeoJsonLd";
 import { SectionFallback } from "./components/ui/SectionFallback";
 
-const HomePage           = lazy(() => import("./pages/HomePage"));
+const ImmersiveHomePage  = lazy(() => import("./pages/ImmersiveHomePage"));
 const ShopPage           = lazy(() => import("./pages/ShopPage"));
 const ProductDetailPage  = lazy(() => import("./pages/ProductDetailPage"));
 const AboutPage          = lazy(() => import("./pages/AboutPage"));
@@ -47,7 +49,7 @@ function AppRoutes() {
   return (
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><Suspense fallback={<SectionFallback label="Loading…" />}><HomePage /></Suspense></PageTransition>} />
+        <Route path="/" element={<PageTransition><Suspense fallback={<SectionFallback label="Loading…" />}><ImmersiveHomePage /></Suspense></PageTransition>} />
         <Route path="/shop" element={<PageTransition><Suspense fallback={<SectionFallback label="Loading shop…" />}><ShopPage /></Suspense></PageTransition>} />
         <Route path="/shop/:id" element={<PageTransition><Suspense fallback={<SectionFallback label="Loading product…" />}><ProductDetailPage /></Suspense></PageTransition>} />
         <Route path="/about" element={<PageTransition><Suspense fallback={<SectionFallback label="Loading about…" />}><AboutPage /></Suspense></PageTransition>} />
@@ -60,6 +62,8 @@ function AppRoutes() {
 
 export default function App() {
   const [loaderDone, setLoaderDone] = useState(false);
+  const location = useLocation();
+  const isImmersiveHome = location.pathname === "/";
 
   useEffect(() => {
     if (!loaderDone) return;
@@ -71,8 +75,9 @@ export default function App() {
     <CartProvider>
       <ScrollProvider>
         <SeoJsonLd />
-        <AmbientBackground />
-        <SiteBackdrop3D />
+        {!isImmersiveHome && <AmbientBackground />}
+        {!isImmersiveHome && <SiteBackdrop3D />}
+        {isImmersiveHome && loaderDone && <CustomCursor />}
         <div className="page-grain" aria-hidden />
         {!loaderDone && <LoadingScreen onDone={() => setLoaderDone(true)} />}
         <AppHeader />
@@ -85,7 +90,7 @@ export default function App() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: loaderDone ? 0.05 : 0 }}
         >
           <AppRoutes />
-          <Footer />
+          {!isImmersiveHome && <Footer />}
         </motion.div>
       </ScrollProvider>
     </CartProvider>
