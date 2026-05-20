@@ -5,6 +5,7 @@ import { whatsappUrl } from "../lib/order";
 import { Stagger, StaggerItem } from "../components/motion/Stagger";
 import { transitionSection, viewportReveal } from "../lib/motion";
 import { use3DQuality } from "../hooks/use3DQuality";
+import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 
 const ContactBannerScene = lazy(() =>
   import("../components/three/ContactBannerScene").then((m) => ({
@@ -49,7 +50,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-clay-50 pt-20">
+    <ImmersivePageLayout className="pt-20">
       {/* 3D banner */}
       <section className="relative h-56 overflow-hidden bg-gradient-to-br from-amber-900 via-saffron-800 to-amber-700 md:h-72">
         <div className="absolute inset-0">
@@ -162,7 +163,7 @@ export default function ContactPage() {
           </Stagger>
         </motion.form>
       </div>
-    </div>
+    </ImmersivePageLayout>
   );
 }
 

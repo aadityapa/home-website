@@ -1,11 +1,13 @@
 import { useState, useMemo, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useSearchParams } from "react-router-dom";
+import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import { PRODUCT_CATEGORIES } from "../data/brand";
 import { useCart } from "../context/CartContext";
 import { easeOut, transitionSection } from "../lib/motion";
 import { ProductCard3D } from "../components/three/ProductCard3D";
 import { use3DQuality } from "../hooks/use3DQuality";
+import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 
 const ShopBannerScene = lazy(() =>
   import("../components/three/ShopBannerScene").then((m) => ({
@@ -19,8 +21,9 @@ const categories = [
 ];
 
 export default function ShopPage() {
-  const [params, setParams] = useSearchParams();
-  const [activeCat, setActiveCat] = useState(params.get("cat") ?? "all");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [activeCat, setActiveCat] = useState(searchParams.get("cat") ?? "all");
   const [sort, setSort] = useState<"default" | "price-asc" | "price-desc">(
     "default",
   );
@@ -61,11 +64,11 @@ export default function ShopPage() {
 
   function handleCat(id: string) {
     setActiveCat(id);
-    setParams(id === "all" ? {} : { cat: id });
+    router.push(id === "all" ? "/shop" : `/shop?cat=${id}`);
   }
 
   return (
-    <div className="min-h-screen bg-clay-50 pt-20">
+    <ImmersivePageLayout className="pt-20">
       <section className="relative h-56 overflow-hidden bg-gradient-to-br from-amber-900 via-saffron-800 to-amber-700 md:h-72">
         <div className="absolute inset-0">
           {quality !== "off" ? (
@@ -166,7 +169,7 @@ export default function ShopPage() {
               >
                 <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-lg shadow-clay-300/10 backdrop-blur-md transition hover:shadow-xl hover:shadow-clay-400/15">
                   <Link
-                    to={`/shop/${item.id}`}
+                    href={`/shop/${item.id}`}
                     className="block aspect-[4/3] overflow-hidden"
                   >
                     <ProductCard3D image={item.image} alt={item.name} />
@@ -176,7 +179,7 @@ export default function ShopPage() {
                     <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-saffron-600">
                       {item.categoryLabel}
                     </p>
-                    <Link to={`/shop/${item.id}`}>
+                    <Link href={`/shop/${item.id}`}>
                       <h2 className="mt-1 font-display text-xl text-ink hover:text-saffron-700 transition">
                         {item.name}
                       </h2>
@@ -220,7 +223,7 @@ export default function ShopPage() {
                           + Cart
                         </motion.button>
                         <Link
-                          to={`/shop/${item.id}`}
+                          href={`/shop/${item.id}`}
                           className="rounded-full bg-gradient-to-r from-amber-800 to-saffron-600 px-3 py-1.5 font-sans text-xs font-semibold text-white"
                         >
                           3D View
@@ -234,6 +237,6 @@ export default function ShopPage() {
           </motion.div>
         </AnimatePresence>
       </div>
-    </div>
+    </ImmersivePageLayout>
   );
 }

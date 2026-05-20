@@ -6,7 +6,7 @@ import { BRAND } from "../../data/brand";
 import { use3DQuality } from "../../hooks/use3DQuality";
 import { InternetBackdrop } from "../ui/InternetBackdrop";
 import { heroItem, heroStagger } from "../../lib/motion";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const HeroCanvas = lazy(() =>
   import("../three/HeroCanvas").then((mod) => ({ default: mod.HeroCanvas })),
@@ -129,7 +129,7 @@ export function HeroSection() {
 
           <m.div variants={reduceMotion ? undefined : heroItem} className="mt-10 flex flex-wrap items-center gap-4">
             <m.div whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.96 }}>
-              <Link to="/shop" className="btn-primary">Shop now</Link>
+              <Link href="/shop" className="btn-primary">Shop now</Link>
             </m.div>
             <m.a href={`tel:+91${BRAND.phone}`} className="btn-secondary"
               whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.96 }}>

@@ -1,6 +1,6 @@
-/** Public site URL for SEO — set `VITE_SITE_URL` in `.env` / `.env.production` before deploy. */
+/** Public site URL for SEO — set `NEXT_PUBLIC_SITE_URL` before deploy. */
 export function getSiteOrigin(): string {
-  const raw = import.meta.env.VITE_SITE_URL as string | undefined;
+  const raw = process.env.NEXT_PUBLIC_SITE_URL;
   if (raw?.trim()) return raw.replace(/\/$/, "");
   if (typeof window !== "undefined") return window.location.origin;
   return "https://www.example.com";

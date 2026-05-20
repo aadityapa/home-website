@@ -1,18 +1,20 @@
+"use client";
+
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { BRAND } from "../../data/brand";
 import { transitionSection, viewportReveal } from "../../lib/motion";
 
 const footerLinks = [
-  { to: "/shop", label: "Shop" },
-  { to: "/about", label: "About" },
-  { to: "/journey", label: "Journey" },
-  { to: "/contact", label: "Contact" },
+  { href: "/shop", label: "Shop" },
+  { href: "/about", label: "About" },
+  { href: "/journey", label: "Journey" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-clay-200 bg-clay-100/95 py-14">
+    <footer className="theme-immersive relative overflow-hidden border-t border-white/[0.06] bg-noir-950 py-14">
       <motion.div
         className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px]"
         style={{ background: "linear-gradient(90deg, transparent, rgba(245,158,11,0.5), rgba(180,83,9,0.7), rgba(245,158,11,0.5), transparent)" }}
@@ -46,7 +48,7 @@ export function Footer() {
           <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-clay-500 mb-4">Navigation</p>
           <nav className="flex flex-col gap-2">
             {footerLinks.map(l => (
-              <Link key={l.to} to={l.to}
+              <Link key={l.href} href={l.href}
                 className="font-sans text-sm text-clay-600 transition hover:text-saffron-600">
                 {l.label}
               </Link>

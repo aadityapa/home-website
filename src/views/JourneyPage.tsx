@@ -4,7 +4,8 @@ import { transitionSection, viewportReveal } from "../lib/motion";
 import { use3DQuality } from "../hooks/use3DQuality";
 import { SECTION_BACKGROUNDS } from "../data/backgrounds";
 import { InternetBackdrop } from "../components/ui/InternetBackdrop";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 
 const SpiceJourneyCanvas = lazy(() => import("../components/three/SpiceJourneyCanvas"));
 
@@ -28,7 +29,7 @@ export default function JourneyPage() {
   const reduced = quality === "off";
 
   return (
-    <div className="min-h-screen bg-clay-100 pt-20">
+    <ImmersivePageLayout className="pt-20">
       {/* Header */}
       <section className="relative overflow-hidden bg-gradient-to-br from-amber-800 to-saffron-700 py-20 md:py-28">
         <div className="pointer-events-none absolute inset-0 opacity-20">
@@ -107,9 +108,11 @@ export default function JourneyPage() {
       <div className="border-t border-clay-200/60 bg-clay-100/80 py-12">
         <div className="mx-auto flex max-w-lg flex-col items-center gap-4 px-4 text-center">
           <p className="font-display text-2xl text-ink">Ready to explore our products?</p>
-          <Link to="/shop" className="btn-primary">Visit the shop →</Link>
+          <Link href="/shop" className="glass-btn-primary inline-block rounded-full px-8 py-3">
+            Visit the shop →
+          </Link>
         </div>
       </div>
-    </div>
+    </ImmersivePageLayout>
   );
 }

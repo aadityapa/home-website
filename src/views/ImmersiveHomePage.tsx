@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BRAND, PRODUCT_CATEGORIES } from "../data/brand";
@@ -76,14 +76,14 @@ export default function ImmersiveHomePage() {
           <div className="mt-10 flex flex-wrap gap-4">
             <Magnetic>
               <Link
-                to="/shop"
+                href="/shop"
                 className="glass-btn-primary inline-flex items-center gap-2 rounded-full px-8 py-4 font-sans text-sm font-semibold uppercase tracking-wider text-noir-950"
               >
                 Explore collection
               </Link>
             </Magnetic>
             <Magnetic strength={0.2}>
-              <Link to="/journey" className="glass-btn-ghost rounded-full px-8 py-4 font-sans text-sm font-medium text-white/90">
+              <Link href="/journey" className="glass-btn-ghost rounded-full px-8 py-4 font-sans text-sm font-medium text-white/90">
                 Our journey
               </Link>
             </Magnetic>
@@ -121,7 +121,7 @@ export default function ImmersiveHomePage() {
             {featured.map((item, i) => (
               <GlassCard key={item.id} delay={i * 0.05}>
                 <div data-reveal>
-                  <Link to={`/shop/${item.id}`} className="block">
+                  <Link href={`/shop/${item.id}`} className="block">
                     <div className="mb-4 aspect-[4/3] overflow-hidden rounded-xl">
                       <ProductCard3D image={item.image} alt={item.name} />
                     </div>
@@ -154,7 +154,7 @@ export default function ImmersiveHomePage() {
               Scroll-driven cameras, volumetric light, and glass interfaces — a premium digital
               experience for {BRAND.company}.
             </p>
-            <Link to="/about" className="glass-btn-ghost mt-8 inline-block rounded-full px-6 py-3 text-sm">
+            <Link href="/about" className="glass-btn-ghost mt-8 inline-block rounded-full px-6 py-3 text-sm">
               About us →
             </Link>
           </motion.div>

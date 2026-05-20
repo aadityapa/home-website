@@ -14,7 +14,7 @@ function cloneCategories(cats: readonly ProductCategory[]): ProductCategory[] {
 
 /**
  * Loads the storefront catalog from JSON (`/data/catalog.json` by default).
- * Override with `VITE_CATALOG_URL`. Falls back to embedded data if fetch fails.
+ * Override with `NEXT_PUBLIC_CATALOG_URL`. Falls back to embedded data if fetch fails.
  */
 export function useCatalog() {
   const [categories, setCategories] = useState<ProductCategory[]>(() =>
@@ -26,7 +26,7 @@ export function useCatalog() {
 
   useEffect(() => {
     const url =
-      (import.meta.env.VITE_CATALOG_URL as string | undefined)?.trim() ||
+      process.env.NEXT_PUBLIC_CATALOG_URL?.trim() ||
       "/data/catalog.json";
 
     let cancelled = false;

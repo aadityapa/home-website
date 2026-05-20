@@ -1,4 +1,5 @@
-import { useParams, Link } from "react-router-dom";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useMemo, useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { PRODUCT_CATEGORIES } from "../data/brand";
@@ -7,6 +8,7 @@ import { transitionSection } from "../lib/motion";
 import { productAccent } from "../lib/product3d";
 import { use3DQuality } from "../hooks/use3DQuality";
 import { ProductCard3D } from "../components/three/ProductCard3D";
+import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 
 const ProductViewerCanvas = lazy(() =>
   import("../components/three/ProductViewerCanvas").then((m) => ({
@@ -15,7 +17,8 @@ const ProductViewerCanvas = lazy(() =>
 );
 
 export default function ProductDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams();
+  const id = params?.id as string | undefined;
   const { addItem } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
@@ -31,12 +34,12 @@ export default function ProductDetailPage() {
 
   if (!item || !category) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 pt-24">
-        <p className="font-display text-2xl text-ink">Product not found</p>
-        <Link to="/shop" className="btn-primary">
+      <ImmersivePageLayout className="flex min-h-screen flex-col items-center justify-center gap-4 pt-24">
+        <p className="font-display text-2xl text-white">Product not found</p>
+        <Link href="/shop" className="glass-btn-primary rounded-full px-8 py-3">
           Back to shop
         </Link>
-      </div>
+      </ImmersivePageLayout>
     );
   }
 
@@ -63,14 +66,14 @@ export default function ProductDetailPage() {
   const accent = productAccent(item.id);
 
   return (
-    <div className="min-h-screen bg-clay-50 pt-20">
+    <ImmersivePageLayout className="pt-20">
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 md:px-10">
         <nav className="flex items-center gap-2 font-sans text-xs text-clay-500">
-          <Link to="/" className="hover:text-saffron-600 transition">
+          <Link href="/" className="hover:text-saffron-600 transition">
             Home
           </Link>
           <span>/</span>
-          <Link to="/shop" className="hover:text-saffron-600 transition">
+          <Link href="/shop" className="hover:text-saffron-600 transition">
             Shop
           </Link>
           <span>/</span>
@@ -179,7 +182,7 @@ export default function ProductDetailPage() {
               {added ? "✓ Added!" : "Add to cart"}
             </motion.button>
             <motion.a
-              href={`https://wa.me/91${import.meta.env.VITE_PHONE ?? "9423431674"}?text=Hi, I want to order ${qty}x ${item.name}`}
+              href={`https://wa.me/91${process.env.NEXT_PUBLIC_PHONE ?? "9423431674"}?text=Hi, I want to order ${qty}x ${item.name}`}
               target="_blank"
               rel="noreferrer"
               className="flex-1 text-center btn-secondary"
@@ -218,7 +221,7 @@ export default function ProductDetailPage() {
               {related.map((r) => (
                 <motion.div key={r.id} whileHover={{ y: -4 }}>
                   <Link
-                    to={`/shop/${r.id}`}
+                    href={`/shop/${r.id}`}
                     className="group block overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-md"
                   >
                     <motion.div className="h-48">
@@ -237,6 +240,6 @@ export default function ProductDetailPage() {
           </div>
         </section>
       )}
-    </div>
+    </ImmersivePageLayout>
   );
 }

@@ -2,7 +2,8 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import { lazy, Suspense, useRef } from "react";
 import { BRAND } from "../data/brand";
 import { transitionSection, viewportReveal } from "../lib/motion";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 import { use3DQuality } from "../hooks/use3DQuality";
 
 const AboutBannerScene = lazy(() =>
@@ -44,7 +45,7 @@ export default function AboutPage() {
   const quality = use3DQuality();
 
   return (
-    <div className="min-h-screen bg-clay-50 pt-20">
+    <ImmersivePageLayout className="pt-0">
       {/* Hero banner with 3D scene */}
       <section className="relative h-72 overflow-hidden bg-gradient-to-br from-amber-800 to-saffron-700 md:h-96">
         <div className="absolute inset-0">
@@ -96,8 +97,8 @@ export default function AboutPage() {
             </motion.p>
             <motion.div className="mt-8 flex gap-4"
               initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={viewportReveal} transition={{ ...transitionSection, delay: 0.2 }}>
-              <Link to="/shop" className="btn-primary">Shop now</Link>
-              <Link to="/contact" className="btn-secondary">Contact us</Link>
+              <Link href="/shop" className="btn-primary">Shop now</Link>
+              <Link href="/contact" className="btn-secondary">Contact us</Link>
             </motion.div>
           </motion.div>
 
@@ -183,6 +184,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </div>
+    </ImmersivePageLayout>
   );
 }

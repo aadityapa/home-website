@@ -6,9 +6,10 @@ import * as THREE from "three";
 import { useAppScroll } from "../../../context/ScrollContext";
 import { useMouseParallax } from "../../../hooks/useMouseParallax";
 import { AmbientParticles } from "./AmbientParticles";
+import { GltfTower } from "./GltfTower";
 
 /** Futuristic pavilion tower — Lusion-style hero centerpiece */
-function PavilionTower() {
+export function PavilionTower() {
   const group = useRef<Group>(null);
 
   const floors = useMemo(
@@ -103,7 +104,7 @@ export function BuildingScene({ particleCount = 100 }: { particleCount?: number 
       <directionalLight position={[-8, 4, -4]} intensity={0.5} color="#818cf8" />
 
       <Float speed={0.5} rotationIntensity={0.08} floatIntensity={0.15}>
-        <PavilionTower />
+        <GltfTower />
       </Float>
 
       <AmbientParticles count={particleCount} />

@@ -1,6 +1,6 @@
 import { HeroSection } from "../components/sections/HeroSection";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { PRODUCT_CATEGORIES } from "../data/brand";
 import { transitionSection, viewportReveal } from "../lib/motion";
 import { ProductCard3D } from "../components/three/ProductCard3D";
@@ -69,7 +69,7 @@ export default function HomePage() {
                   whileHover={{ y: -6 }}
                 >
                   <Link
-                    to={`/shop?cat=${cat.id}`}
+                    href={`/shop?cat=${cat.id}`}
                     className={`flex flex-col items-center gap-4 rounded-3xl border bg-gradient-to-br ${meta?.bg} ${meta?.border} p-6 text-center shadow-md shadow-clay-300/10 backdrop-blur-sm transition hover:shadow-xl hover:shadow-clay-400/15`}
                   >
                     {meta && (
@@ -138,7 +138,7 @@ export default function HomePage() {
                 Most loved · 3D view
               </h2>
             </div>
-            <Link to="/shop" className="btn-secondary text-sm">
+            <Link href="/shop" className="btn-secondary text-sm">
               View all →
             </Link>
           </motion.div>
@@ -156,7 +156,7 @@ export default function HomePage() {
                   whileHover={{ y: -5 }}
                 >
                   <Link
-                    to={`/shop/${item.id}`}
+                    href={`/shop/${item.id}`}
                     className="group block overflow-hidden rounded-2xl border border-white/60 bg-white/75 shadow-lg shadow-clay-300/10 backdrop-blur-md transition hover:shadow-xl hover:shadow-clay-400/15"
                   >
                     <div className="aspect-[4/3] overflow-hidden">

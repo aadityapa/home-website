@@ -12,7 +12,7 @@ export function brandStoryVideoSrc(): string {
 
 /** Only if `VITE_VIDEO_ALLOW_FALLBACK=true` (e.g. local dev without the MP4 yet). */
 export function remoteVideoFallbackUrl(): string | null {
-  return import.meta.env.VITE_VIDEO_ALLOW_FALLBACK === "true"
+  return process.env.NEXT_PUBLIC_VIDEO_ALLOW_FALLBACK === "true"
     ? "https://videos.pexels.com/video-files/3191892/3191892-hd_1920_1080_25fps.mp4"
     : null;
 }
