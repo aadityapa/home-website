@@ -20,6 +20,7 @@ export default function ImmersiveHomePage() {
   const pinRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const runwayRef = useRef<HTMLDivElement>(null);
+  const chaptersRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const heroWords = useMemo(() => BRAND.name.split(" "), []);
 
@@ -83,6 +84,37 @@ export default function ImmersiveHomePage() {
             scrub: 1.1,
           },
         });
+      }
+
+      if (chaptersRef.current) {
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: chaptersRef.current,
+              start: "top 72%",
+              end: "bottom 25%",
+              scrub: 1.1,
+            },
+          })
+          .fromTo(
+            chaptersRef.current.querySelectorAll("[data-chapter]"),
+            { y: 88, opacity: 0, rotateX: 16, scale: 0.95 },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              scale: 1,
+              stagger: 0.14,
+              duration: 1,
+              ease: "power3.out",
+            },
+          )
+          .fromTo(
+            chaptersRef.current.querySelectorAll("[data-chapter-line]"),
+            { width: "0%" },
+            { width: "100%", stagger: 0.15, duration: 0.9 },
+            0.2,
+          );
       }
     });
 
@@ -239,6 +271,45 @@ export default function ImmersiveHomePage() {
               </div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      <section ref={chaptersRef} className="relative z-10 border-t border-white/[0.06] px-6 py-28 md:px-14">
+        <div className="mx-auto max-w-6xl">
+          <p className="font-sans text-xs uppercase tracking-[0.45em] text-amber-400/85">
+            Cinematic chapters
+          </p>
+          <h2 className="mt-4 max-w-3xl font-display text-4xl text-white md:text-5xl">
+            A luxury commerce narrative designed like a short film.
+          </h2>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                t: "Atmosphere",
+                b: "Volumetric lighting, parallax depth, and real-time post FX create a premium digital stage.",
+              },
+              {
+                t: "Product presence",
+                b: "Each product appears as a floating hero object with spotlight behavior and tactile motion.",
+              },
+              {
+                t: "Conversion rhythm",
+                b: "Quick-view, magnetic CTAs, and cinematic pacing guide users from emotion to checkout intent.",
+              },
+            ].map((chapter) => (
+              <div
+                key={chapter.t}
+                data-chapter
+                className="rounded-2xl border border-white/[0.1] bg-gradient-to-b from-white/[0.07] to-white/[0.02] p-6"
+              >
+                <p className="font-sans text-[10px] uppercase tracking-[0.35em] text-amber-400/80">
+                  {chapter.t}
+                </p>
+                <div data-chapter-line className="mt-3 h-px bg-gradient-to-r from-amber-400/80 to-transparent" />
+                <p className="mt-4 font-sans text-sm leading-relaxed text-noir-300">{chapter.b}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

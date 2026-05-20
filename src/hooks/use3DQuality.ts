@@ -7,15 +7,21 @@ function compute(): Quality3D {
   const reduceMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
-  const nav = navigator as Navigator & { deviceMemory?: number };
+  const nav = navigator as Navigator & {
+    deviceMemory?: number;
+    connection?: { saveData?: boolean; effectiveType?: string };
+  };
   const lowMem =
     typeof nav.deviceMemory === "number" && nav.deviceMemory <= 2;
-  if (reduceMotion || lowMem) return "off";
+  const lowCpu = navigator.hardwareConcurrency <= 4;
+  const saveData = Boolean(nav.connection?.saveData);
+  const slowNet = /2g/.test(nav.connection?.effectiveType ?? "");
+  if (reduceMotion || lowMem || saveData || slowNet) return "off";
 
   const narrow = window.innerWidth < 640;
   const medMem =
     typeof nav.deviceMemory === "number" && nav.deviceMemory <= 4;
-  if (narrow || medMem) return "lite";
+  if (narrow || medMem || lowCpu) return "lite";
 
   return "full";
 }

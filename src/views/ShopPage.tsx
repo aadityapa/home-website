@@ -1,4 +1,4 @@
-import { useState, useMemo, lazy, Suspense, useEffect } from "react";
+import { useState, useMemo, lazy, Suspense, useEffect, type PointerEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -105,6 +105,22 @@ export default function ShopPage() {
     window.setTimeout(() => setPriceFlash(null), 550);
   }
 
+  function handleCardPointerMove(e: PointerEvent<HTMLElement>, itemId: string) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    e.currentTarget.style.setProperty("--spot-x", `${x}%`);
+    e.currentTarget.style.setProperty("--spot-y", `${y}%`);
+    e.currentTarget.style.setProperty("--tilt-x", `${(y - 50) * -0.08}deg`);
+    e.currentTarget.style.setProperty("--tilt-y", `${(x - 50) * 0.1}deg`);
+    e.currentTarget.setAttribute("data-hovered-id", itemId);
+  }
+
+  function handleCardPointerLeave(e: PointerEvent<HTMLElement>) {
+    e.currentTarget.style.setProperty("--tilt-x", "0deg");
+    e.currentTarget.style.setProperty("--tilt-y", "0deg");
+  }
+
   return (
     <ImmersivePageLayout className="pt-20">
       <section className="relative h-56 overflow-hidden bg-gradient-to-br from-[#1a0b05] via-[#2c1307] to-[#0c0a14] md:h-72">
@@ -204,8 +220,10 @@ export default function ShopPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04, ...transitionSection }}
                 whileHover={{ y: -5 }}
+                onPointerMove={(e) => handleCardPointerMove(e, item.id)}
+                onPointerLeave={handleCardPointerLeave}
               >
-                <div className="shop-cinematic-panel overflow-hidden rounded-3xl border border-white/[0.12] bg-gradient-to-b from-white/[0.08] via-white/[0.04] to-black/30 shadow-2xl backdrop-blur-xl transition">
+                <div className="shop-cinematic-panel shop-spotlight-panel overflow-hidden rounded-3xl border border-white/[0.12] bg-gradient-to-b from-white/[0.08] via-white/[0.04] to-black/30 shadow-2xl backdrop-blur-xl transition">
                   <Link
                     href={`/shop/${item.id}`}
                     className="block aspect-[4/3] overflow-hidden"
