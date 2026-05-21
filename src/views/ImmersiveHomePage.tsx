@@ -13,6 +13,7 @@ import { useCatalog } from "../hooks/useCatalog";
 import { CinematicHeroCanvas } from "../components/immersive/cinematic/CinematicHeroCanvas";
 import { Magnetic } from "../components/immersive/Magnetic";
 import { ProductCard3D } from "../components/three/ProductCard3D";
+import { trackEvent } from "../lib/analytics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -128,6 +129,13 @@ export default function ImmersiveHomePage() {
     if (typeof window !== "undefined") window.localStorage.setItem(key, chosen);
   }, []);
 
+  useEffect(() => {
+    trackEvent("hero_variant_impression", {
+      variant: heroVariant,
+      productCount: heroProducts.length,
+    });
+  }, [heroVariant, heroProducts.length]);
+
   const heroLead = heroProducts[0];
 
   return (
@@ -165,12 +173,32 @@ export default function ImmersiveHomePage() {
           </p>
           <div data-hero-sub className="mt-9 flex flex-wrap gap-3">
             <Magnetic>
-              <Link href={heroCopy.primaryHref} className="glass-btn-primary rounded-full px-8 py-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-noir-950">
+              <Link
+                href={heroCopy.primaryHref}
+                onClick={() =>
+                  trackEvent("hero_primary_cta_click", {
+                    variant: heroVariant,
+                    cta: heroCopy.primaryCta,
+                    href: heroCopy.primaryHref,
+                  })
+                }
+                className="glass-btn-primary rounded-full px-8 py-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-noir-950"
+              >
                 {heroCopy.primaryCta}
               </Link>
             </Magnetic>
             <Magnetic strength={0.2}>
-              <Link href={heroCopy.secondaryHref} className="glass-btn-ghost rounded-full px-8 py-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-white">
+              <Link
+                href={heroCopy.secondaryHref}
+                onClick={() =>
+                  trackEvent("hero_secondary_cta_click", {
+                    variant: heroVariant,
+                    cta: heroCopy.secondaryCta,
+                    href: heroCopy.secondaryHref,
+                  })
+                }
+                className="glass-btn-ghost rounded-full px-8 py-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-white"
+              >
                 {heroCopy.secondaryCta}
               </Link>
             </Magnetic>

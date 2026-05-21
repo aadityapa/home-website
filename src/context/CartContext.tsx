@@ -12,6 +12,7 @@ import {
 } from "react";
 import type { ProductItem } from "../data/brand";
 import { parseInrRupees } from "../lib/price";
+import { trackEvent } from "../lib/analytics";
 
 export type CartLine = {
   productId: string;
@@ -70,7 +71,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cartToast, setCartToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const openCart = useCallback(() => setDrawerOpen(true), []);
+  const openCart = useCallback(() => {
+    setDrawerOpen(true);
+    trackEvent("cart_opened");
+  }, []);
   const closeCart = useCallback(() => setDrawerOpen(false), []);
 
   const dismissCartToast = useCallback(() => {
@@ -115,6 +119,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
             quantity: qty,
           },
         ];
+      });
+      trackEvent("add_to_cart", {
+        productId: product.id,
+        productName: product.name,
+        category: categoryLabel,
+        quantity: qty,
+        priceRupees,
       });
       setCartToast(`${product.name} · added to cart`);
       if (toastTimer.current) clearTimeout(toastTimer.current);

@@ -9,6 +9,7 @@ import {
 } from "../../lib/order";
 import { formatInr } from "../../lib/price";
 import { cartLine } from "../../lib/motion";
+import { trackEvent } from "../../lib/analytics";
 
 type Step = "cart" | "checkout" | "success";
 
@@ -120,6 +121,11 @@ export function CartDrawer() {
 
   const handleCheckoutClick = () => {
     if (lines.length === 0) return;
+    trackEvent("checkout_started", {
+      itemCount,
+      subtotalRupees,
+      lines: lines.length,
+    });
     setStep("checkout");
   };
 
@@ -129,6 +135,12 @@ export function CartDrawer() {
 
     const id = makeOrderId();
     setOrderId(id);
+    trackEvent("order_placed", {
+      orderId: id,
+      itemCount,
+      subtotalRupees,
+      payment,
+    });
 
     if (payment === "online") {
       console.info(
@@ -140,6 +152,7 @@ export function CartDrawer() {
   };
 
   const handleDone = () => {
+    trackEvent("cart_cleared_after_success");
     clearCart();
     closeCart();
   };
