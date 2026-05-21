@@ -8,6 +8,7 @@ import { BRAND } from "@/data/brand";
 const links = [
   { href: "/", label: "Home", exact: true },
   { href: "/shop", label: "Shop", exact: false },
+  { href: "/wishlist", label: "Wishlist", exact: false },
   { href: "/about", label: "About", exact: false },
   { href: "/journey", label: "Journey", exact: false },
   { href: "/contact", label: "Contact", exact: false },

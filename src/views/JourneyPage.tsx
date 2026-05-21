@@ -7,6 +7,7 @@ import { SECTION_BACKGROUNDS } from "../data/backgrounds";
 import { InternetBackdrop } from "../components/ui/InternetBackdrop";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 import { Magnetic } from "../components/immersive/Magnetic";
+import { useCatalog } from "../hooks/useCatalog";
 
 const SpiceJourneyCanvas = lazy(() => import("../components/three/SpiceJourneyCanvas"));
 
@@ -31,6 +32,7 @@ function JourneyFallback() {
 export default function JourneyPage() {
   const quality = use3DQuality();
   const reduced = quality === "off";
+  const { categories } = useCatalog();
 
   return (
     <ImmersivePageLayout className="pt-20">
@@ -148,6 +150,33 @@ export default function JourneyPage() {
             </div>
           ))}
         </motion.div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pb-14 sm:px-6 md:px-10">
+        <div className="rounded-3xl border border-white/[0.12] bg-gradient-to-r from-white/[0.06] to-white/[0.02] p-6 md:p-8">
+          <p className="font-sans text-[10px] uppercase tracking-[0.34em] text-amber-400/85">
+            Conversion story map
+          </p>
+          <h3 className="mt-2 font-display text-3xl text-white md:text-4xl">
+            From ingredient motion to checkout intent
+          </h3>
+          <div className="mt-6 grid gap-4 md:grid-cols-4">
+            {categories.map((cat, idx) => (
+              <div
+                key={cat.id}
+                className="rounded-2xl border border-white/[0.1] bg-black/25 p-4"
+              >
+                <p className="font-sans text-[10px] uppercase tracking-[0.22em] text-noir-300">
+                  Step {idx + 1}
+                </p>
+                <p className="mt-2 font-display text-xl text-white">{cat.title}</p>
+                <p className="mt-1 font-sans text-xs text-noir-300">
+                  {cat.items.length} products
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <div className="border-t border-white/[0.08] bg-white/[0.02] py-12">

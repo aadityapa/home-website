@@ -3,6 +3,10 @@ import { useParams } from "next/navigation";
 import { useMemo, useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 import { PRODUCT_CATEGORIES } from "../data/brand";
 import { useCart } from "../context/CartContext";
 import { transitionSection } from "../lib/motion";
@@ -11,6 +15,7 @@ import { use3DQuality } from "../hooks/use3DQuality";
 import { ProductCard3D } from "../components/three/ProductCard3D";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 import { Magnetic } from "../components/immersive/Magnetic";
+import { useWishlistStore } from "../stores/wishlist";
 
 const ProductViewerCanvas = lazy(() =>
   import("../components/three/ProductViewerCanvas").then((m) => ({
@@ -25,6 +30,8 @@ export default function ProductDetailPage() {
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const quality = use3DQuality();
+  const toggleWish = useWishlistStore((s) => s.toggle);
+  const hasWish = useWishlistStore((s) => s.has);
 
   const { item, category } = useMemo(() => {
     for (const cat of PRODUCT_CATEGORIES) {
@@ -68,6 +75,7 @@ export default function ProductDetailPage() {
   const accent = productAccent(item.id);
   const priceRaw = parseInt(item.price.replace(/\D/g, ""), 10) || 0;
   const totalPrice = (priceRaw * qty).toLocaleString("en-IN");
+  const galleryItems = [item, ...related.slice(0, 4)];
 
   return (
     <ImmersivePageLayout className="pt-20">
@@ -192,6 +200,21 @@ export default function ProductDetailPage() {
                 {added ? "Added to cart" : "Add to cart"}
               </motion.button>
             </Magnetic>
+            <Magnetic strength={0.22}>
+              <motion.button
+                type="button"
+                onClick={() => toggleWish(item.id)}
+                className={`rounded-full px-8 py-3.5 font-sans text-sm font-semibold uppercase tracking-[0.18em] ${
+                  hasWish(item.id)
+                    ? "border border-pink-400/80 bg-pink-500/20 text-pink-200"
+                    : "glass-btn-ghost text-white"
+                }`}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                {hasWish(item.id) ? "Wishlisted" : "Add wishlist"}
+              </motion.button>
+            </Magnetic>
             <Magnetic strength={0.24}>
               <motion.a
                 href={`https://wa.me/91${process.env.NEXT_PUBLIC_PHONE ?? "9423431674"}?text=Hi, I want to order ${qty}x ${item.name}`}
@@ -224,6 +247,44 @@ export default function ProductDetailPage() {
         </motion.div>
       </div>
 
+      <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 md:px-10">
+        <div className="mb-6 flex items-end justify-between">
+          <h2 className="font-display text-3xl text-white">Swipe campaign gallery</h2>
+          <p className="font-sans text-xs uppercase tracking-[0.26em] text-noir-400">
+            Mobile-first storytelling
+          </p>
+        </div>
+        <Swiper
+          modules={[Pagination]}
+          pagination={{ clickable: true }}
+          spaceBetween={16}
+          breakpoints={{
+            0: { slidesPerView: 1.1 },
+            640: { slidesPerView: 2.2 },
+            1024: { slidesPerView: 3.1 },
+          }}
+          className="campaign-swiper pb-10"
+        >
+          {galleryItems.map((g) => (
+            <SwiperSlide key={g.id}>
+              <article className="overflow-hidden rounded-2xl border border-white/[0.12] bg-white/[0.04] p-3">
+                <div className="h-60 overflow-hidden rounded-xl md:h-64">
+                  <Image
+                    src={g.image}
+                    alt={g.name}
+                    width={900}
+                    height={900}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <p className="mt-3 font-display text-2xl text-white">{g.name}</p>
+                <p className="font-sans text-sm text-amber-300">{g.price}</p>
+              </article>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </section>
+
       {related.length > 0 && (
         <section className="border-t border-white/[0.08] bg-white/[0.02] py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-10">
@@ -253,6 +314,39 @@ export default function ProductDetailPage() {
           </div>
         </section>
       )}
+
+      <div className="fixed inset-x-0 bottom-0 z-[65] border-t border-white/[0.14] bg-noir-950/92 p-3 backdrop-blur-xl md:hidden">
+        <div className="mx-auto flex max-w-md items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setQty((q) => Math.max(1, q - 1))}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.2] text-white"
+          >
+            −
+          </button>
+          <span className="w-7 text-center font-display text-lg text-white">{qty}</span>
+          <button
+            type="button"
+            onClick={() => setQty((q) => q + 1)}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.2] text-white"
+          >
+            +
+          </button>
+          <div className="min-w-0 flex-1">
+            <p className="truncate font-display text-xl text-amber-300">Rs {totalPrice}</p>
+            <p className="truncate font-sans text-[11px] uppercase tracking-[0.22em] text-noir-300">
+              {item.name}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleAdd}
+            className="glass-btn-primary rounded-full px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-noir-950"
+          >
+            Add
+          </button>
+        </div>
+      </div>
     </ImmersivePageLayout>
   );
 }

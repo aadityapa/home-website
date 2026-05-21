@@ -6,6 +6,7 @@ import { transitionSection, viewportReveal } from "../lib/motion";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 import { use3DQuality } from "../hooks/use3DQuality";
 import { Magnetic } from "../components/immersive/Magnetic";
+import { useCatalog } from "../hooks/useCatalog";
 
 const AboutBannerScene = lazy(() =>
   import("../components/three/AboutBannerScene").then((m) => ({
@@ -53,6 +54,7 @@ export default function AboutPage() {
   const yText = useTransform(scrollYProgress, [0, 1], [30, -50]);
   const reduce = useReducedMotion();
   const quality = use3DQuality();
+  const { categories } = useCatalog();
 
   return (
     <ImmersivePageLayout className="pt-0">
@@ -252,6 +254,45 @@ export default function AboutPage() {
                 <h3 className="mt-3 font-display text-xl text-white">{v.title}</h3>
                 <p className="mt-2 font-sans text-sm text-noir-300">{v.body}</p>
               </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/[0.08] bg-white/[0.02] py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-10">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="font-sans text-[10px] uppercase tracking-[0.34em] text-amber-400/85">
+                Brand commerce pillars
+              </p>
+              <h3 className="mt-2 font-display text-4xl text-white">Shop by taste universe</h3>
+            </div>
+            <Link
+              href="/shop"
+              className="rounded-full border border-white/[0.16] px-5 py-2 font-sans text-xs uppercase tracking-[0.2em] text-noir-100"
+            >
+              Open shop
+            </Link>
+          </div>
+          <div className="grid gap-5 md:grid-cols-4">
+            {categories.map((cat) => (
+              <article
+                key={cat.id}
+                className="rounded-2xl border border-white/[0.1] bg-gradient-to-b from-white/[0.07] to-white/[0.02] p-5"
+              >
+                <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-amber-400/80">
+                  {cat.items.length} SKUs
+                </p>
+                <h4 className="mt-2 font-display text-2xl text-white">{cat.title}</h4>
+                <p className="mt-2 line-clamp-3 font-sans text-sm text-noir-300">{cat.blurb}</p>
+                <Link
+                  href={`/shop?cat=${cat.id}`}
+                  className="mt-4 inline-flex rounded-full border border-amber-400/45 px-3 py-1.5 font-sans text-[11px] uppercase tracking-[0.2em] text-amber-300"
+                >
+                  Explore
+                </Link>
+              </article>
             ))}
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FormEvent, useState, lazy, Suspense } from "react";
+import Link from "next/link";
 import { BRAND } from "../data/brand";
 import { whatsappUrl } from "../lib/order";
 import { Stagger, StaggerItem } from "../components/motion/Stagger";
@@ -7,6 +8,7 @@ import { transitionSection, viewportReveal } from "../lib/motion";
 import { use3DQuality } from "../hooks/use3DQuality";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 import { Magnetic } from "../components/immersive/Magnetic";
+import { useCatalog } from "../hooks/useCatalog";
 
 const ContactBannerScene = lazy(() =>
   import("../components/three/ContactBannerScene").then((m) => ({
@@ -59,6 +61,7 @@ const WHATSAPP_MSG = `Hello - I'd like to enquire about ${BRAND.name} (${BRAND.c
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
   const quality = use3DQuality();
+  const { categories } = useCatalog();
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -213,6 +216,38 @@ export default function ContactPage() {
           </Stagger>
         </motion.form>
       </div>
+
+      <section className="border-t border-white/[0.08] bg-white/[0.02] py-14">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-10">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="font-sans text-[10px] uppercase tracking-[0.34em] text-amber-400/85">
+                B2B and retail support
+              </p>
+              <h3 className="mt-2 font-display text-3xl text-white">Tell us your product mix</h3>
+            </div>
+            <Link
+              href="/shop"
+              className="rounded-full border border-white/[0.16] px-5 py-2 font-sans text-xs uppercase tracking-[0.2em] text-noir-100"
+            >
+              Browse catalog
+            </Link>
+          </div>
+          <div className="grid gap-4 md:grid-cols-4">
+            {categories.map((cat) => (
+              <div
+                key={cat.id}
+                className="rounded-2xl border border-white/[0.1] bg-black/25 p-4"
+              >
+                <p className="font-display text-2xl text-white">{cat.title}</p>
+                <p className="mt-1 font-sans text-xs uppercase tracking-[0.22em] text-noir-300">
+                  {cat.items.length} SKUs available
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </ImmersivePageLayout>
   );
 }

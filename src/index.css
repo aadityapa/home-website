@@ -340,6 +340,24 @@ body {
   border-color: rgba(251, 191, 36, 0.45);
 }
 
+.campaign-swiper .swiper-pagination-bullet {
+  width: 7px;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.35);
+  opacity: 1;
+}
+
+.campaign-swiper .swiper-pagination-bullet-active {
+  background: rgba(251, 191, 36, 0.9);
+  box-shadow: 0 0 16px -3px rgba(251, 191, 36, 0.9);
+}
+
+.campaign-slide-card {
+  box-shadow:
+    0 24px 64px -34px rgba(0, 0, 0, 0.62),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset;
+}
+
 .cinematic-noise-mask {
   opacity: 0.06;
   mix-blend-mode: soft-light;

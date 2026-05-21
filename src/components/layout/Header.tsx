@@ -10,10 +10,12 @@ import { useCart } from "../../context/CartContext";
 import { useAppScroll } from "../../context/ScrollContext";
 import { springSoft } from "../../lib/motion";
 import { FullscreenMenu } from "../immersive/FullscreenMenu";
+import { useWishlistStore } from "../../stores/wishlist";
 
 const links = [
   { href: "/", label: "Home", exact: true },
   { href: "/shop", label: "Shop", exact: false },
+  { href: "/wishlist", label: "Wishlist", exact: false },
   { href: "/about", label: "About", exact: false },
   { href: "/journey", label: "Journey", exact: false },
   { href: "/contact", label: "Contact", exact: false },
@@ -26,6 +28,7 @@ function isActive(pathname: string, href: string, exact?: boolean) {
 
 export function AppHeader() {
   const { itemCount, openCart } = useCart();
+  const wishlistCount = useWishlistStore((s) => s.ids.length);
   const { scroll } = useAppScroll();
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
@@ -127,6 +130,18 @@ export function AppHeader() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <Link
+              href="/wishlist"
+              className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-pink-400/60"
+              aria-label={`Wishlist, ${wishlistCount} items`}
+            >
+              <span className="text-sm">♡</span>
+              {wishlistCount > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-pink-500 px-1 font-sans text-[10px] font-bold text-white">
+                  {wishlistCount > 99 ? "99+" : wishlistCount}
+                </span>
+              )}
+            </Link>
             <motion.button
               type="button"
               className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-amber-500/40"

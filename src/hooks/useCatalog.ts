@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import type { ProductCategory } from "../data/brand";
 import { PRODUCT_CATEGORIES } from "../data/brand";
 import { parseCatalogPayload } from "../lib/catalog";
@@ -17,56 +17,33 @@ function cloneCategories(cats: readonly ProductCategory[]): ProductCategory[] {
  * Override with `NEXT_PUBLIC_CATALOG_URL`. Falls back to embedded data if fetch fails.
  */
 export function useCatalog() {
-  const [categories, setCategories] = useState<ProductCategory[]>(() =>
-    cloneCategories(PRODUCT_CATEGORIES),
-  );
-  const [catalogReady, setCatalogReady] = useState(false);
-  const [status, setStatus] = useState<Status>("loading");
-  const [fetchError, setFetchError] = useState<string | null>(null);
+  const url = process.env.NEXT_PUBLIC_CATALOG_URL?.trim() || "/data/catalog.json";
+  const query = useQuery({
+    queryKey: ["catalog", url],
+    queryFn: async () => {
+      const res = await fetch(url, {
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json: unknown = await res.json();
+      const parsed = parseCatalogPayload(json);
+      if (!parsed?.length) throw new Error("Invalid catalog shape");
+      return cloneCategories(parsed);
+    },
+  });
 
-  useEffect(() => {
-    const url =
-      process.env.NEXT_PUBLIC_CATALOG_URL?.trim() ||
-      "/data/catalog.json";
-
-    let cancelled = false;
-
-    async function load() {
-      setStatus("loading");
-      setFetchError(null);
-      try {
-        const res = await fetch(url, {
-          headers: { Accept: "application/json" },
-          cache: "no-store",
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json: unknown = await res.json();
-        const parsed = parseCatalogPayload(json);
-        if (!parsed?.length) throw new Error("Invalid catalog shape");
-        if (!cancelled) {
-          setCategories(cloneCategories(parsed));
-          setStatus("live");
-        }
-      } catch (e) {
-        if (!cancelled) {
-          setCategories(cloneCategories(PRODUCT_CATEGORIES));
-          setStatus("fallback");
-          setFetchError(e instanceof Error ? e.message : "Unknown error");
-        }
-      } finally {
-        if (!cancelled) setCatalogReady(true);
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const categories = query.data ?? cloneCategories(PRODUCT_CATEGORIES);
+  const status: Status = query.isLoading
+    ? "loading"
+    : query.isError
+      ? "fallback"
+      : "live";
+  const fetchError = query.error instanceof Error ? query.error.message : null;
 
   return {
     categories,
-    catalogReady,
+    catalogReady: !query.isLoading,
     status,
     isLiveCatalog: status === "live",
     fetchError,

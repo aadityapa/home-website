@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
-import { PRODUCT_CATEGORIES } from "../data/brand";
 import { useCart } from "../context/CartContext";
 import { easeOut, transitionSection } from "../lib/motion";
 import { ProductCard3D } from "../components/three/ProductCard3D";
@@ -11,6 +10,8 @@ import { use3DQuality } from "../hooks/use3DQuality";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 import { Magnetic } from "../components/immersive/Magnetic";
 import type { ProductItem } from "../data/brand";
+import { useCatalog } from "../hooks/useCatalog";
+import { useWishlistStore } from "../stores/wishlist";
 
 const ShopBannerScene = lazy(() =>
   import("../components/three/ShopBannerScene").then((m) => ({
@@ -22,11 +23,6 @@ const ProductViewerCanvas = lazy(() =>
     default: m.ProductViewerCanvas,
   })),
 );
-
-const categories = [
-  { id: "all", label: "All" },
-  ...PRODUCT_CATEGORIES.map((c) => ({ id: c.id, label: c.title })),
-];
 
 export default function ShopPage() {
   const searchParams = useSearchParams();
@@ -43,19 +39,26 @@ export default function ShopPage() {
     | null
   >(null);
   const { addItem } = useCart();
+  const { categories: catalogCategories } = useCatalog();
+  const toggleWish = useWishlistStore((s) => s.toggle);
+  const hasWish = useWishlistStore((s) => s.has);
   const quality = use3DQuality();
   const [priceFlash, setPriceFlash] = useState<string | null>(null);
+  const categories = useMemo(
+    () => [{ id: "all", label: "All" }, ...catalogCategories.map((c) => ({ id: c.id, label: c.title }))],
+    [catalogCategories],
+  );
 
   const allItems = useMemo(
     () =>
-      PRODUCT_CATEGORIES.flatMap((c) =>
+      catalogCategories.flatMap((c) =>
         c.items.map((item) => ({
           ...item,
           category: c.id,
           categoryLabel: c.title,
         })),
       ),
-    [],
+    [catalogCategories],
   );
 
   const filtered = useMemo(() => {
@@ -264,6 +267,19 @@ export default function ShopPage() {
                         )}
                       </div>
                       <div className="flex gap-2">
+                        <motion.button
+                          type="button"
+                          onClick={() => toggleWish(item.id)}
+                          className={`rounded-full border px-3 py-1.5 font-sans text-xs font-semibold ${
+                            hasWish(item.id)
+                              ? "border-pink-400/70 bg-pink-500/20 text-pink-200"
+                              : "border-white/[0.2] bg-white/[0.05] text-white"
+                          }`}
+                          whileHover={{ scale: 1.06 }}
+                          whileTap={{ scale: 0.94 }}
+                        >
+                          {hasWish(item.id) ? "Wishlisted" : "Wishlist"}
+                        </motion.button>
                         <Magnetic strength={0.2}>
                           <motion.button
                             type="button"
