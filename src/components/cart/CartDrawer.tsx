@@ -30,6 +30,9 @@ const PAYMENT_OPTIONS = [
   },
 ];
 
+const FREE_DELIVERY_THRESHOLD = 1200;
+const FAST_DISPATCH_THRESHOLD = 900;
+
 export function CartDrawer() {
   const {
     lines,
@@ -75,6 +78,18 @@ export function CartDrawer() {
   const paymentLabel = useMemo(
     () => PAYMENT_OPTIONS.find((p) => p.id === payment)?.label ?? payment,
     [payment],
+  );
+  const freeDeliveryRemaining = Math.max(
+    FREE_DELIVERY_THRESHOLD - subtotalRupees,
+    0,
+  );
+  const fastDispatchRemaining = Math.max(
+    FAST_DISPATCH_THRESHOLD - subtotalRupees,
+    0,
+  );
+  const freeDeliveryProgress = Math.min(
+    100,
+    Math.round((subtotalRupees / FREE_DELIVERY_THRESHOLD) * 100),
   );
 
   const waLink = useMemo(() => {
@@ -204,6 +219,25 @@ export function CartDrawer() {
             <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 py-5 md:px-6">
               {step === "cart" ? (
                 <>
+                  {lines.length > 0 ? (
+                    <div className="mb-4 rounded-2xl border border-saffron-200/80 bg-gradient-to-r from-saffron-50/90 to-white/90 px-4 py-3">
+                      <p className="font-sans text-[11px] uppercase tracking-[0.22em] text-clay-500">
+                        Checkout motivator
+                      </p>
+                      <p className="mt-1 font-sans text-sm text-ink">
+                        {freeDeliveryRemaining > 0
+                          ? `Add ${formatInr(freeDeliveryRemaining)} more for free delivery.`
+                          : "Free delivery unlocked for this cart."}
+                      </p>
+                      <p className="mt-1 font-sans text-xs text-clay-600">
+                        {fastDispatchRemaining > 0
+                          ? `Fast dispatch unlocks above ${formatInr(
+                              FAST_DISPATCH_THRESHOLD,
+                            )}.`
+                          : "Priority dispatch unlocked."}
+                      </p>
+                    </div>
+                  ) : null}
                   {lines.length === 0 ? (
                     <p className="font-sans text-sm text-clay-600">
                       Your cart is empty. Browse{" "}
@@ -299,6 +333,14 @@ export function CartDrawer() {
 
               {step === "checkout" ? (
                 <div className="space-y-4">
+                  <div className="rounded-2xl border border-saffron-200/80 bg-saffron-50/90 px-4 py-3 font-sans text-xs text-clay-700">
+                    <p className="font-semibold text-ink">
+                      Complete your order in under 60 seconds.
+                    </p>
+                    <p className="mt-1">
+                      We reserve your selected items after order confirmation.
+                    </p>
+                  </div>
                   {payment === "online" ? (
                     <div className="rounded-2xl border border-amber-200/80 bg-amber-50/90 px-4 py-3 font-sans text-xs leading-relaxed text-amber-950/90">
                       <strong className="font-semibold">Demo checkout:</strong>{" "}
@@ -448,6 +490,20 @@ export function CartDrawer() {
             <footer className="border-t border-clay-200/80 bg-clay-50/95 px-5 py-4 md:px-6">
               {step === "cart" ? (
                 <div className="flex flex-col gap-3">
+                  {lines.length > 0 ? (
+                    <div>
+                      <div className="mb-1.5 flex items-center justify-between font-sans text-[10px] uppercase tracking-[0.22em] text-clay-500">
+                        <span>Free delivery progress</span>
+                        <span>{freeDeliveryProgress}%</span>
+                      </div>
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-clay-200/70">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-amber-500 to-saffron-600 transition-all duration-500"
+                          style={{ width: `${freeDeliveryProgress}%` }}
+                        />
+                      </div>
+                    </div>
+                  ) : null}
                   <div className="flex items-end justify-between gap-4">
                     <div>
                       <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-clay-500">

@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useRef } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -19,10 +19,42 @@ gsap.registerPlugin(ScrollTrigger);
 export default function ImmersiveHomePage() {
   const reduce = useReducedMotion();
   const { categories } = useCatalog();
+  const [heroVariant, setHeroVariant] = useState<"A" | "B">("A");
 
   const heroProducts = useMemo(
-    () => categories.flatMap((cat) => cat.items.map((item) => ({ ...item, category: cat.title }))).slice(0, 8),
+    () =>
+      categories
+        .flatMap((cat) => cat.items.map((item) => ({ ...item, category: cat.title })))
+        .slice(0, 8),
     [categories],
+  );
+
+  const heroCopy = useMemo(
+    () =>
+      heroVariant === "A"
+        ? {
+            preline: "Campaign drop - crafted in Telhara",
+            line1: ["Bold", "Taste", "Engineered"],
+            line2: ["For", "Modern", "India"],
+            body:
+              "A premium direct-to-consumer food brand experience with editorial storytelling, giant product moments, and conversion-ready shopping flow.",
+            primaryCta: "Shop collection",
+            secondaryCta: "Brand story",
+            primaryHref: "/shop?campaign=drop-a",
+            secondaryHref: "/about",
+          }
+        : {
+            preline: "Limited batch - direct from kitchen",
+            line1: ["Authentic", "Flavor", "Reimagined"],
+            line2: ["For", "Everyday", "Celebrations"],
+            body:
+              "Discover best-selling jars and spice blends through an immersive campaign flow designed to convert quickly on mobile and desktop.",
+            primaryCta: "Shop best sellers",
+            secondaryCta: "See our journey",
+            primaryHref: "/shop?campaign=drop-b",
+            secondaryHref: "/journey",
+          },
+    [heroVariant],
   );
 
   const storyRef = useRef<HTMLDivElement>(null);
@@ -35,13 +67,28 @@ export default function ImmersiveHomePage() {
       gsap.fromTo(
         "[data-hero-word]",
         { yPercent: 120, opacity: 0, rotateX: 25 },
-        { yPercent: 0, opacity: 1, rotateX: 0, stagger: 0.06, duration: 1.1, ease: "power4.out" },
+        {
+          yPercent: 0,
+          opacity: 1,
+          rotateX: 0,
+          stagger: 0.06,
+          duration: 1.1,
+          ease: "power4.out",
+        },
       );
 
       gsap.fromTo(
         "[data-hero-sub]",
         { y: 22, opacity: 0, filter: "blur(8px)" },
-        { y: 0, opacity: 1, filter: "blur(0px)", stagger: 0.08, duration: 0.8, ease: "power3.out", delay: 0.2 },
+        {
+          y: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          stagger: 0.08,
+          duration: 0.8,
+          ease: "power3.out",
+          delay: 0.2,
+        },
       );
 
       ScrollTrigger.create({
@@ -68,6 +115,19 @@ export default function ImmersiveHomePage() {
     return () => ctx.revert();
   }, [reduce]);
 
+  useEffect(() => {
+    const key = "ulu-hero-variant-v1";
+    const saved =
+      typeof window !== "undefined" ? window.localStorage.getItem(key) : null;
+    if (saved === "A" || saved === "B") {
+      setHeroVariant(saved);
+      return;
+    }
+    const chosen = Math.random() > 0.5 ? "A" : "B";
+    setHeroVariant(chosen);
+    if (typeof window !== "undefined") window.localStorage.setItem(key, chosen);
+  }, []);
+
   const heroLead = heroProducts[0];
 
   return (
@@ -79,18 +139,21 @@ export default function ImmersiveHomePage() {
       <section className="relative z-10 grid min-h-[100dvh] items-end gap-10 px-6 pb-20 pt-28 md:grid-cols-[1.05fr_0.95fr] md:px-14 md:pb-24">
         <div className="max-w-3xl">
           <p data-hero-sub className="font-sans text-[10px] uppercase tracking-[0.52em] text-amber-400/80">
-            Campaign drop · crafted in Telhara
+            {heroCopy.preline}
+          </p>
+          <p data-hero-sub className="mt-2 font-sans text-[10px] uppercase tracking-[0.28em] text-noir-400">
+            Conversion variant {heroVariant}
           </p>
           <h1 className="mt-4 font-display text-5xl leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
             <span className="block overflow-hidden text-white">
-              {["Bold", "Taste", "Engineered"].map((word) => (
+              {heroCopy.line1.map((word) => (
                 <span key={word} data-hero-word className="inline-block pr-[0.24em]">
                   {word}
                 </span>
               ))}
             </span>
             <span className="block overflow-hidden bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
-              {["For", "Modern", "India"].map((word) => (
+              {heroCopy.line2.map((word) => (
                 <span key={word} data-hero-word className="inline-block pr-[0.24em]">
                   {word}
                 </span>
@@ -98,18 +161,17 @@ export default function ImmersiveHomePage() {
             </span>
           </h1>
           <p data-hero-sub className="mt-6 max-w-lg font-sans text-base leading-relaxed text-noir-200/90 md:text-lg">
-            A premium direct-to-consumer food brand experience with editorial storytelling,
-            giant product moments, and conversion-ready shopping flow.
+            {heroCopy.body}
           </p>
           <div data-hero-sub className="mt-9 flex flex-wrap gap-3">
             <Magnetic>
-              <Link href="/shop" className="glass-btn-primary rounded-full px-8 py-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-noir-950">
-                Shop collection
+              <Link href={heroCopy.primaryHref} className="glass-btn-primary rounded-full px-8 py-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-noir-950">
+                {heroCopy.primaryCta}
               </Link>
             </Magnetic>
             <Magnetic strength={0.2}>
-              <Link href="/about" className="glass-btn-ghost rounded-full px-8 py-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-white">
-                Brand story
+              <Link href={heroCopy.secondaryHref} className="glass-btn-ghost rounded-full px-8 py-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-white">
+                {heroCopy.secondaryCta}
               </Link>
             </Magnetic>
           </div>
@@ -231,4 +293,3 @@ export default function ImmersiveHomePage() {
     </div>
   );
 }
-
