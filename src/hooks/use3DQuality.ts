@@ -1,46 +1,6 @@
-import { useEffect, useState } from "react";
-
 export type Quality3D = "full" | "lite" | "off";
 
-function compute(): Quality3D {
-  if (typeof window === "undefined") return "lite";
-  const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-  const nav = navigator as Navigator & {
-    deviceMemory?: number;
-    connection?: { saveData?: boolean; effectiveType?: string };
-  };
-  const lowMem =
-    typeof nav.deviceMemory === "number" && nav.deviceMemory <= 2;
-  const lowCpu = navigator.hardwareConcurrency <= 4;
-  const saveData = Boolean(nav.connection?.saveData);
-  const slowNet = /2g/.test(nav.connection?.effectiveType ?? "");
-  if (reduceMotion || lowMem || saveData || slowNet) return "off";
-
-  const narrow = window.innerWidth < 640;
-  const medMem =
-    typeof nav.deviceMemory === "number" && nav.deviceMemory <= 4;
-  if (narrow || medMem || lowCpu) return "lite";
-
-  return "full";
-}
-
-/** `full` = post-processing + rich scenes; `lite` = textures, fewer particles; `off` = 2D fallback */
+/** Site-wide 2D mode — disables WebGL scenes for faster load and stable scroll. */
 export function use3DQuality(): Quality3D {
-  const [quality, setQuality] = useState<Quality3D>(compute);
-
-  useEffect(() => {
-    const evaluate = () => setQuality(compute());
-    evaluate();
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    mq.addEventListener("change", evaluate);
-    window.addEventListener("resize", evaluate);
-    return () => {
-      mq.removeEventListener("change", evaluate);
-      window.removeEventListener("resize", evaluate);
-    };
-  }, []);
-
-  return quality;
+  return "off";
 }

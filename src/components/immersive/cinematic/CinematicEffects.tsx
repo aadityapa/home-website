@@ -3,37 +3,27 @@ import {
   Bloom,
   Vignette,
   ChromaticAberration,
-  Noise,
-  DepthOfField,
-  ToneMapping,
 } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 
+/** Lightweight post FX — avoids heavy DoF/tone-map that darkened the hero scene. */
 export function CinematicEffects() {
   return (
     <EffectComposer multisampling={0} enableNormalPass={false}>
       <Bloom
-        intensity={1.05}
-        luminanceThreshold={0.14}
-        luminanceSmoothing={0.9}
+        intensity={0.55}
+        luminanceThreshold={0.22}
+        luminanceSmoothing={0.85}
         mipmapBlur
-        radius={0.88}
-      />
-      <DepthOfField
-        focusDistance={0.014}
-        focalLength={0.024}
-        bokehScale={1.8}
-        height={480}
+        radius={0.65}
       />
       <ChromaticAberration
         blendFunction={BlendFunction.NORMAL}
-        offset={[0.0009, 0.0013]}
+        offset={[0.0004, 0.0006]}
         radialModulation
-        modulationOffset={0.48}
+        modulationOffset={0.35}
       />
-      <ToneMapping adaptive mode={2} />
-      <Noise opacity={0.042} blendFunction={BlendFunction.SOFT_LIGHT} />
-      <Vignette eskil={false} offset={0.14} darkness={0.75} />
+      <Vignette eskil={false} offset={0.22} darkness={0.45} />
     </EffectComposer>
   );
 }

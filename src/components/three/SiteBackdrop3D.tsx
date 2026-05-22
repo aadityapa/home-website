@@ -8,7 +8,8 @@ const SiteBackdropCanvas = lazy(() =>
 /** Subtle fixed WebGL spice field behind the whole site (desktop / tablet). */
 export function SiteBackdrop3D() {
   const quality = use3DQuality();
-  if (quality === "off") return null;
+  // Keep this effect only on strong devices to avoid extra startup/render cost.
+  if (quality !== "full") return null;
 
   return (
     <div className="pointer-events-none fixed inset-0 -z-[2] opacity-[0.12]">

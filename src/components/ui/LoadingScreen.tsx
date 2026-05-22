@@ -25,25 +25,28 @@ export function LoadingScreen({ onDone }: Props) {
   const [exit, setExit] = useState(false);
   const [count, setCount] = useState(0);
   const [glitch, setGlitch] = useState(false);
-  const total = 120; // steps
+  const total = 48; // steps
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    preload3DAssets();
+    // Defer heavy preloads so first paint is fast.
+    const preloadId = window.setTimeout(() => preload3DAssets(), 0);
+
     let step = 0;
     intervalRef.current = setInterval(() => {
       step += 1;
       setCount(step);
       // glitch flash at 50 and 90
-      if (step === 60 || step === 108) setGlitch(true);
+      if (step === 24 || step === 40) setGlitch(true);
       setTimeout(() => setGlitch(false), 80);
       if (step >= total) {
         if (intervalRef.current) clearInterval(intervalRef.current);
-        setTimeout(() => setExit(true), 280);
+        setTimeout(() => setExit(true), 90);
       }
-    }, 14);
+    }, 8);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      window.clearTimeout(preloadId);
     };
   }, []);
 

@@ -190,6 +190,34 @@ body {
   will-change: transform, opacity;
 }
 
+.horizontal-scroll-track {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.horizontal-scroll-track::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes hero-glow-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(-2%, 3%, 0) scale(1.06);
+    opacity: 1;
+  }
+}
+
+.hero-glow-orb {
+  animation: hero-glow-drift 10s ease-in-out infinite;
+}
+
 @supports (content-visibility: auto) {
   .section-flow {
     content-visibility: auto;
@@ -215,23 +243,7 @@ body {
   background: linear-gradient(180deg, #f59e0b, #c45f00);
 }
 
-/* ─── Immersive / Lusion-style dark theme ─── */
-.theme-immersive {
-  cursor: none;
-}
-
-.theme-immersive a,
-.theme-immersive button {
-  cursor: none;
-}
-
-@media (pointer: coarse) {
-  .theme-immersive,
-  .theme-immersive a,
-  .theme-immersive button {
-    cursor: auto;
-  }
-}
+/* Native cursor retained for better usability/perf. */
 
 .glass-btn-primary {
   background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #b45309 100%);

@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -31,8 +32,8 @@ const ScrollContext = createContext<ScrollContextValue>({
 
 export function ScrollProvider({ children }: { children: ReactNode }) {
   const [scroll, setScroll] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [lenis, setLenis] = useState<Lenis | null>(null);
+  const scrollRef = useRef(0);
+  const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
     document.documentElement.classList.add("lenis", "lenis-smooth");
@@ -49,61 +50,83 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
             syncTouch: false,
             wheelMultiplier: 1,
             touchMultiplier: 1,
-            stopInertiaOnNavigate: true,
           }
         : {
-            duration: 1.35,
+            duration: 0.85,
             easing: easeOutExpo,
-            lerp: 0.08,
+            lerp: 0.12,
             smoothWheel: true,
-            wheelMultiplier: 0.9,
-            touchMultiplier: 1.08,
+            wheelMultiplier: 1,
+            touchMultiplier: 1,
             syncTouch: true,
-            syncTouchLerp: 0.075,
-            stopInertiaOnNavigate: true,
-            anchors: {
-              offset: -84,
-              duration: 1.35,
-              easing: easeOutExpo,
-            },
+            syncTouchLerp: 0.1,
           },
     );
 
-    setLenis(instance);
+    lenisRef.current = instance;
 
-    let raf = 0;
-    const onRaf = (time: number) => {
-      instance.raf(time);
-      raf = requestAnimationFrame(onRaf);
-    };
-    raf = requestAnimationFrame(onRaf);
-
-    const onScroll = (e: { scroll: number }) => {
+    instance.on("scroll", ({ scroll: s }) => {
+      scrollRef.current = s;
       ScrollTrigger.update();
-      setScroll(e.scroll);
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? e.scroll / max : 0);
+    });
+
+    const lenisRaf = (time: number) => {
+      instance.raf(time);
     };
 
-    instance.on("scroll", onScroll);
+    let lastHeaderSync = 0;
+    const syncHeaderScroll = () => {
+      const now = performance.now();
+      if (now - lastHeaderSync < 100) return;
+      lastHeaderSync = now;
+      setScroll(scrollRef.current);
+    };
+
+    gsap.ticker.add(lenisRaf);
+    gsap.ticker.add(syncHeaderScroll);
+    gsap.ticker.lagSmoothing(0);
+
+    ScrollTrigger.scrollerProxy(document.documentElement, {
+      scrollTop(value) {
+        if (arguments.length && typeof value === "number") {
+          instance.scrollTo(value, { immediate: true });
+        }
+        return scrollRef.current;
+      },
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      },
+    });
 
     const onResize = () => ScrollTrigger.refresh();
     window.addEventListener("resize", onResize);
-
     requestAnimationFrame(() => ScrollTrigger.refresh());
 
     return () => {
-      cancelAnimationFrame(raf);
+      gsap.ticker.remove(lenisRaf);
+      gsap.ticker.remove(syncHeaderScroll);
       window.removeEventListener("resize", onResize);
+      ScrollTrigger.scrollerProxy(document.documentElement, {});
       document.documentElement.classList.remove("lenis", "lenis-smooth");
       instance.destroy();
-      setLenis(null);
+      lenisRef.current = null;
     };
   }, []);
 
+  const progress = useMemo(() => {
+    if (typeof document === "undefined") return 0;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    return max > 0 ? scroll / max : 0;
+  }, [scroll]);
+
   const value = useMemo(
-    () => ({ scroll, progress, lenis }),
-    [scroll, progress, lenis],
+    () => ({ scroll, progress, lenis: lenisRef.current }),
+    [scroll, progress],
   );
 
   return (

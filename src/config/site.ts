@@ -3,7 +3,8 @@ export function getSiteOrigin(): string {
   const raw = process.env.NEXT_PUBLIC_SITE_URL;
   if (raw?.trim()) return raw.replace(/\/$/, "");
   if (typeof window !== "undefined") return window.location.origin;
-  return "https://www.example.com";
+  // Stable dev fallback (must not differ between SSR and hydration paths).
+  return "http://localhost:3000";
 }
 
 export const SITE_DEFAULT_DESCRIPTION =

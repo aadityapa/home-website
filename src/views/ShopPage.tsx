@@ -1,28 +1,16 @@
-import { useState, useMemo, lazy, Suspense, useEffect, type PointerEvent } from "react";
+import { useState, useMemo, useEffect, type PointerEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCart } from "../context/CartContext";
 import { easeOut, transitionSection } from "../lib/motion";
 import { ProductCard3D } from "../components/three/ProductCard3D";
-import { use3DQuality } from "../hooks/use3DQuality";
+import { MotionImage } from "../components/motion/MotionImage";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 import { Magnetic } from "../components/immersive/Magnetic";
 import type { ProductItem } from "../data/brand";
 import { useCatalog } from "../hooks/useCatalog";
 import { useWishlistStore } from "../stores/wishlist";
-
-const ShopBannerScene = lazy(() =>
-  import("../components/three/ShopBannerScene").then((m) => ({
-    default: m.ShopBannerScene,
-  })),
-);
-const ProductViewerCanvas = lazy(() =>
-  import("../components/three/ProductViewerCanvas").then((m) => ({
-    default: m.ProductViewerCanvas,
-  })),
-);
 
 export default function ShopPage() {
   const searchParams = useSearchParams();
@@ -42,7 +30,6 @@ export default function ShopPage() {
   const { categories: catalogCategories } = useCatalog();
   const toggleWish = useWishlistStore((s) => s.toggle);
   const hasWish = useWishlistStore((s) => s.has);
-  const quality = use3DQuality();
   const [priceFlash, setPriceFlash] = useState<string | null>(null);
   const categories = useMemo(
     () => [{ id: "all", label: "All" }, ...catalogCategories.map((c) => ({ id: c.id, label: c.title }))],
@@ -127,19 +114,11 @@ export default function ShopPage() {
   return (
     <ImmersivePageLayout className="pt-20">
       <section className="relative h-56 overflow-hidden bg-gradient-to-br from-[#1a0b05] via-[#2c1307] to-[#0c0a14] md:h-72">
-        <div className="absolute inset-0">
-          {quality !== "off" ? (
-            <Suspense
-              fallback={
-                <div className="h-full w-full bg-amber-900/80 animate-pulse" />
-              }
-            >
-              <ShopBannerScene quality={quality} />
-            </Suspense>
-          ) : (
-            <motion.div className="h-full w-full bg-gradient-to-br from-[#3d1c0b] to-[#190f0d]" />
-          )}
-        </div>
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-br from-[#3d1c0b] via-[#2a1508] to-[#190f0d]"
+          animate={{ opacity: [0.85, 1, 0.85] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-transparent" />
         <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-16">
           <motion.p
@@ -148,7 +127,7 @@ export default function ShopPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            Uma Laghoo Udyog · 3D Shop
+            Uma Laghoo Udyog · Premium Shop
           </motion.p>
           <motion.h1
             className="mt-2 font-display text-4xl text-white md:text-5xl"
@@ -157,7 +136,7 @@ export default function ShopPage() {
             transition={{ delay: 0.18 }}
             style={{ textShadow: "0 4px 24px rgba(0,0,0,0.4)" }}
           >
-            Immersive Shop
+            Shop Collection
           </motion.h1>
           <motion.p
             className="mt-2 max-w-sm font-sans text-sm text-amber-100/80"
@@ -165,7 +144,7 @@ export default function ShopPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.28 }}
           >
-            Cinematic product storytelling in real-time 3D with luxury motion choreography.
+            Fast-loading 2D product motion with smooth scroll and conversion-first UX.
           </motion.p>
         </div>
       </section>
@@ -203,8 +182,8 @@ export default function ShopPage() {
 
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 md:px-10">
         <p className="mb-6 font-sans text-sm text-noir-300">
-          {filtered.length} product{filtered.length !== 1 ? "s" : ""} · drag to
-          explore 3D frames
+          {filtered.length} product{filtered.length !== 1 ? "s" : ""} · hover for
+          2D motion previews
         </p>
         <AnimatePresence mode="wait">
           <motion.div
@@ -339,19 +318,13 @@ export default function ShopPage() {
               </button>
               <div className="grid gap-6 md:grid-cols-[1.2fr_1fr]">
                 <div className="h-[320px] overflow-hidden rounded-2xl border border-white/[0.1] bg-black/40 md:h-[420px]">
-                  {quality !== "off" ? (
-                    <Suspense fallback={<div className="h-full w-full animate-pulse bg-white/[0.05]" />}>
-                      <ProductViewerCanvas imageUrl={selected.image} accent="#f59e0b" quality={quality} />
-                    </Suspense>
-                  ) : (
-                    <Image
-                      src={selected.image}
-                      alt={selected.name}
-                      width={1200}
-                      height={900}
-                      className="h-full w-full object-cover"
-                    />
-                  )}
+                  <MotionImage
+                    src={selected.image}
+                    alt={selected.name}
+                    width={1200}
+                    height={900}
+                    imageClassName="object-cover"
+                  />
                 </div>
                 <div className="flex flex-col justify-center">
                   <p className="font-sans text-[10px] uppercase tracking-[0.36em] text-amber-400/80">

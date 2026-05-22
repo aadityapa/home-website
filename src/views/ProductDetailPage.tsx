@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useMemo, useState, lazy, Suspense } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
@@ -10,18 +9,11 @@ import "swiper/css/pagination";
 import { PRODUCT_CATEGORIES } from "../data/brand";
 import { useCart } from "../context/CartContext";
 import { transitionSection } from "../lib/motion";
-import { productAccent } from "../lib/product3d";
-import { use3DQuality } from "../hooks/use3DQuality";
+import { MotionImage } from "../components/motion/MotionImage";
 import { ProductCard3D } from "../components/three/ProductCard3D";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 import { Magnetic } from "../components/immersive/Magnetic";
 import { useWishlistStore } from "../stores/wishlist";
-
-const ProductViewerCanvas = lazy(() =>
-  import("../components/three/ProductViewerCanvas").then((m) => ({
-    default: m.ProductViewerCanvas,
-  })),
-);
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -29,7 +21,6 @@ export default function ProductDetailPage() {
   const { addItem } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
-  const quality = use3DQuality();
   const toggleWish = useWishlistStore((s) => s.toggle);
   const hasWish = useWishlistStore((s) => s.has);
 
@@ -72,7 +63,6 @@ export default function ProductDetailPage() {
   }
 
   const related = category.items.filter((i) => i.id !== id);
-  const accent = productAccent(item.id);
   const priceRaw = parseInt(item.price.replace(/\D/g, ""), 10) || 0;
   const totalPrice = (priceRaw * qty).toLocaleString("en-IN");
   const galleryItems = [item, ...related.slice(0, 4)];
@@ -101,34 +91,14 @@ export default function ProductDetailPage() {
           transition={transitionSection}
         >
           <div className="relative h-96 overflow-hidden rounded-3xl border border-white/[0.14] bg-gradient-to-br from-[#1f1110] via-[#0e1019] to-[#09090f] shadow-2xl shadow-black/45 md:h-[520px]">
-            {quality !== "off" ? (
-              <Suspense
-                fallback={
-                  <ProductCard3D
-                    image={item.image}
-                    alt={item.name}
-                    className="h-full"
-                  />
-                }
-              >
-                <ProductViewerCanvas
-                  imageUrl={item.image}
-                  accent={accent}
-                  quality={quality}
-                />
-              </Suspense>
-            ) : (
-              <Image
-                src={item.image}
-                alt={item.name}
-                width={1200}
-                height={900}
-                className="h-full w-full object-cover"
-              />
-            )}
-            <div className="pointer-events-none absolute left-4 top-4 rounded-full border border-white/[0.2] bg-black/30 px-3 py-1.5 font-sans text-xs font-medium text-amber-200 backdrop-blur-md">
-              Cinematic 3D viewer · drag to orbit
-            </div>
+            <MotionImage
+              src={item.image}
+              alt={item.name}
+              width={1200}
+              height={900}
+              priority
+              imageClassName="object-cover"
+            />
           </div>
         </motion.div>
 
@@ -269,13 +239,7 @@ export default function ProductDetailPage() {
             <SwiperSlide key={g.id}>
               <article className="overflow-hidden rounded-2xl border border-white/[0.12] bg-white/[0.04] p-3">
                 <div className="h-60 overflow-hidden rounded-xl md:h-64">
-                  <Image
-                    src={g.image}
-                    alt={g.name}
-                    width={900}
-                    height={900}
-                    className="h-full w-full object-cover"
-                  />
+                  <MotionImage src={g.image} alt={g.name} width={900} height={900} />
                 </div>
                 <p className="mt-3 font-display text-2xl text-white">{g.name}</p>
                 <p className="font-sans text-sm text-amber-300">{g.price}</p>
