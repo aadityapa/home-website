@@ -3,13 +3,16 @@ import CommerceHomePage from "@/views/CommerceHomePage";
 import { buildHomeMetadata } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqSchema, itemListSchema } from "@/lib/seo/schema";
-import { getBestSellers, getTrendingProducts } from "@/lib/catalog-utils";
+import { getServerCatalog } from "@/lib/commerce/catalog-server";
+import { flattenCatalog } from "@/lib/catalog-utils";
 
 export const metadata: Metadata = buildHomeMetadata();
 
-export default function HomePage() {
-  const bestSellers = getBestSellers(6);
-  const trending = getTrendingProducts(4);
+export default async function HomePage() {
+  const categories = await getServerCatalog();
+  const all = flattenCatalog(categories);
+  const bestSellers = all.slice(0, 6);
+  const trending = [...all].reverse().slice(0, 4);
 
   return (
     <>

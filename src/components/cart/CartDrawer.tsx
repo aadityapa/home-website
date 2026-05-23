@@ -10,6 +10,7 @@ import {
 import { formatInr } from "../../lib/price";
 import { cartLine } from "../../lib/motion";
 import { trackEvent } from "../../lib/analytics";
+import { useCommerce } from "../../hooks/useCommerce";
 
 type Step = "cart" | "checkout" | "success";
 
@@ -56,6 +57,10 @@ export function CartDrawer() {
   const [note, setNote] = useState("");
   const [payment, setPayment] =
     useState<(typeof PAYMENT_OPTIONS)[number]["id"]>("cod");
+  const [shopifyLoading, setShopifyLoading] = useState(false);
+  const { isShopify } = useCommerce();
+  const canShopifyCheckout =
+    isShopify && lines.length > 0 && lines.every((line) => Boolean(line.variantId));
 
   useEffect(() => {
     if (!drawerOpen) return;
@@ -127,6 +132,38 @@ export function CartDrawer() {
       lines: lines.length,
     });
     setStep("checkout");
+  };
+
+  const handleShopifyCheckout = async () => {
+    if (!canShopifyCheckout) return;
+    setShopifyLoading(true);
+    trackEvent("shopify_checkout_started", {
+      itemCount,
+      subtotalRupees,
+    });
+    try {
+      const res = await fetch("/api/checkout/shopify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lines: lines.map((line) => ({
+            variantId: line.variantId,
+            quantity: line.quantity,
+          })),
+        }),
+      });
+      const data = (await res.json()) as { checkoutUrl?: string; error?: string };
+      if (!res.ok || !data.checkoutUrl) {
+        throw new Error(data.error ?? "Could not start Shopify checkout");
+      }
+      trackEvent("shopify_checkout_redirect");
+      window.location.href = data.checkoutUrl;
+    } catch (err) {
+      console.error("[cart] Shopify checkout failed", err);
+      alert(err instanceof Error ? err.message : "Checkout failed. Try WhatsApp order.");
+    } finally {
+      setShopifyLoading(false);
+    }
   };
 
   const handlePlaceOrder = () => {
@@ -531,13 +568,27 @@ export function CartDrawer() {
                       Enquire only
                     </a>
                   </div>
+                  {canShopifyCheckout ? (
+                    <button
+                      type="button"
+                      className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
+                      disabled={lines.length === 0 || shopifyLoading}
+                      onClick={handleShopifyCheckout}
+                    >
+                      {shopifyLoading ? "Opening secure checkout…" : "Secure Shopify checkout"}
+                    </button>
+                  ) : null}
                   <button
                     type="button"
-                    className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
+                    className={
+                      canShopifyCheckout
+                        ? "focus-ring w-full rounded-full border border-clay-300 bg-white/90 py-3 font-sans text-sm font-semibold text-clay-800 transition hover:border-saffron-400 disabled:cursor-not-allowed disabled:opacity-50"
+                        : "btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
+                    }
                     disabled={lines.length === 0}
                     onClick={handleCheckoutClick}
                   >
-                    Proceed to checkout
+                    {canShopifyCheckout ? "Order via WhatsApp / COD" : "Proceed to checkout"}
                   </button>
                 </div>
               ) : null}

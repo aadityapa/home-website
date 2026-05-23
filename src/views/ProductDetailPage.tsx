@@ -16,6 +16,7 @@ import { Magnetic } from "../components/immersive/Magnetic";
 import { useWishlistStore } from "../stores/wishlist";
 import { mapRecentlyViewedProducts, useRecentlyViewed } from "../hooks/useRecentlyViewed";
 import { RecentlyViewedSection } from "../components/commerce/RecentlyViewedSection";
+import { getProductStockLabel } from "../lib/commerce/inventory";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -67,19 +68,7 @@ export default function ProductDetailPage() {
 
   function handleAdd() {
     if (!item || !category) return;
-    for (let i = 0; i < qty; i++)
-      addItem(
-        {
-          id: item.id,
-          name: item.name,
-          description: item.description,
-          image: item.image,
-          price: item.price,
-          unit: item.unit,
-        },
-        category.title,
-        1,
-      );
+    addItem(item, category.title, qty);
     setAdded(true);
     setTimeout(() => setAdded(false), 2200);
   }
@@ -88,7 +77,7 @@ export default function ProductDetailPage() {
   const priceRaw = parseInt(item.price.replace(/\D/g, ""), 10) || 0;
   const totalPrice = (priceRaw * qty).toLocaleString("en-IN");
   const galleryItems = [item, ...related.slice(0, 4)];
-  const stockLeft = 4 + (item.id.length % 9);
+  const { label: stockLabel, outOfStock } = getProductStockLabel(item);
   const rating = (4.6 + (item.id.length % 3) * 0.1).toFixed(1);
   const reviewCount = 38 + item.id.length * 7;
 
@@ -148,7 +137,7 @@ export default function ProductDetailPage() {
             {item.description}
           </p>
           <p className="mt-3 inline-flex rounded-full border border-amber-400/30 bg-amber-500/10 px-3 py-1.5 font-sans text-[10px] uppercase tracking-[0.2em] text-amber-200">
-            Only {stockLeft} units left in this batch
+            {stockLabel}
           </p>
 
           <div className="mt-5 rounded-2xl border border-white/[0.12] bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-4 md:mt-8 md:p-5">
@@ -194,11 +183,12 @@ export default function ProductDetailPage() {
               <motion.button
                 type="button"
                 onClick={handleAdd}
-                className="glass-btn-primary flex-1 rounded-full px-5 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-noir-950 md:px-8 md:py-3.5 md:text-sm md:tracking-[0.18em]"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                disabled={outOfStock}
+                className="glass-btn-primary flex-1 rounded-full px-5 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-noir-950 disabled:cursor-not-allowed disabled:opacity-50 md:px-8 md:py-3.5 md:text-sm md:tracking-[0.18em]"
+                whileHover={{ scale: outOfStock ? 1 : 1.03 }}
+                whileTap={{ scale: outOfStock ? 1 : 0.97 }}
               >
-                {added ? "Added to cart" : "Add to cart"}
+                {outOfStock ? "Out of stock" : added ? "Added to cart" : "Add to cart"}
               </motion.button>
             </Magnetic>
             <Magnetic strength={0.22}>
@@ -358,9 +348,10 @@ export default function ProductDetailPage() {
           <button
             type="button"
             onClick={handleAdd}
-            className="glass-btn-primary rounded-full px-3.5 py-1.5 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-noir-950"
+            disabled={outOfStock}
+            className="glass-btn-primary rounded-full px-3.5 py-1.5 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-noir-950 disabled:opacity-50"
           >
-            Add
+            {outOfStock ? "Sold out" : "Add"}
           </button>
         </div>
       </div>

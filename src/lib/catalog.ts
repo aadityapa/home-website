@@ -9,13 +9,20 @@ export type CatalogPayload = {
 function isProductItem(x: unknown): x is ProductItem {
   if (!x || typeof x !== "object") return false;
   const o = x as Record<string, unknown>;
-  return (
-    typeof o.id === "string" &&
-    typeof o.name === "string" &&
-    typeof o.description === "string" &&
-    typeof o.image === "string" &&
-    typeof o.price === "string"
-  );
+  if (
+    typeof o.id !== "string" ||
+    typeof o.name !== "string" ||
+    typeof o.description !== "string" ||
+    typeof o.image !== "string" ||
+    typeof o.price !== "string"
+  ) {
+    return false;
+  }
+  if (o.variantId !== undefined && typeof o.variantId !== "string") return false;
+  if (o.availableForSale !== undefined && typeof o.availableForSale !== "boolean") {
+    return false;
+  }
+  return true;
 }
 
 function isCategory(x: unknown): x is ProductCategory {

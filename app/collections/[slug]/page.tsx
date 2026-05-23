@@ -1,23 +1,31 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CollectionPage from "@/views/CollectionPage";
-import { findCategoryById } from "@/lib/catalog-utils";
+import { findCategoryByIdInCategories } from "@/lib/catalog-utils";
+import { getServerCatalog } from "@/lib/commerce/catalog-server";
 import { buildCollectionMetadata } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbSchema, itemListSchema } from "@/lib/seo/schema";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export async function generateStaticParams() {
+  const categories = await getServerCatalog();
+  return categories.map((c) => ({ slug: c.id }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const category = findCategoryById(slug);
+  const categories = await getServerCatalog();
+  const category = findCategoryByIdInCategories(slug, categories);
   if (!category) return { title: "Collection not found" };
   return buildCollectionMetadata(category);
 }
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const category = findCategoryById(slug);
+  const categories = await getServerCatalog();
+  const category = findCategoryByIdInCategories(slug, categories);
   if (!category) notFound();
 
   return (

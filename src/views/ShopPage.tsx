@@ -103,18 +103,7 @@ export default function ShopPage() {
   }
 
   function handleAdd(item: CatalogProduct) {
-    addItem(
-      {
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        image: item.image,
-        price: item.price,
-        unit: item.unit,
-      },
-      item.categoryTitle,
-      1,
-    );
+    addItem(item, item.categoryTitle, 1);
   }
 
   return (

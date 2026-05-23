@@ -23,6 +23,8 @@ export type CartLine = {
   unit?: string;
   categoryLabel: string;
   quantity: number;
+  /** Shopify Storefront variant GID — required for hosted checkout. */
+  variantId?: string;
 };
 
 const STORAGE_KEY = "ulu-ecom-cart-v1";
@@ -119,6 +121,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             unit: product.unit,
             categoryLabel,
             quantity: qty,
+            variantId: product.variantId,
           },
         ];
       });

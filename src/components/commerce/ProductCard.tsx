@@ -6,17 +6,13 @@ import { motion } from "framer-motion";
 import { useCart } from "@/context/CartContext";
 import { useWishlistStore } from "@/stores/wishlist";
 import type { CatalogProduct } from "@/lib/catalog-utils";
+import { getProductStockLabel } from "@/lib/commerce/inventory";
 
 type ProductCardProps = {
   product: CatalogProduct;
   priority?: boolean;
   onQuickView?: (product: CatalogProduct) => void;
 };
-
-function getPseudoStock(productId: string) {
-  const sum = [...productId].reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
-  return 4 + (sum % 14);
-}
 
 function getRatingMeta(productId: string) {
   const sum = [...productId].reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
@@ -29,8 +25,7 @@ export function ProductCard({ product, priority, onQuickView }: ProductCardProps
   const { addItem } = useCart();
   const toggleWish = useWishlistStore((s) => s.toggle);
   const saved = useWishlistStore((s) => s.has(product.id));
-  const stockLeft = getPseudoStock(product.id);
-  const lowStock = stockLeft <= 8;
+  const { label: stockLabel, lowStock, outOfStock } = getProductStockLabel(product);
   const { rating, reviews } = getRatingMeta(product.id);
 
   return (
@@ -55,7 +50,7 @@ export function ProductCard({ product, priority, onQuickView }: ProductCardProps
           {saved ? "♥" : "♡"}
         </button>
         <div className="absolute left-2 top-2 rounded-full border border-white/20 bg-black/50 px-2 py-0.5 font-sans text-[9px] uppercase tracking-[0.13em] text-noir-100 backdrop-blur-md md:left-3 md:top-3 md:px-2.5 md:py-1 md:text-[10px] md:tracking-[0.16em]">
-          {lowStock ? `Only ${stockLeft} left` : "In stock"}
+          {stockLabel}
         </div>
         <motion.div
           className="absolute inset-x-0 bottom-0 flex gap-1.5 p-2 opacity-100 transition duration-300 md:gap-2 md:p-3 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
@@ -64,19 +59,9 @@ export function ProductCard({ product, priority, onQuickView }: ProductCardProps
         >
           <button
             type="button"
+            disabled={outOfStock}
             onClick={() =>
-              addItem(
-                {
-                  id: product.id,
-                  name: product.name,
-                  description: product.description,
-                  image: product.image,
-                  price: product.price,
-                  unit: product.unit,
-                },
-                product.categoryTitle,
-                1,
-              )
+              addItem(product, product.categoryTitle, 1)
             }
             className="commerce-btn-primary flex-1 rounded-full py-2 font-sans text-[10px] font-semibold uppercase tracking-[0.12em] md:py-2.5 md:text-[11px] md:tracking-[0.16em]"
           >

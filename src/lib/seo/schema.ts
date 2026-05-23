@@ -60,7 +60,11 @@ export function productSchema(product: ProductItem, category: ProductCategory) {
       url: absoluteUrl(`/shop/${product.id}`),
       priceCurrency: "INR",
       price: price,
-      availability: "https://schema.org/InStock",
+      availability:
+        product.availableForSale === false ||
+        (typeof product.inventoryQuantity === "number" && product.inventoryQuantity <= 0)
+          ? "https://schema.org/OutOfStock"
+          : "https://schema.org/InStock",
       seller: { "@id": `${absoluteUrl("/")}#business` },
     },
   };

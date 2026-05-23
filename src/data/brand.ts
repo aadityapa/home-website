@@ -21,6 +21,14 @@ export type ProductItem = {
   price: string;
   /** Pack size or weight, e.g. "500 g jar". */
   unit?: string;
+  /** Shopify product handle (when using Storefront API). */
+  handle?: string;
+  /** Shopify Storefront variant GID for checkout. */
+  variantId?: string;
+  /** Live availability from commerce backend. */
+  availableForSale?: boolean;
+  /** Live inventory when exposed by Shopify. */
+  inventoryQuantity?: number | null;
 };
 
 export type ProductCategory = {

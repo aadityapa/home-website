@@ -29,8 +29,15 @@ export function flattenCatalog(
 }
 
 export function findProductById(id: string) {
-  for (const cat of PRODUCT_CATEGORIES) {
-    const item = cat.items.find((i) => i.id === id);
+  return findProductByIdInCategories(id, PRODUCT_CATEGORIES);
+}
+
+export function findProductByIdInCategories(
+  id: string,
+  categories: readonly ProductCategory[],
+) {
+  for (const cat of categories) {
+    const item = cat.items.find((i) => i.id === id || i.handle === id);
     if (item) return { item, category: cat };
   }
   return null;
@@ -38,6 +45,13 @@ export function findProductById(id: string) {
 
 export function findCategoryById(id: string) {
   return PRODUCT_CATEGORIES.find((c) => c.id === id) ?? null;
+}
+
+export function findCategoryByIdInCategories(
+  id: string,
+  categories: readonly ProductCategory[],
+) {
+  return categories.find((c) => c.id === id) ?? null;
 }
 
 export function getBestSellers(limit = 6): CatalogProduct[] {
