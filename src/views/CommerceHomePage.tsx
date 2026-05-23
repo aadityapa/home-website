@@ -15,6 +15,7 @@ import {
   FAQSection,
 } from "@/components/commerce/TrustSections";
 import { NewsletterCTA } from "@/components/commerce/NewsletterCTA";
+import { PageReveal } from "@/components/motion/PageReveal";
 
 const CommerceHomeAmbience = dynamic(
   () =>
@@ -32,7 +33,7 @@ export default function CommerceHomePage() {
   return (
     <div className="theme-commerce relative overflow-hidden text-noir-50">
       <CommerceHomeAmbience />
-      <div className="relative z-10">
+      <PageReveal className="relative z-10">
         <CommerceHero />
         <UrgencyStrip />
         <TrustBar />
@@ -57,7 +58,7 @@ export default function CommerceHomePage() {
         <BrandStorySection />
         <FAQSection />
         <NewsletterCTA />
-      </div>
+      </PageReveal>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import { easeOut } from "../lib/motion";
 import { MotionImage } from "../components/motion/MotionImage";
 import { ProductCard } from "../components/commerce/ProductCard";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
+import { PageReveal } from "@/components/motion/PageReveal";
 import { Magnetic } from "../components/immersive/Magnetic";
 import type { CatalogProduct } from "../lib/catalog-utils";
 import { useCatalog } from "../hooks/useCatalog";
@@ -195,7 +196,7 @@ export default function ShopPage() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-3 py-6 sm:px-6 sm:py-12 md:px-10">
+      <PageReveal className="mx-auto max-w-6xl px-3 py-6 sm:px-6 sm:py-12 md:px-10">
         <p className="mb-2 line-clamp-2 max-w-xl font-sans text-[11px] text-noir-300 sm:text-xs">
           {activeCategoryMeta?.blurb}
         </p>
@@ -226,7 +227,7 @@ export default function ShopPage() {
             ))}
           </motion.div>
         </AnimatePresence>
-      </div>
+      </PageReveal>
 
       <AnimatePresence>
         {selected && (

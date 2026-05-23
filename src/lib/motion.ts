@@ -1,6 +1,11 @@
 /** Shared easing / timing for one cohesive feel across Framer + UI */
 export const easeOut = [0.16, 1, 0.3, 1] as const;
 
+/** Material / Google-style standard easing */
+export const easeMaterial = [0.2, 0, 0, 1] as const;
+export const easeMaterialDecelerate = [0, 0, 0.2, 1] as const;
+export const easeMaterialAccelerate = [0.4, 0, 1, 1] as const;
+
 export const springSoft = {
   type: "spring" as const,
   stiffness: 320,
@@ -40,6 +45,44 @@ export const transitionSection = {
 export const transitionFast = {
   duration: 0.45,
   ease: easeOut,
+};
+
+/** Google-style route change — page content */
+export const pageTransition = {
+  duration: 0.38,
+  ease: easeMaterial,
+};
+
+export const pageVariants = {
+  initial: {
+    opacity: 0,
+    y: 14,
+    scale: 0.992,
+  },
+  enter: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.42,
+      ease: easeMaterialDecelerate,
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -10,
+    scale: 0.996,
+    transition: {
+      duration: 0.28,
+      ease: easeMaterialAccelerate,
+    },
+  },
+};
+
+export const pageVariantsReduced = {
+  initial: { opacity: 0 },
+  enter: { opacity: 1, transition: { duration: 0.2 } },
+  exit: { opacity: 0, transition: { duration: 0.15 } },
 };
 
 /** Scroll-reveal: fade + rise */

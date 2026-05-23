@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { CartProvider } from "@/context/CartContext";
+import { PageTransitionProvider } from "@/context/PageTransitionContext";
 import { ScrollProvider } from "@/context/ScrollContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -24,9 +25,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        <ScrollProvider>
-          <MotionProvider>{children}</MotionProvider>
-        </ScrollProvider>
+        <PageTransitionProvider>
+          <ScrollProvider>
+            <MotionProvider>{children}</MotionProvider>
+          </ScrollProvider>
+        </PageTransitionProvider>
       </CartProvider>
     </QueryClientProvider>
   );

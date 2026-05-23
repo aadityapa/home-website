@@ -9,32 +9,30 @@ import { StickyCartFab } from "@/components/cart/StickyCartFab";
 import { CartToast } from "@/components/ui/CartToast";
 import { Footer } from "@/components/sections/Footer";
 import { AmbientBackground } from "@/components/ui/AmbientBackground";
-import { RouteTransitionLayer } from "@/components/immersive/RouteTransitionLayer";
+import { RouteTransitionLayer } from "@/components/motion/RouteTransitionLayer";
+import { NavigationProgress } from "@/components/motion/NavigationProgress";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const loaderDone = true;
 
   useEffect(() => {
-    if (!loaderDone) return;
     const id = requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => cancelAnimationFrame(id);
-  }, [loaderDone, pathname]);
+  }, [pathname]);
 
   return (
     <>
+      <NavigationProgress />
       {pathname !== "/" && <AmbientBackground />}
       <div className="page-grain" aria-hidden />
       <AppHeader />
       <CartDrawer />
       <CartToast />
       <StickyCartFab />
-      <div style={{ opacity: loaderDone ? 1 : 0, transition: "opacity 0.6s cubic-bezier(0.16,1,0.3,1)" }}>
-        <RouteTransitionLayer routeKey={pathname}>
-          {children}
-          <Footer />
-        </RouteTransitionLayer>
-      </div>
+      <main id="main-content">
+        <RouteTransitionLayer>{children}</RouteTransitionLayer>
+      </main>
+      <Footer />
     </>
   );
 }

@@ -16,6 +16,10 @@ html {
   scroll-padding-top: 5.75rem;
 }
 
+#main-content {
+  isolation: isolate;
+}
+
 /* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
   html {
