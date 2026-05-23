@@ -6,7 +6,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { PRODUCT_CATEGORIES } from "../data/brand";
+import { useCatalog } from "../hooks/useCatalog";
+import { TRUST_BADGES, HOME_FAQS } from "../data/commerce";
 import { useCart } from "../context/CartContext";
 import { transitionSection } from "../lib/motion";
 import { MotionImage } from "../components/motion/MotionImage";
@@ -24,13 +25,15 @@ export default function ProductDetailPage() {
   const toggleWish = useWishlistStore((s) => s.toggle);
   const hasWish = useWishlistStore((s) => s.has);
 
+  const { categories } = useCatalog();
+
   const { item, category } = useMemo(() => {
-    for (const cat of PRODUCT_CATEGORIES) {
+    for (const cat of categories) {
       const found = cat.items.find((i) => i.id === id);
       if (found) return { item: found, category: cat };
     }
     return { item: null, category: null };
-  }, [id]);
+  }, [id, categories]);
 
   if (!item || !category) {
     return (
@@ -199,21 +202,36 @@ export default function ProductDetailPage() {
             </Magnetic>
           </div>
 
-          <motion.div className="mt-8 space-y-2">
-            {[
-              "100% vegetarian",
-              "FSSAI Licensed",
-              "Small batch crafted in Telhara",
-              "No artificial preservatives",
-            ].map((f) => (
-              <div
-                key={f}
-                className="flex items-center gap-2 font-sans text-sm text-noir-300"
+          <div className="mt-8 flex flex-wrap gap-2">
+            {TRUST_BADGES.map((b) => (
+              <span
+                key={b.label}
+                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 font-sans text-[10px] uppercase tracking-[0.16em] text-noir-200"
               >
-                <span className="text-amber-400">✦</span> {f}
+                {b.icon} {b.label}
+              </span>
+            ))}
+          </div>
+          <details className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4">
+            <summary className="cursor-pointer font-sans text-sm font-medium text-white">
+              Shipping &amp; returns
+            </summary>
+            <p className="mt-3 font-sans text-sm text-noir-300">
+              Pan-India shipping with careful packaging. Contact us on WhatsApp for delivery timelines to your pincode.
+            </p>
+          </details>
+          <div className="mt-6 space-y-3">
+            <p className="font-sans text-xs uppercase tracking-[0.24em] text-noir-400">Quick answers</p>
+            {HOME_FAQS.slice(0, 2).map((f) => (
+              <div key={f.question}>
+                <p className="font-sans text-sm font-medium text-white">{f.question}</p>
+                <p className="mt-1 font-sans text-sm text-noir-300">{f.answer}</p>
               </div>
             ))}
-          </motion.div>
+            <Link href="/faq" className="font-sans text-xs uppercase tracking-[0.2em] text-amber-300 hover:underline">
+              View all FAQs →
+            </Link>
+          </div>
         </motion.div>
       </div>
 

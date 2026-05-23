@@ -8,13 +8,11 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { StickyCartFab } from "@/components/cart/StickyCartFab";
 import { CartToast } from "@/components/ui/CartToast";
 import { Footer } from "@/components/sections/Footer";
-import { SeoJsonLd } from "@/components/seo/SeoJsonLd";
 import { AmbientBackground } from "@/components/ui/AmbientBackground";
 import { RouteTransitionLayer } from "@/components/immersive/RouteTransitionLayer";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isHome = pathname === "/";
   const loaderDone = true;
 
   useEffect(() => {
@@ -25,8 +23,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <SeoJsonLd />
-      {!isHome && <AmbientBackground />}
+      {pathname !== "/" && <AmbientBackground />}
       <div className="page-grain" aria-hidden />
       <AppHeader />
       <CartDrawer />
@@ -35,7 +32,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div style={{ opacity: loaderDone ? 1 : 0, transition: "opacity 0.6s cubic-bezier(0.16,1,0.3,1)" }}>
         <RouteTransitionLayer routeKey={pathname}>
           {children}
-          {!isHome && <Footer />}
+          <Footer />
         </RouteTransitionLayer>
       </div>
     </>

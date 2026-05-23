@@ -6,9 +6,12 @@ import { BRAND } from "../../data/brand";
 import { transitionSection, viewportReveal } from "../../lib/motion";
 
 const footerLinks = [
-  { href: "/shop", label: "Shop" },
+  { href: "/shop", label: "Shop all" },
+  { href: "/collections/shrikhand", label: "Shrikhand" },
+  { href: "/collections/achaar", label: "Achaar" },
+  { href: "/blog", label: "Buying guides" },
+  { href: "/faq", label: "FAQ" },
   { href: "/about", label: "About" },
-  { href: "/journey", label: "Journey" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -28,11 +31,11 @@ export function Footer() {
           initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportReveal} transition={transitionSection}
         >
-          <p className="font-display text-2xl tracking-[0.08em] text-ink">{BRAND.name}</p>
-          <p className="mt-1 font-sans text-sm font-medium text-saffron-800/80">{BRAND.company}</p>
-          <p className="mt-2 max-w-xs font-sans text-sm text-clay-500">{BRAND.tagline} · {BRAND.location}</p>
+          <p className="font-display text-2xl tracking-[0.08em] text-white">{BRAND.name}</p>
+          <p className="mt-1 font-sans text-sm font-medium text-amber-400/90">{BRAND.company}</p>
+          <p className="mt-2 max-w-xs font-sans text-sm text-noir-300">{BRAND.tagline} · {BRAND.location}</p>
           <motion.div
-            className="mt-5 inline-flex items-center gap-2 rounded-full border border-saffron-500/25 bg-saffron-50 px-4 py-2 font-sans text-xs font-medium text-saffron-800"
+            className="mt-5 inline-flex items-center gap-2 rounded-full border border-amber-500/25 bg-amber-500/10 px-4 py-2 font-sans text-xs font-medium text-amber-200"
             whileHover={{ scale: 1.03 }}>
             <motion.span className="h-2 w-2 rounded-full bg-emerald-500"
               animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 2, repeat: Infinity }} />
@@ -45,11 +48,11 @@ export function Footer() {
           initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportReveal} transition={{ ...transitionSection, delay: 0.08 }}
         >
-          <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-clay-500 mb-4">Navigation</p>
+          <p className="mb-4 font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-noir-400">Shop</p>
           <nav className="flex flex-col gap-2">
             {footerLinks.map(l => (
               <Link key={l.href} href={l.href}
-                className="font-sans text-sm text-clay-600 transition hover:text-saffron-600">
+                className="font-sans text-sm text-noir-200 transition hover:text-amber-300">
                 {l.label}
               </Link>
             ))}
@@ -61,15 +64,15 @@ export function Footer() {
           initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportReveal} transition={{ ...transitionSection, delay: 0.12 }}
         >
-          <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-clay-500 mb-4">Get in touch</p>
-          <a href={`tel:+91${BRAND.phone}`} className="block font-display text-xl text-saffron-700 hover:text-saffron-600 transition">
+          <p className="mb-4 font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-noir-400">Get in touch</p>
+          <a href={`tel:+91${BRAND.phone}`} className="block font-display text-xl text-amber-300 transition hover:text-amber-200">
             {BRAND.phoneDisplay}
           </a>
           <a href={`https://wa.me/${BRAND.whatsappE164}`} target="_blank" rel="noreferrer"
             className="mt-2 inline-flex items-center gap-2 font-sans text-sm text-emerald-700 hover:text-emerald-600 transition">
             <span className="text-base">💬</span> WhatsApp order
           </a>
-          <p className="mt-4 font-sans text-xs text-clay-500">{BRAND.location}</p>
+          <p className="mt-4 font-sans text-xs text-noir-400">{BRAND.location}</p>
         </motion.div>
       </div>
 
@@ -77,7 +80,7 @@ export function Footer() {
         <div className="h-px bg-gradient-to-r from-transparent via-clay-300/60 to-transparent" />
       </div>
 
-      <p className="mt-6 text-center font-sans text-xs text-clay-500">
+      <p className="mt-6 text-center font-sans text-xs text-noir-400">
         © {new Date().getFullYear()} {BRAND.name} · {BRAND.company}. Crafted with care in India.
       </p>
 

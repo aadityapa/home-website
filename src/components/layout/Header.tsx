@@ -11,14 +11,15 @@ import { useCart } from "../../context/CartContext";
 import { useAppScroll } from "../../context/ScrollContext";
 import { springSoft } from "../../lib/motion";
 import { FullscreenMenu } from "../immersive/FullscreenMenu";
+import { MegaMenu } from "../commerce/MegaMenu";
+import { SearchOverlay } from "../commerce/SearchOverlay";
 import { useWishlistStore } from "../../stores/wishlist";
 
 const links = [
   { href: "/", label: "Home", exact: true },
-  { href: "/shop", label: "Shop", exact: false },
-  { href: "/wishlist", label: "Wishlist", exact: false },
+  { href: "/shop", label: "Shop", exact: false, mega: true },
+  { href: "/blog", label: "Guides", exact: false },
   { href: "/about", label: "About", exact: false },
-  { href: "/journey", label: "Journey", exact: false },
   { href: "/contact", label: "Contact", exact: false },
 ];
 
@@ -36,9 +37,16 @@ export function AppHeader() {
   const prevScroll = useRef(0);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [megaOpen, setMegaOpen] = useState(false);
 
   const scrolled = scroll > 48;
-  const immersive = pathname === "/" || pathname.startsWith("/shop") || pathname.startsWith("/about") || pathname.startsWith("/journey") || pathname.startsWith("/contact");
+  const commerce =
+    pathname === "/" ||
+    pathname.startsWith("/shop") ||
+    pathname.startsWith("/collections") ||
+    pathname.startsWith("/blog") ||
+    pathname.startsWith("/faq");
 
   useEffect(() => setMenuOpen(false), [pathname]);
 
@@ -56,7 +64,7 @@ export function AppHeader() {
     prevScroll.current = scroll;
   }, [scroll, reduceMotion]);
 
-  const headerClass = immersive
+  const headerClass = commerce
     ? scrolled
       ? "border-white/[0.08] bg-noir-950/85 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.5)] backdrop-blur-2xl"
       : "border-transparent bg-transparent backdrop-blur-sm"
@@ -68,6 +76,7 @@ export function AppHeader() {
     <>
       <motion.header
         className={`fixed left-0 right-0 top-0 z-50 border-b transition-[background-color,box-shadow,border-color] duration-500 ease-out ${headerClass}`}
+        onMouseLeave={() => setMegaOpen(false)}
         initial={skipInitial ? false : { y: -28, opacity: 0 }}
         animate={{ y: reduceMotion ? 0 : hidden ? -80 : 0, opacity: 1 }}
         transition={springSoft}
@@ -102,10 +111,12 @@ export function AppHeader() {
           <nav className="hidden items-center gap-1 lg:flex">
             {links.map((l) => {
               const active = isActive(pathname, l.href, l.exact);
+              const shopMega = "mega" in l && l.mega;
               return (
                 <Link
                   key={l.href}
                   href={l.href}
+                  onMouseEnter={() => shopMega && setMegaOpen(true)}
                   className={`group relative rounded-lg px-3 py-2 font-sans text-sm font-medium transition duration-300 ${
                     active
                       ? "text-amber-400"
@@ -131,9 +142,20 @@ export function AppHeader() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="hidden h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-amber-500/40 sm:flex"
+              aria-label="Search products"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+                <circle cx="11" cy="11" r="7" />
+                <path strokeLinecap="round" d="M20 20l-3-3" />
+              </svg>
+            </button>
             <Link
               href="/wishlist"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-pink-400/60"
+              className="relative hidden h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-pink-400/60 sm:flex"
               aria-label={`Wishlist, ${wishlistCount} items`}
             >
               <span className="text-sm">♡</span>
@@ -188,8 +210,10 @@ export function AppHeader() {
             </motion.button>
           </div>
         </div>
+        <MegaMenu open={megaOpen} onClose={() => setMegaOpen(false)} />
       </motion.header>
 
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       <FullscreenMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
     </>
   );

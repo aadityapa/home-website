@@ -1,16 +1,15 @@
-import { useState, useMemo, useEffect, type PointerEvent } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCart } from "../context/CartContext";
-import { easeOut, transitionSection } from "../lib/motion";
-import { ProductCard3D } from "../components/three/ProductCard3D";
+import { easeOut } from "../lib/motion";
 import { MotionImage } from "../components/motion/MotionImage";
+import { ProductCard } from "../components/commerce/ProductCard";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 import { Magnetic } from "../components/immersive/Magnetic";
-import type { ProductItem } from "../data/brand";
+import type { CatalogProduct } from "../lib/catalog-utils";
 import { useCatalog } from "../hooks/useCatalog";
-import { useWishlistStore } from "../stores/wishlist";
 
 export default function ShopPage() {
   const searchParams = useSearchParams();
@@ -19,18 +18,9 @@ export default function ShopPage() {
   const [sort, setSort] = useState<"default" | "price-asc" | "price-desc">(
     "default",
   );
-  const [selected, setSelected] = useState<
-    | (ProductItem & {
-        category: string;
-        categoryLabel: string;
-      })
-    | null
-  >(null);
+  const [selected, setSelected] = useState<CatalogProduct | null>(null);
   const { addItem } = useCart();
   const { categories: catalogCategories } = useCatalog();
-  const toggleWish = useWishlistStore((s) => s.toggle);
-  const hasWish = useWishlistStore((s) => s.has);
-  const [priceFlash, setPriceFlash] = useState<string | null>(null);
   const categories = useMemo(
     () => [{ id: "all", label: "All" }, ...catalogCategories.map((c) => ({ id: c.id, label: c.title }))],
     [catalogCategories],
@@ -78,7 +68,7 @@ export default function ShopPage() {
     router.push(id === "all" ? "/shop" : `/shop?cat=${id}`);
   }
 
-  function handleAdd(item: (typeof allItems)[number]) {
+  function handleAdd(item: CatalogProduct) {
     addItem(
       {
         id: item.id,
@@ -88,27 +78,9 @@ export default function ShopPage() {
         price: item.price,
         unit: item.unit,
       },
-      item.categoryLabel,
+      item.categoryTitle,
       1,
     );
-    setPriceFlash(item.id);
-    window.setTimeout(() => setPriceFlash(null), 550);
-  }
-
-  function handleCardPointerMove(e: PointerEvent<HTMLElement>, itemId: string) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    e.currentTarget.style.setProperty("--spot-x", `${x}%`);
-    e.currentTarget.style.setProperty("--spot-y", `${y}%`);
-    e.currentTarget.style.setProperty("--tilt-x", `${(y - 50) * -0.08}deg`);
-    e.currentTarget.style.setProperty("--tilt-y", `${(x - 50) * 0.1}deg`);
-    e.currentTarget.setAttribute("data-hovered-id", itemId);
-  }
-
-  function handleCardPointerLeave(e: PointerEvent<HTMLElement>) {
-    e.currentTarget.style.setProperty("--tilt-x", "0deg");
-    e.currentTarget.style.setProperty("--tilt-y", "0deg");
   }
 
   return (
@@ -144,7 +116,7 @@ export default function ShopPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.28 }}
           >
-            Fast-loading 2D product motion with smooth scroll and conversion-first UX.
+            Premium vegetarian pantry — quick add, wishlist, and secure WhatsApp checkout.
           </motion.p>
         </div>
       </section>
@@ -182,110 +154,28 @@ export default function ShopPage() {
 
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 md:px-10">
         <p className="mb-6 font-sans text-sm text-noir-300">
-          {filtered.length} product{filtered.length !== 1 ? "s" : ""} · hover for
-          2D motion previews
+          {filtered.length} product{filtered.length !== 1 ? "s" : ""} · hover to quick add
         </p>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCat + sort}
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className="commerce-grid-4"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.4, ease: easeOut }}
           >
             {filtered.map((item, i) => (
-              <motion.article
+              <ProductCard
                 key={item.id}
-                className="group relative"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04, ...transitionSection }}
-                whileHover={{ y: -5 }}
-                onPointerMove={(e) => handleCardPointerMove(e, item.id)}
-                onPointerLeave={handleCardPointerLeave}
-              >
-                <div className="shop-cinematic-panel shop-spotlight-panel overflow-hidden rounded-3xl border border-white/[0.12] bg-gradient-to-b from-white/[0.08] via-white/[0.04] to-black/30 shadow-2xl backdrop-blur-xl transition">
-                  <Link
-                    href={`/shop/${item.id}`}
-                    className="block aspect-[4/3] overflow-hidden"
-                  >
-                    <ProductCard3D image={item.image} alt={item.name} />
-                  </Link>
-
-                  <div className="p-5">
-                    <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-saffron-600">
-                      {item.categoryLabel}
-                    </p>
-                    <Link href={`/shop/${item.id}`}>
-                      <h2 className="mt-1 font-display text-xl text-white transition group-hover:text-amber-300">
-                        {item.name}
-                      </h2>
-                    </Link>
-                    <p className="mt-2 line-clamp-2 font-sans text-sm text-noir-300">
-                      {item.description}
-                    </p>
-
-                    <div className="mt-4 flex items-center justify-between gap-2">
-                      <div>
-                        <p className="font-display text-2xl tabular-nums text-amber-300">
-                          <motion.span
-                            key={`${item.id}-${item.price}`}
-                            initial={{ y: 10, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.35, ease: easeOut }}
-                            className={priceFlash === item.id ? "price-flash inline-block" : "inline-block"}
-                          >
-                            {item.price}
-                          </motion.span>
-                        </p>
-                        {item.unit && (
-                          <p className="font-sans text-xs text-noir-400">
-                            {item.unit}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex gap-2">
-                        <motion.button
-                          type="button"
-                          onClick={() => toggleWish(item.id)}
-                          className={`rounded-full border px-3 py-1.5 font-sans text-xs font-semibold ${
-                            hasWish(item.id)
-                              ? "border-pink-400/70 bg-pink-500/20 text-pink-200"
-                              : "border-white/[0.2] bg-white/[0.05] text-white"
-                          }`}
-                          whileHover={{ scale: 1.06 }}
-                          whileTap={{ scale: 0.94 }}
-                        >
-                          {hasWish(item.id) ? "Wishlisted" : "Wishlist"}
-                        </motion.button>
-                        <Magnetic strength={0.2}>
-                          <motion.button
-                            type="button"
-                            onClick={() => setSelected(item)}
-                            className="rounded-full border border-white/[0.2] bg-white/[0.05] px-3 py-1.5 font-sans text-xs font-semibold text-white hover:border-amber-400/70"
-                            whileHover={{ scale: 1.06 }}
-                            whileTap={{ scale: 0.94 }}
-                          >
-                            Quick View
-                          </motion.button>
-                        </Magnetic>
-                        <Magnetic strength={0.22}>
-                          <motion.button
-                            type="button"
-                            onClick={() => handleAdd(item)}
-                            className="rounded-full bg-gradient-to-r from-amber-700 to-amber-500 px-3 py-1.5 font-sans text-xs font-semibold text-black"
-                            whileHover={{ scale: 1.06 }}
-                            whileTap={{ scale: 0.94 }}
-                          >
-                            + Cart
-                          </motion.button>
-                        </Magnetic>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.article>
+                product={{
+                  ...item,
+                  categoryId: item.category,
+                  categoryTitle: item.categoryLabel,
+                }}
+                priority={i < 4}
+                onQuickView={(p) => setSelected(p)}
+              />
             ))}
           </motion.div>
         </AnimatePresence>
@@ -328,7 +218,7 @@ export default function ShopPage() {
                 </div>
                 <div className="flex flex-col justify-center">
                   <p className="font-sans text-[10px] uppercase tracking-[0.36em] text-amber-400/80">
-                    {selected.categoryLabel}
+                    {selected.categoryTitle}
                   </p>
                   <h3 className="mt-2 font-display text-4xl text-white">{selected.name}</h3>
                   <p className="mt-4 font-sans text-sm leading-relaxed text-noir-300">{selected.description}</p>

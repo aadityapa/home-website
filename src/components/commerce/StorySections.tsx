@@ -1,0 +1,64 @@
+import Image from "next/image";
+import Link from "next/link";
+import { PRODUCT_STORY, LIFESTYLE_CAMPAIGN } from "@/data/commerce";
+import { SectionHeader } from "./SectionHeader";
+
+export function ProductStorySection() {
+  return (
+    <section className="commerce-section" aria-labelledby="product-story">
+      <div className="commerce-split">
+        <div>
+          <SectionHeader
+            id="product-story"
+            eyebrow={PRODUCT_STORY.eyebrow}
+            title={PRODUCT_STORY.headline}
+          />
+          <ul className="mt-8 space-y-4">
+            {PRODUCT_STORY.points.map((point) => (
+              <li key={point} className="flex gap-3 font-sans text-sm leading-relaxed text-noir-100/90 md:text-base">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" aria-hidden />
+                {point}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
+          <Image
+            src="/images/aam-ka-achar.png"
+            alt="Handcrafted achaar"
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function LifestyleBanner() {
+  return (
+    <section className="commerce-section" aria-label="Campaign banner">
+      <div className="commerce-banner relative overflow-hidden rounded-3xl border border-white/10">
+        <Image
+          src={LIFESTYLE_CAMPAIGN.image}
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-transparent" />
+        <div className="relative z-10 flex max-w-xl flex-col gap-4 p-8 md:p-14">
+          <p className="font-sans text-[11px] uppercase tracking-[0.38em] text-amber-300/90">
+            {LIFESTYLE_CAMPAIGN.eyebrow}
+          </p>
+          <h2 className="font-display text-4xl text-white md:text-5xl">{LIFESTYLE_CAMPAIGN.headline}</h2>
+          <p className="font-sans text-sm leading-relaxed text-noir-100/90 md:text-base">{LIFESTYLE_CAMPAIGN.body}</p>
+          <Link href={LIFESTYLE_CAMPAIGN.href} className="commerce-btn-primary mt-2 w-fit rounded-full px-8 py-3.5 font-sans text-xs font-semibold uppercase tracking-[0.2em]">
+            {LIFESTYLE_CAMPAIGN.cta}
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
