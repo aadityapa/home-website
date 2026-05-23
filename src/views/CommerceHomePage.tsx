@@ -33,8 +33,10 @@ export default function CommerceHomePage() {
       <div className="relative z-10">
         {/* 1. Premium Hero Campaign */}
         <CommerceHero />
-        {/* 2. Featured Categories */}
-        <FeaturedCollections categories={categories} />
+        {/* 2. Featured Categories — below hero, never overlapping */}
+        <div className="relative z-[1] border-t border-white/[0.06] bg-noir-950/20">
+          <FeaturedCollections categories={categories} />
+        </div>
         {/* 3. Best Sellers */}
         <ProductGridSection
           id="best-sellers"

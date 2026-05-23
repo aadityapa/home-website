@@ -11,7 +11,7 @@ export function CommerceHero() {
   const { skipInitial } = useMotionReady();
 
   return (
-    <section className="relative min-h-[70vh] overflow-hidden md:min-h-screen">
+    <section className="relative isolate z-10 min-h-[70vh] overflow-hidden md:min-h-[min(100vh,900px)]">
       <motion.div className="pointer-events-none absolute inset-0" aria-hidden initial={false} animate={{ opacity: 1 }}>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_20%,rgba(245,158,11,0.16),transparent_55%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(48,34,25,0.1)_0%,rgba(19,14,11,0.68)_88%)]" />

@@ -49,7 +49,11 @@ export function AppHeader() {
     pathname.startsWith("/blog") ||
     pathname.startsWith("/faq");
 
-  useEffect(() => setMenuOpen(false), [pathname]);
+  useEffect(() => {
+    setMenuOpen(false);
+    setMegaOpen(false);
+    setSearchOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (reduceMotion) {
@@ -61,7 +65,9 @@ export function AppHeader() {
     else if (delta > 10) {
       setHidden(true);
       setMenuOpen(false);
+      setMegaOpen(false);
     } else if (delta < -10) setHidden(false);
+    if (scroll > 24) setMegaOpen(false);
     prevScroll.current = scroll;
   }, [scroll, reduceMotion]);
 
@@ -118,6 +124,8 @@ export function AppHeader() {
                   key={l.href}
                   href={l.href}
                   onMouseEnter={() => shopMega && setMegaOpen(true)}
+                  onFocus={() => shopMega && setMegaOpen(true)}
+                  onClick={() => shopMega && setMegaOpen(false)}
                   className={`group relative rounded-lg px-3 py-2 font-sans text-sm font-medium transition duration-300 ${
                     active
                       ? "text-amber-400"
