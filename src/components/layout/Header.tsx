@@ -19,6 +19,7 @@ const links = [
   { href: "/", label: "Home", exact: true },
   { href: "/shop", label: "Shop", exact: false, mega: true },
   { href: "/blog", label: "Guides", exact: false },
+  { href: "/compare", label: "Compare", exact: false },
   { href: "/about", label: "About", exact: false },
   { href: "/contact", label: "Contact", exact: false },
 ];
@@ -93,14 +94,14 @@ export function AppHeader() {
           />
         )}
 
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-5 md:px-8 md:py-3.5">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-3 sm:px-5 sm:py-3 md:px-8 md:py-3.5">
           <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.18 }}>
             <Link href="/" className="group flex min-w-0 flex-col rounded-md focus:outline-none">
-              <span className="font-display text-lg tracking-[0.1em] text-white transition duration-300 group-hover:text-amber-400 md:text-xl">
+              <span className="font-display text-base tracking-[0.08em] text-white transition duration-300 group-hover:text-amber-400 sm:text-lg md:text-xl">
                 {BRAND.name}
               </span>
-              <span className="flex items-center gap-2">
-                <span className="text-[10px] font-sans font-light uppercase tracking-[0.35em] text-noir-300">
+              <span className="hidden items-center gap-2 sm:flex">
+                <span className="text-[9px] font-sans font-light uppercase tracking-[0.28em] text-noir-300 md:text-[10px] md:tracking-[0.35em]">
                   {BRAND.company} · Telhara
                 </span>
                 <PureVegMark size="sm" className="scale-90" />
@@ -141,24 +142,24 @@ export function AppHeader() {
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="hidden h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-amber-500/40 sm:flex"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-amber-500/40 sm:h-10 sm:w-10"
               aria-label="Search products"
             >
-              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+              <svg className="h-4.5 w-4.5 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
                 <circle cx="11" cy="11" r="7" />
                 <path strokeLinecap="round" d="M20 20l-3-3" />
               </svg>
             </button>
             <Link
               href="/wishlist"
-              className="relative hidden h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-pink-400/60 sm:flex"
+              className="relative flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-pink-400/60 sm:h-10 sm:w-10"
               aria-label={`Wishlist, ${wishlistCount} items`}
             >
-              <span className="text-sm">♡</span>
+              <span className="text-xs sm:text-sm">♡</span>
               {wishlistCount > 0 && (
                 <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-pink-500 px-1 font-sans text-[10px] font-bold text-white">
                   {wishlistCount > 99 ? "99+" : wishlistCount}
@@ -167,13 +168,13 @@ export function AppHeader() {
             </Link>
             <motion.button
               type="button"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-amber-500/40"
+              className="relative flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-amber-500/40 sm:h-10 sm:w-10"
               onClick={openCart}
               aria-label={`Open cart${itemCount ? `, ${itemCount} items` : ""}`}
               whileHover={{ scale: 1.08, y: -1 }}
               whileTap={{ scale: 0.93 }}
             >
-              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+              <svg className="h-4.5 w-4.5 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 7h15l-1.5 9h-12L6 7zm0 0L5 3H2" />
                 <circle cx="9" cy="20" r="1" />
                 <circle cx="18" cy="20" r="1" />
@@ -196,7 +197,7 @@ export function AppHeader() {
 
             <motion.button
               type="button"
-              className="group relative flex h-10 items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-white/5 px-3 font-sans text-xs font-medium uppercase tracking-wider text-noir-100 lg:hidden"
+              className="group relative flex h-9 items-center justify-center gap-1.5 overflow-hidden rounded-full border border-white/10 bg-white/5 px-2.5 font-sans text-[10px] font-medium uppercase tracking-[0.13em] text-noir-100 sm:h-10 sm:gap-2 sm:px-3 sm:text-xs sm:tracking-wider lg:hidden"
               onClick={() => setMenuOpen(true)}
               whileTap={{ scale: 0.93 }}
               aria-label="Open menu"

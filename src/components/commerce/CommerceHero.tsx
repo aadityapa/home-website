@@ -10,7 +10,7 @@ export function CommerceHero() {
   const { skipInitial } = useMotionReady();
 
   return (
-    <section className="relative overflow-hidden bg-noir-950">
+    <section className="relative min-h-[70vh] overflow-hidden bg-noir-950 md:min-h-[82vh]">
       <motion.div
         className="pointer-events-none absolute inset-0"
         aria-hidden
@@ -22,37 +22,37 @@ export function CommerceHero() {
       </motion.div>
 
       <motion.div
-        className="relative mx-auto grid max-w-7xl items-end gap-12 px-6 pb-16 pt-28 md:grid-cols-2 md:gap-16 md:px-10 md:pb-24 md:pt-32 lg:px-14"
+        className="relative mx-auto grid max-w-7xl items-end gap-6 px-4 pb-8 pt-20 md:grid-cols-2 md:gap-16 md:px-10 md:pb-24 md:pt-32 lg:px-14"
         initial={skipInitial ? false : { opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       >
         <motion.div className="max-w-xl md:max-w-2xl">
-          <p className="font-sans text-[11px] font-medium uppercase tracking-[0.42em] text-amber-400/90">
+          <p className="font-sans text-[9px] font-medium uppercase tracking-[0.24em] text-amber-400/90 md:text-[11px] md:tracking-[0.42em]">
             {BRAND.company} · {BRAND.location}
           </p>
-          <h1 className="mt-4 font-display text-[clamp(2.75rem,8vw,5.5rem)] leading-[0.92] tracking-tight text-white">
+          <h1 className="mt-2 font-display text-[clamp(1.95rem,7.2vw,5.5rem)] leading-[0.96] tracking-tight text-white md:mt-4 md:leading-[0.92]">
             Authentic taste.
             <span className="block bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
               Premium pantry.
             </span>
           </h1>
-          <p className="mt-6 max-w-lg font-sans text-base leading-relaxed text-noir-100/85 md:text-lg">
+          <p className="mt-3 max-w-lg font-sans text-sm leading-relaxed text-noir-100/85 md:mt-6 md:text-lg">
             Shop small-batch shrikhand, achaar, chai masala and aamchur — {BRAND.certification},{" "}
             {BRAND.promise.toLowerCase()}, delivered with care.
           </p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Link href="/shop" className="commerce-btn-primary rounded-full px-8 py-4 font-sans text-xs font-semibold uppercase tracking-[0.2em]">
+          <div className="mt-4 flex flex-wrap gap-2 md:mt-9 md:gap-3">
+            <Link href="/shop" className="commerce-btn-primary rounded-full px-4 py-2.5 font-sans text-[10px] font-semibold uppercase tracking-[0.12em] md:px-8 md:py-4 md:text-xs md:tracking-[0.2em]">
               Shop all products
             </Link>
-            <Link href="/collections/shrikhand" className="commerce-btn-ghost rounded-full px-8 py-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-white">
+            <Link href="/collections/shrikhand" className="commerce-btn-ghost rounded-full px-4 py-2.5 font-sans text-[10px] font-semibold uppercase tracking-[0.12em] text-white md:px-8 md:py-4 md:text-xs md:tracking-[0.2em]">
               Explore collections
             </Link>
           </div>
         </motion.div>
 
-        <div className="relative mx-auto w-full max-w-md md:max-w-none">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-white/10 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)]">
+        <div className="relative mx-auto w-full max-w-sm md:max-w-none">
+          <div className="relative aspect-[4/4.1] max-h-[48vh] overflow-hidden rounded-2xl border border-white/10 shadow-[0_24px_56px_-32px_rgba(0,0,0,0.8)] md:aspect-[4/5] md:max-h-none md:rounded-[1.75rem] md:shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)]">
             <Image
               src="/images/shrikhand-kesar-ilaichi.png"
               alt={`${BRAND.name} flagship shrikhand`}
@@ -62,14 +62,14 @@ export function CommerceHero() {
               className="object-cover"
             />
             <motion.div
-              className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-6"
+              className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-4 md:p-6"
               initial={skipInitial ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
             >
-              <p className="font-sans text-[10px] uppercase tracking-[0.34em] text-amber-300/90">Flagship drop</p>
-              <p className="mt-1 font-display text-3xl text-white">Kesar Ilaichi Shrikhand</p>
-              <p className="mt-1 font-sans text-sm text-noir-200">From ₹ 420 · 500 g</p>
+              <p className="font-sans text-[9px] uppercase tracking-[0.16em] text-amber-300/90 md:text-[10px] md:tracking-[0.34em]">Flagship drop</p>
+              <p className="mt-1 font-display text-2xl text-white md:text-3xl">Kesar Ilaichi Shrikhand</p>
+              <p className="mt-1 font-sans text-xs text-noir-200 md:text-sm">From ₹ 420 · 500 g</p>
             </motion.div>
           </div>
         </div>

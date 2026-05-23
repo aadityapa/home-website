@@ -28,7 +28,7 @@ export function ProductGridSection({
         title={title}
         subtitle={subtitle}
         action={
-          <Link href={viewAllHref} className="commerce-btn-ghost rounded-full px-5 py-2.5 font-sans text-xs uppercase tracking-[0.2em] text-white">
+          <Link href={viewAllHref} className="commerce-btn-ghost rounded-full px-3.5 py-2 font-sans text-[10px] uppercase tracking-[0.12em] text-white md:px-5 md:py-2.5 md:text-xs md:tracking-[0.2em]">
             View all
           </Link>
         }

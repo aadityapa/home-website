@@ -3,6 +3,7 @@
 import { useCatalog } from "@/hooks/useCatalog";
 import { getBestSellers, getTrendingProducts } from "@/lib/catalog-utils";
 import { CommerceHero } from "@/components/commerce/CommerceHero";
+import { UrgencyStrip } from "@/components/commerce/UrgencyStrip";
 import { TrustBar } from "@/components/commerce/TrustBar";
 import { FeaturedCollections } from "@/components/commerce/FeaturedCollections";
 import { ProductGridSection } from "@/components/commerce/ProductGridSection";
@@ -22,6 +23,7 @@ export default function CommerceHomePage() {
   return (
     <div className="theme-commerce bg-noir-950 text-noir-50">
       <CommerceHero />
+      <UrgencyStrip />
       <TrustBar />
       <FeaturedCollections categories={categories} />
       <ProductGridSection

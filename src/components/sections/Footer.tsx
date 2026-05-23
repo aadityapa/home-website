@@ -10,6 +10,7 @@ const footerLinks = [
   { href: "/collections/shrikhand", label: "Shrikhand" },
   { href: "/collections/achaar", label: "Achaar" },
   { href: "/blog", label: "Buying guides" },
+  { href: "/compare", label: "Comparisons" },
   { href: "/faq", label: "FAQ" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

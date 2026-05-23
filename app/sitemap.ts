@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { flattenCatalog, getAllCategories } from "@/lib/catalog-utils";
-import { BLOG_POSTS } from "@/data/commerce";
+import { BLOG_POSTS, COMPARISON_PAGES } from "@/data/commerce";
 
 const SITE_ORIGIN =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_ORIGIN}/wishlist`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
     { url: `${SITE_ORIGIN}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_ORIGIN}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${SITE_ORIGIN}/compare`, lastModified: now, changeFrequency: "monthly", priority: 0.65 },
   ];
 
   const collectionRoutes = getAllCategories().map((cat) => ({
@@ -40,5 +41,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.65,
   }));
 
-  return [...staticRoutes, ...collectionRoutes, ...productRoutes, ...blogRoutes];
+  const comparisonRoutes = COMPARISON_PAGES.map((page) => ({
+    url: `${SITE_ORIGIN}/compare/${page.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...collectionRoutes, ...productRoutes, ...blogRoutes, ...comparisonRoutes];
 }

@@ -23,9 +23,9 @@ export function FeaturedCollections({
             <Link
               key={cat.id}
               href={`/collections/${cat.id}`}
-              className="group relative overflow-hidden rounded-2xl border border-white/10"
+              className="group relative overflow-hidden rounded-xl border border-white/10 md:rounded-2xl"
             >
-              <div className="relative aspect-[4/5] overflow-hidden">
+              <div className="relative aspect-[4/3] overflow-hidden md:aspect-[4/5]">
                 {lead ? (
                   <Image
                     src={lead.image}
@@ -37,13 +37,13 @@ export function FeaturedCollections({
                 ) : null}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
               </div>
-              <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-                <p className="font-sans text-[10px] uppercase tracking-[0.32em] text-amber-300/90">
+              <div className="absolute inset-x-0 bottom-0 p-4 md:p-8">
+                <p className="font-sans text-[9px] uppercase tracking-[0.16em] text-amber-300/90 md:text-[10px] md:tracking-[0.32em]">
                   {cat.items.length} products
                 </p>
-                <h3 className="mt-2 font-display text-3xl text-white md:text-4xl">{cat.title}</h3>
-                <p className="mt-2 line-clamp-2 max-w-md font-sans text-sm text-noir-200">{cat.blurb}</p>
-                <span className="mt-4 inline-flex font-sans text-xs uppercase tracking-[0.22em] text-amber-300">
+                <h3 className="mt-1 font-display text-2xl text-white md:mt-2 md:text-4xl">{cat.title}</h3>
+                <p className="mt-1 line-clamp-2 max-w-md font-sans text-xs text-noir-200 md:mt-2 md:text-sm">{cat.blurb}</p>
+                <span className="mt-2 inline-flex font-sans text-[10px] uppercase tracking-[0.12em] text-amber-300 md:mt-4 md:text-xs md:tracking-[0.22em]">
                   Shop collection →
                 </span>
               </div>

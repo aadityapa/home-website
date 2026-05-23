@@ -13,14 +13,21 @@ type ProductCardProps = {
   onQuickView?: (product: CatalogProduct) => void;
 };
 
+function getPseudoStock(productId: string) {
+  const sum = [...productId].reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  return 4 + (sum % 14);
+}
+
 export function ProductCard({ product, priority, onQuickView }: ProductCardProps) {
   const { addItem } = useCart();
   const toggleWish = useWishlistStore((s) => s.toggle);
   const saved = useWishlistStore((s) => s.has(product.id));
+  const stockLeft = getPseudoStock(product.id);
+  const lowStock = stockLeft <= 8;
 
   return (
     <article className="commerce-card group relative flex flex-col">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-noir-950/40">
+      <div className="relative aspect-[1/1.05] overflow-hidden rounded-xl bg-noir-950/40 md:aspect-[4/5] md:rounded-2xl">
         <Link href={`/shop/${product.id}`} className="block h-full w-full">
           <Image
             src={product.image}
@@ -34,13 +41,16 @@ export function ProductCard({ product, priority, onQuickView }: ProductCardProps
         <button
           type="button"
           onClick={() => toggleWish(product.id)}
-          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/45 text-sm backdrop-blur-md transition hover:bg-black/60"
+          className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/45 text-xs backdrop-blur-md transition hover:bg-black/60 md:right-3 md:top-3 md:h-9 md:w-9 md:text-sm"
           aria-label={saved ? "Remove from wishlist" : "Add to wishlist"}
         >
           {saved ? "♥" : "♡"}
         </button>
+        <div className="absolute left-2 top-2 rounded-full border border-white/20 bg-black/50 px-2 py-0.5 font-sans text-[9px] uppercase tracking-[0.13em] text-noir-100 backdrop-blur-md md:left-3 md:top-3 md:px-2.5 md:py-1 md:text-[10px] md:tracking-[0.16em]">
+          {lowStock ? `Only ${stockLeft} left` : "In stock"}
+        </div>
         <motion.div
-          className="absolute inset-x-0 bottom-0 flex gap-2 p-3 opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100"
+          className="absolute inset-x-0 bottom-0 flex gap-1.5 p-2 opacity-100 transition duration-300 md:gap-2 md:p-3 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
           initial={false}
         >
           <button
@@ -59,7 +69,7 @@ export function ProductCard({ product, priority, onQuickView }: ProductCardProps
                 1,
               )
             }
-            className="commerce-btn-primary flex-1 rounded-full py-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.16em]"
+            className="commerce-btn-primary flex-1 rounded-full py-2 font-sans text-[10px] font-semibold uppercase tracking-[0.12em] md:py-2.5 md:text-[11px] md:tracking-[0.16em]"
           >
             Quick add
           </button>
@@ -67,28 +77,31 @@ export function ProductCard({ product, priority, onQuickView }: ProductCardProps
             <button
               type="button"
               onClick={() => onQuickView(product)}
-              className="rounded-full border border-white/20 bg-black/40 px-4 py-2.5 font-sans text-[11px] uppercase tracking-[0.14em] text-white backdrop-blur-md"
+              className="rounded-full border border-white/20 bg-black/40 px-2.5 py-2 font-sans text-[10px] uppercase tracking-[0.1em] text-white backdrop-blur-md md:px-4 md:py-2.5 md:text-[11px] md:tracking-[0.14em]"
             >
               View
             </button>
           ) : null}
         </motion.div>
       </div>
-      <motion.div className="mt-4 space-y-1" whileHover={{ y: -2 }} transition={{ duration: 0.25 }}>
-        <p className="font-sans text-[10px] uppercase tracking-[0.28em] text-amber-400/85">
+      <motion.div className="mt-2 space-y-0.5 md:mt-4 md:space-y-1" whileHover={{ y: -2 }} transition={{ duration: 0.25 }}>
+        <p className="font-sans text-[9px] uppercase tracking-[0.16em] text-amber-400/85 md:text-[10px] md:tracking-[0.28em]">
           {product.categoryTitle}
         </p>
         <Link href={`/shop/${product.id}`}>
-          <h3 className="font-display text-xl text-white transition hover:text-amber-300 md:text-2xl">
+          <h3 className="line-clamp-1 font-display text-base text-white transition hover:text-amber-300 md:text-2xl">
             {product.name}
           </h3>
         </Link>
-        <div className="flex items-center justify-between gap-2 pt-1">
-          <p className="font-display text-lg text-amber-300">{product.price}</p>
+        <div className="flex items-center justify-between gap-1 pt-0.5 md:gap-2 md:pt-1">
+          <p className="font-display text-base text-amber-300 md:text-lg">{product.price}</p>
           {product.unit ? (
-            <p className="font-sans text-xs text-noir-300">{product.unit}</p>
+            <p className="font-sans text-[10px] text-noir-300 md:text-xs">{product.unit}</p>
           ) : null}
         </div>
+        <p className="line-clamp-1 font-sans text-[10px] text-noir-300 md:text-[11px]">
+          {lowStock ? "Selling fast this week" : "Dispatch in 24-48 hours"}
+        </p>
       </motion.div>
     </article>
   );

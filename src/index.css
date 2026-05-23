@@ -444,11 +444,11 @@ body:has(.theme-commerce) {
 }
 
 .commerce-section {
-  @apply mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-20 lg:px-14;
+  @apply mx-auto max-w-7xl px-4 py-8 md:px-10 md:py-20 lg:px-14;
 }
 
 .commerce-section-head {
-  @apply mb-10 md:mb-12;
+  @apply mb-6 md:mb-12;
 }
 
 .commerce-eyebrow {
@@ -456,27 +456,27 @@ body:has(.theme-commerce) {
 }
 
 .commerce-title {
-  @apply mt-3 font-display text-4xl leading-[1.02] tracking-tight text-white md:text-5xl lg:text-6xl;
+  @apply mt-2 font-display text-2xl leading-[1.06] tracking-tight text-white md:mt-3 md:text-5xl lg:text-6xl;
 }
 
 .commerce-subtitle {
-  @apply mt-4 max-w-2xl font-sans text-sm leading-relaxed text-noir-200 md:text-base;
+  @apply mt-2 max-w-2xl font-sans text-xs leading-relaxed text-noir-200 md:mt-4 md:text-base;
 }
 
 .commerce-grid-3 {
-  @apply grid gap-5 sm:grid-cols-2 lg:grid-cols-3;
+  @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3;
 }
 
 .commerce-grid-4 {
-  @apply grid gap-5 sm:grid-cols-2 lg:grid-cols-4;
+  @apply grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4;
 }
 
 .commerce-split {
-  @apply grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-14;
+  @apply grid gap-6 lg:grid-cols-2 lg:items-start lg:gap-14;
 }
 
 .commerce-banner {
-  @apply relative min-h-[320px] md:min-h-[380px];
+  @apply relative min-h-[220px] md:min-h-[380px];
 }
 
 .commerce-btn-primary {
@@ -505,4 +505,13 @@ body:has(.theme-commerce) {
 
 .commerce-card {
   @apply transition duration-300;
+}
+
+@media (max-width: 767px) {
+  .commerce-btn-primary,
+  .commerce-btn-ghost {
+    padding: 0.62rem 0.95rem;
+    font-size: 11px;
+    letter-spacing: 0.11em;
+  }
 }

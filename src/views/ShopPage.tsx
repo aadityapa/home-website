@@ -84,17 +84,17 @@ export default function ShopPage() {
   }
 
   return (
-    <ImmersivePageLayout className="pt-20">
-      <section className="relative h-56 overflow-hidden bg-gradient-to-br from-[#1a0b05] via-[#2c1307] to-[#0c0a14] md:h-72">
+    <ImmersivePageLayout className="pt-16 sm:pt-20">
+      <section className="relative h-44 overflow-hidden bg-gradient-to-br from-[#1a0b05] via-[#2c1307] to-[#0c0a14] sm:h-48 md:h-72">
         <motion.div
           className="absolute inset-0 bg-gradient-to-br from-[#3d1c0b] via-[#2a1508] to-[#190f0d]"
           animate={{ opacity: [0.85, 1, 0.85] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-transparent" />
-        <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-16">
+        <div className="relative z-10 flex h-full flex-col justify-center px-4 sm:px-6 md:px-16">
           <motion.p
-            className="font-sans text-xs font-semibold uppercase tracking-[0.4em] text-amber-300/80"
+            className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-300/80 md:text-xs md:tracking-[0.4em]"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -102,7 +102,7 @@ export default function ShopPage() {
             Uma Laghoo Udyog · Premium Shop
           </motion.p>
           <motion.h1
-            className="mt-2 font-display text-4xl text-white md:text-5xl"
+            className="mt-1 font-display text-2xl text-white sm:text-3xl md:mt-2 md:text-5xl"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.18 }}
@@ -111,7 +111,7 @@ export default function ShopPage() {
             Shop Collection
           </motion.h1>
           <motion.p
-            className="mt-2 max-w-sm font-sans text-sm text-amber-100/80"
+            className="mt-1 max-w-xs font-sans text-xs text-amber-100/80 sm:max-w-sm sm:text-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.28 }}
@@ -121,14 +121,14 @@ export default function ShopPage() {
         </div>
       </section>
 
-      <div className="sticky top-[70px] z-30 border-b border-white/[0.08] bg-noir-950/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 md:px-10">
-          <div className="flex flex-wrap gap-2">
+      <div className="sticky top-[56px] z-30 border-b border-white/[0.08] bg-noir-950/88 backdrop-blur-xl sm:top-[64px]">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-3 py-2 sm:gap-3 sm:px-6 sm:py-3 md:px-10">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {categories.map((cat) => (
               <motion.button
                 key={cat.id}
                 onClick={() => handleCat(cat.id)}
-                className={`rounded-full px-4 py-1.5 font-sans text-xs font-semibold transition ${
+                className={`rounded-full px-3 py-1 font-sans text-[11px] font-semibold transition sm:px-4 sm:py-1.5 sm:text-xs ${
                   activeCat === cat.id
                     ? "bg-gradient-to-r from-amber-500 to-amber-700 text-black shadow-lg shadow-amber-900/40"
                     : "border border-white/[0.16] bg-white/[0.03] text-noir-200 hover:border-amber-400/60"
@@ -143,7 +143,7 @@ export default function ShopPage() {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as typeof sort)}
-            className="rounded-xl border border-white/[0.16] bg-white/[0.06] px-3 py-1.5 font-sans text-xs text-noir-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+            className="rounded-lg border border-white/[0.16] bg-white/[0.06] px-2.5 py-1 font-sans text-[11px] text-noir-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-xs"
           >
             <option value="default">Sort: Default</option>
             <option value="price-asc">Price: Low → High</option>
@@ -152,8 +152,8 @@ export default function ShopPage() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 md:px-10">
-        <p className="mb-6 font-sans text-sm text-noir-300">
+      <div className="mx-auto max-w-6xl px-3 py-6 sm:px-6 sm:py-12 md:px-10">
+        <p className="mb-4 font-sans text-xs text-noir-300 sm:mb-6 sm:text-sm">
           {filtered.length} product{filtered.length !== 1 ? "s" : ""} · hover to quick add
         </p>
         <AnimatePresence mode="wait">
@@ -192,7 +192,7 @@ export default function ShopPage() {
           >
             <motion.div
               className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/[0.16] bg-gradient-to-b from-[#16121a] via-[#120f14] to-[#0b0b10] p-5 md:p-8"
-              initial={{ y: 32, opacity: 0, scale: 0.98 }}
+              initial={{ y: 24, opacity: 0, scale: 0.98 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
               exit={{ y: 16, opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.45, ease: easeOut }}
@@ -206,8 +206,8 @@ export default function ShopPage() {
               >
                 Close
               </button>
-              <div className="grid gap-6 md:grid-cols-[1.2fr_1fr]">
-                <div className="h-[320px] overflow-hidden rounded-2xl border border-white/[0.1] bg-black/40 md:h-[420px]">
+              <div className="grid gap-4 md:grid-cols-[1.2fr_1fr] md:gap-6">
+                <div className="h-[220px] overflow-hidden rounded-xl border border-white/[0.1] bg-black/40 sm:h-[280px] md:h-[420px] md:rounded-2xl">
                   <MotionImage
                     src={selected.image}
                     alt={selected.name}
@@ -220,13 +220,13 @@ export default function ShopPage() {
                   <p className="font-sans text-[10px] uppercase tracking-[0.36em] text-amber-400/80">
                     {selected.categoryTitle}
                   </p>
-                  <h3 className="mt-2 font-display text-4xl text-white">{selected.name}</h3>
-                  <p className="mt-4 font-sans text-sm leading-relaxed text-noir-300">{selected.description}</p>
-                  <p className="mt-5 font-display text-3xl tabular-nums text-amber-300">{selected.price}</p>
+                  <h3 className="mt-1 font-display text-2xl text-white sm:text-3xl md:text-4xl">{selected.name}</h3>
+                  <p className="mt-2 font-sans text-xs leading-relaxed text-noir-300 sm:mt-4 sm:text-sm">{selected.description}</p>
+                  <p className="mt-3 font-display text-2xl tabular-nums text-amber-300 sm:mt-5 sm:text-3xl">{selected.price}</p>
                   {selected.unit && (
                     <p className="font-sans text-xs uppercase tracking-[0.2em] text-noir-400">{selected.unit}</p>
                   )}
-                  <div className="mt-7 flex flex-wrap gap-3">
+                  <div className="mt-4 flex flex-wrap gap-2 sm:mt-7 sm:gap-3">
                     <Magnetic strength={0.2}>
                       <button
                         type="button"

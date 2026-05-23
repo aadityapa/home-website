@@ -110,3 +110,25 @@ export const BLOG_POSTS = [
     readMinutes: 6,
   },
 ] as const;
+
+export const URGENCY_BANNER = {
+  title: "Weekend kitchen drop",
+  subtitle: "Extra 10% off on combos · ends tonight",
+  cta: "Shop offers",
+  href: "/shop?campaign=weekend-drop",
+} as const;
+
+export const COMPARISON_PAGES = [
+  {
+    slug: "chai-masala-vs-aamchur",
+    title: "Chai Masala vs Aamchur: Uses, Flavor, and Best Pairings",
+    excerpt:
+      "Understand where chai masala and aamchur belong in your kitchen, from daily chai to tangy gravies.",
+  },
+  {
+    slug: "shrikhand-vs-mithai-desserts",
+    title: "Shrikhand vs Traditional Mithai: Which Dessert for Which Occasion?",
+    excerpt:
+      "A practical comparison for texture, serving style, and festive menu planning.",
+  },
+] as const;
