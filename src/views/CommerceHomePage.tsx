@@ -27,7 +27,7 @@ export default function CommerceHomePage() {
         aria-hidden
         style={{
           background:
-            "radial-gradient(70% 45% at 20% 12%, rgba(255,255,255,0.06), transparent 65%), radial-gradient(60% 38% at 88% 34%, rgba(251,191,36,0.08), transparent 70%)",
+            "radial-gradient(70% 45% at 20% 12%, rgba(255,255,255,0.09), transparent 65%), radial-gradient(60% 38% at 88% 34%, rgba(251,191,36,0.14), transparent 70%), repeating-linear-gradient(120deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 14px)",
         }}
       />
       <div className="relative z-10">

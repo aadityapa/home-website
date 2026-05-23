@@ -18,7 +18,7 @@ export function CommerceHero() {
         animate={{ opacity: 1 }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_20%,rgba(245,158,11,0.14),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,19,32,0.18)_0%,rgba(13,16,27,0.86)_82%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,26,42,0.12)_0%,rgba(14,19,33,0.58)_82%)]" />
       </motion.div>
 
       <motion.div
@@ -62,7 +62,7 @@ export function CommerceHero() {
               className="object-cover"
             />
             <motion.div
-              className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent p-4 md:p-6"
+              className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/45 via-black/12 to-transparent p-4 md:p-6"
               initial={skipInitial ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
