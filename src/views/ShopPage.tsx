@@ -9,7 +9,6 @@ import { easeOut } from "../lib/motion";
 import { MotionImage } from "../components/motion/MotionImage";
 import { ProductCard } from "../components/commerce/ProductCard";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
-import { PageReveal } from "@/components/motion/PageReveal";
 import { Magnetic } from "../components/immersive/Magnetic";
 import type { CatalogProduct } from "../lib/catalog-utils";
 import { useCatalog } from "../hooks/useCatalog";
@@ -110,38 +109,21 @@ export default function ShopPage() {
   return (
     <ImmersivePageLayout className="pt-16 sm:pt-20">
       <section className="relative h-44 overflow-hidden bg-gradient-to-br from-[#1a0b05] via-[#2c1307] to-[#0c0a14] sm:h-48 md:h-72">
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-[#3d1c0b] via-[#2a1508] to-[#190f0d]"
-          animate={{ opacity: [0.85, 1, 0.85] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#3d1c0b] via-[#2a1508] to-[#190f0d]" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-transparent" />
         <div className="relative z-10 flex h-full flex-col justify-center px-4 sm:px-6 md:px-16">
-          <motion.p
-            className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-300/80 md:text-xs md:tracking-[0.4em]"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
+          <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-300/80 md:text-xs md:tracking-[0.4em]">
             Uma Laghoo Udyog · Premium Shop
-          </motion.p>
-          <motion.h1
+          </p>
+          <h1
             className="mt-1 font-display text-2xl text-white sm:text-3xl md:mt-2 md:text-5xl"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.18 }}
             style={{ textShadow: "0 4px 24px rgba(0,0,0,0.4)" }}
           >
             Shop Collection
-          </motion.h1>
-          <motion.p
-            className="mt-1 max-w-xs font-sans text-xs text-amber-100/80 sm:max-w-sm sm:text-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.28 }}
-          >
+          </h1>
+          <p className="mt-1 max-w-xs font-sans text-xs text-amber-100/80 sm:max-w-sm sm:text-sm">
             Premium vegetarian pantry — quick add, wishlist, and secure WhatsApp checkout.
-          </motion.p>
+          </p>
         </div>
       </section>
 
@@ -196,7 +178,7 @@ export default function ShopPage() {
         </div>
       </div>
 
-      <PageReveal className="mx-auto max-w-6xl px-3 py-6 sm:px-6 sm:py-12 md:px-10">
+      <div className="mx-auto max-w-6xl px-3 py-6 sm:px-6 sm:py-12 md:px-10">
         <p className="mb-2 line-clamp-2 max-w-xl font-sans text-[11px] text-noir-300 sm:text-xs">
           {activeCategoryMeta?.blurb}
         </p>
@@ -227,7 +209,7 @@ export default function ShopPage() {
             ))}
           </motion.div>
         </AnimatePresence>
-      </PageReveal>
+      </div>
 
       <AnimatePresence>
         {selected && (

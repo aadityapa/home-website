@@ -12,10 +12,8 @@ import {
   BrandStorySection,
   FAQSection,
 } from "@/components/commerce/TrustSections";
-import { TrustAuthoritySection } from "@/components/commerce/TrustAuthoritySection";
 import { SeoContentHub } from "@/components/commerce/SeoContentHub";
 import { NewsletterCTA } from "@/components/commerce/NewsletterCTA";
-import { PageReveal } from "@/components/motion/PageReveal";
 
 const CommerceHomeAmbience = dynamic(
   () =>
@@ -32,7 +30,7 @@ export default function CommerceHomePage() {
   return (
     <div className="theme-commerce relative overflow-hidden text-noir-50">
       <CommerceHomeAmbience />
-      <PageReveal className="relative z-10">
+      <div className="relative z-10">
         {/* 1. Premium Hero Campaign */}
         <CommerceHero />
         {/* 2. Featured Categories */}
@@ -57,19 +55,17 @@ export default function CommerceHomePage() {
         <ProductStorySection />
         {/* 6. Lifestyle Campaign */}
         <LifestyleBanner />
-        {/* Trust authority before social proof */}
-        <TrustAuthoritySection />
-        {/* 7. Customer Reviews */}
+        {/* 7. Customer Reviews (includes trust counters) */}
         <TestimonialsSection />
         {/* 8. Brand Story */}
         <BrandStorySection />
         {/* 9. FAQ */}
         <FAQSection />
-        {/* SEO internal linking hub */}
+        {/* SEO topical hub — internal linking */}
         <SeoContentHub />
         {/* 10. Newsletter CTA */}
         <NewsletterCTA />
-      </PageReveal>
+      </div>
     </div>
   );
 }

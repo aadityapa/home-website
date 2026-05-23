@@ -529,6 +529,17 @@ body:has(.theme-commerce) {
   box-shadow: 0 12px 40px -8px rgba(180, 83, 9, 0.55);
 }
 
+.commerce-btn-primary:active,
+.commerce-btn-ghost:active {
+  transform: scale(0.97);
+}
+
+.commerce-btn-primary[data-loading="true"],
+.commerce-btn-loading[data-loading="true"] {
+  pointer-events: none;
+  opacity: 0.85;
+}
+
 .commerce-btn-ghost {
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.04);

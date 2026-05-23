@@ -81,8 +81,12 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
     }
 
     prevPath.current = pathname;
-    window.scrollTo(0, 0);
+    // Scroll after exit animation to avoid layout jump during overlap window
+    const scrollTimer = window.setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 240);
     completeNavigation();
+    return () => window.clearTimeout(scrollTimer);
   }, [pathname, completeNavigation]);
 
   useEffect(

@@ -29,7 +29,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <CartDrawer />
       <CartToast />
       <StickyCartFab />
-      <main id="main-content">
+      <main id="main-content" className="relative isolate overflow-x-hidden">
         <RouteTransitionLayer>{children}</RouteTransitionLayer>
       </main>
       <Footer />

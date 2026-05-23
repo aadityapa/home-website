@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AnimatePresence, m, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { useCart } from "../../context/CartContext";
@@ -288,13 +289,13 @@ export function CartDrawer() {
                   {lines.length === 0 ? (
                     <p className="font-sans text-sm text-clay-600">
                       Your cart is empty. Browse{" "}
-                      <a
-                        href="#products"
+                      <Link
+                        href="/shop"
                         className="font-medium text-saffron-700 underline-offset-2 hover:underline"
                         onClick={closeCart}
                       >
-                        Products
-                      </a>{" "}
+                        shop
+                      </Link>{" "}
                       and tap Add to cart.
                     </p>
                   ) : (

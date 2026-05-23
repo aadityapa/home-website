@@ -1,4 +1,4 @@
-import { TESTIMONIALS, HOME_FAQS, BRAND_STORY } from "@/data/commerce";
+import { TESTIMONIALS, HOME_FAQS, BRAND_STORY, TRUST_COUNTERS, TRUST_BADGES } from "@/data/commerce";
 import Link from "next/link";
 import { SectionHeader } from "./SectionHeader";
 
@@ -6,6 +6,29 @@ export function TestimonialsSection() {
   return (
     <section className="commerce-section bg-white/[0.02]" aria-labelledby="testimonials">
       <SectionHeader id="testimonials" eyebrow="Social proof" title="Loved by home cooks across India" />
+      <div className="mb-6 grid grid-cols-2 gap-2 md:mb-8 md:grid-cols-4 md:gap-3">
+        {TRUST_COUNTERS.map((stat) => (
+          <div
+            key={stat.label}
+            className="framer-surface rounded-lg px-3 py-3 text-center md:rounded-xl md:px-4 md:py-4"
+          >
+            <p className="font-display text-xl text-amber-300 md:text-3xl">{stat.value}</p>
+            <p className="mt-0.5 font-sans text-[9px] uppercase tracking-[0.14em] text-noir-300 md:text-[10px]">
+              {stat.label}
+            </p>
+          </div>
+        ))}
+      </div>
+      <div className="mb-6 flex flex-wrap gap-1.5 md:mb-8 md:gap-2">
+        {TRUST_BADGES.map((b) => (
+          <span
+            key={b.label}
+            className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 font-sans text-[9px] uppercase tracking-[0.12em] text-noir-200 md:px-3 md:text-[10px]"
+          >
+            {b.icon} {b.label}
+          </span>
+        ))}
+      </div>
       <div className="commerce-grid-3">
         {TESTIMONIALS.map((t) => (
           <blockquote

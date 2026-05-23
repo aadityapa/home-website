@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ProductCampaignSwiper } from "../components/commerce/ProductCampaignSwiper";
 import { useCatalog } from "../hooks/useCatalog";
@@ -23,10 +23,11 @@ import { getProductStockLabel } from "../lib/commerce/inventory";
 export default function ProductDetailPage() {
   const params = useParams();
   const id = params?.id as string | undefined;
-  const { addItem } = useCart();
+  const { addItem, openCart } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const [pincode, setPincode] = useState("");
+  const [packSize, setPackSize] = useState<string | null>(null);
   const toggleWish = useWishlistStore((s) => s.toggle);
   const hasWish = useWishlistStore((s) => s.has);
 
@@ -64,6 +65,21 @@ export default function ProductDetailPage() {
       .slice(0, 4);
   }, [categories, item, category]);
 
+  const packOptions = useMemo(() => {
+    if (!item?.unit) return [];
+    const base = item.unit;
+    const alt = base.includes("500")
+      ? base.replace("500", "250")
+      : base.includes("400")
+        ? base.replace("400", "200")
+        : null;
+    return alt ? [alt, base] : [base];
+  }, [item?.unit]);
+
+  useEffect(() => {
+    if (packOptions[0]) setPackSize(packOptions[0]);
+  }, [packOptions, item?.id]);
+
   if (!item || !category) {
     return (
       <ImmersivePageLayout className="flex min-h-screen flex-col items-center justify-center gap-4 pt-24">
@@ -75,10 +91,11 @@ export default function ProductDetailPage() {
     );
   }
 
-  function handleAdd() {
+  function handleAdd(openDrawer = false) {
     if (!item || !category) return;
     addItem(item, category.title, qty);
     setAdded(true);
+    if (openDrawer) openCart();
     setTimeout(() => setAdded(false), 2200);
   }
 
@@ -149,9 +166,27 @@ export default function ProductDetailPage() {
             <p className="mt-1 font-display text-3xl tabular-nums text-amber-300 md:text-4xl">
               {item.price}
             </p>
-            {item.unit && (
-              <p className="mt-1 font-sans text-sm text-noir-300">{item.unit}</p>
-            )}
+            {packOptions.length > 0 ? (
+              <div className="mt-3">
+                <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-noir-400">Pack size</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {packOptions.map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => setPackSize(size)}
+                      className={`rounded-full border px-3 py-1.5 font-sans text-xs uppercase tracking-[0.12em] transition ${
+                        packSize === size
+                          ? "border-amber-400/60 bg-amber-500/15 text-amber-100"
+                          : "border-white/15 text-noir-200 hover:border-amber-400/40"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
             <p className="mt-3 font-sans text-xs uppercase tracking-[0.22em] text-noir-400">
               Total for {qty} · Rs {totalPrice}
             </p>
@@ -184,13 +219,25 @@ export default function ProductDetailPage() {
             <Magnetic>
               <motion.button
                 type="button"
-                onClick={handleAdd}
+                onClick={() => handleAdd(false)}
                 disabled={outOfStock}
                 className="glass-btn-primary flex-1 rounded-full px-5 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-noir-950 disabled:cursor-not-allowed disabled:opacity-50 md:px-8 md:py-3.5 md:text-sm md:tracking-[0.18em]"
                 whileHover={{ scale: outOfStock ? 1 : 1.03 }}
                 whileTap={{ scale: outOfStock ? 1 : 0.97 }}
               >
                 {outOfStock ? "Out of stock" : added ? "Added to cart" : "Add to cart"}
+              </motion.button>
+            </Magnetic>
+            <Magnetic strength={0.2}>
+              <motion.button
+                type="button"
+                onClick={() => handleAdd(true)}
+                disabled={outOfStock}
+                className="commerce-btn-ghost flex-1 rounded-full px-5 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-white disabled:opacity-50 md:px-8 md:py-3.5 md:text-sm md:tracking-[0.18em]"
+                whileHover={{ scale: outOfStock ? 1 : 1.02 }}
+                whileTap={{ scale: outOfStock ? 1 : 0.98 }}
+              >
+                Buy now
               </motion.button>
             </Magnetic>
             <Magnetic strength={0.22}>
@@ -340,11 +387,11 @@ export default function ProductDetailPage() {
           </div>
           <button
             type="button"
-            onClick={handleAdd}
+            onClick={() => handleAdd(true)}
             disabled={outOfStock}
             className="glass-btn-primary rounded-full px-3.5 py-1.5 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-noir-950 disabled:opacity-50"
           >
-            {outOfStock ? "Sold out" : "Add"}
+            {outOfStock ? "Sold out" : added ? "Added" : "Buy"}
           </button>
         </div>
       </div>

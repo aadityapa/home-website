@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import ContactPage from "@/views/ContactPage";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { breadcrumbSchema } from "@/lib/seo/schema";
 import { BRAND } from "@/data/brand";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -10,5 +12,15 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function ContactRoute() {
-  return <ContactPage />;
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" },
+        ])}
+      />
+      <ContactPage />
+    </>
+  );
 }

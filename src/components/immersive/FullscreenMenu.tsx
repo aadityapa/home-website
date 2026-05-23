@@ -8,9 +8,10 @@ import { BRAND } from "@/data/brand";
 const links = [
   { href: "/", label: "Home", exact: true },
   { href: "/shop", label: "Shop", exact: false },
+  { href: "/blog", label: "Guides", exact: false },
+  { href: "/compare", label: "Compare", exact: false },
   { href: "/wishlist", label: "Wishlist", exact: false },
   { href: "/about", label: "About", exact: false },
-  { href: "/journey", label: "Journey", exact: false },
   { href: "/contact", label: "Contact", exact: false },
 ];
 
@@ -109,16 +110,16 @@ export function FullscreenMenu({ open, onClose }: Props) {
             className="hidden rounded-3xl border border-white/[0.1] bg-white/[0.03] p-6 md:block"
           >
             <p className="font-sans text-[10px] uppercase tracking-[0.36em] text-amber-400/85">
-              Immersive Commerce
+              Premium pantry
             </p>
             <h3 className="mt-3 font-display text-3xl text-white">
-              Cinematic navigation surface
+              Shop with confidence
             </h3>
             <p className="mt-4 font-sans text-sm leading-relaxed text-noir-300">
-              Designed for fluid route discovery with tactile transitions, premium typography, and motion-led hierarchy.
+              Homemade vegetarian products from Telhara — FSSAI licensed, pan-India delivery, and WhatsApp checkout support.
             </p>
             <div className="mt-6 space-y-3">
-              {["3D ready routes", "Luxury interaction language", "Conversion-focused flow"].map((point) => (
+              {["FSSAI licensed batches", "Secure cart & checkout", "Fast dispatch 24–48h"].map((point) => (
                 <div key={point} className="flex items-center gap-2 text-noir-200">
                   <span className="text-amber-400">✦</span>
                   <span className="font-sans text-sm">{point}</span>
