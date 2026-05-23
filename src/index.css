@@ -440,9 +440,9 @@ body:has(.theme-immersive) ::-webkit-scrollbar-thumb {
 .theme-commerce,
 body:has(.theme-commerce) {
   background:
-    linear-gradient(160deg, #2a3552 0%, #2a3552 50%, #0f1527 50%, #0f1527 100%),
-    radial-gradient(1200px 600px at 80% -10%, rgba(245, 158, 11, 0.2), transparent 60%),
-    radial-gradient(900px 500px at 0% 20%, rgba(167, 139, 250, 0.16), transparent 58%);
+    linear-gradient(156deg, rgb(99, 76, 58) 0%, rgb(99, 76, 58) 50%, rgb(24, 19, 16) 50%, rgb(24, 19, 16) 100%),
+    radial-gradient(1200px 620px at 84% -10%, rgba(255, 176, 92, 0.25), transparent 62%),
+    radial-gradient(900px 520px at 0% 24%, rgba(237, 134, 92, 0.2), transparent 60%);
   color: #f4f4f8;
 }
 
@@ -451,9 +451,9 @@ body:has(.theme-commerce) {
   .theme-commerce,
   body:has(.theme-commerce) {
     background:
-      linear-gradient(170deg, #34466d 0%, #34466d 50%, #131b33 50%, #131b33 100%),
-      radial-gradient(95% 52% at 88% -6%, rgba(251, 191, 36, 0.28), transparent 62%),
-      radial-gradient(80% 44% at 8% 22%, rgba(99, 102, 241, 0.24), transparent 62%);
+      linear-gradient(170deg, rgb(116, 90, 68) 0%, rgb(116, 90, 68) 50%, rgb(32, 24, 19) 50%, rgb(32, 24, 19) 100%),
+      radial-gradient(95% 52% at 88% -6%, rgba(255, 193, 107, 0.3), transparent 62%),
+      radial-gradient(80% 44% at 8% 22%, rgba(242, 148, 104, 0.26), transparent 62%);
   }
 }
 
@@ -525,12 +525,12 @@ body:has(.theme-commerce) {
 .framer-surface {
   background: linear-gradient(
       150deg,
-      rgba(255, 255, 255, 0.1),
-      rgba(255, 255, 255, 0.03) 44%,
-      rgba(0, 0, 0, 0.1)
+      rgba(255, 245, 229, 0.16),
+      rgba(255, 255, 255, 0.04) 44%,
+      rgba(18, 13, 10, 0.15)
     ),
-    rgba(23, 29, 46, 0.46);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+    rgba(42, 32, 27, 0.46);
+  border: 1px solid rgba(255, 241, 224, 0.2);
   backdrop-filter: blur(14px) saturate(1.1);
   -webkit-backdrop-filter: blur(14px) saturate(1.1);
   box-shadow:
