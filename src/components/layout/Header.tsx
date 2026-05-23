@@ -156,7 +156,7 @@ export function AppHeader() {
             </button>
             <Link
               href="/wishlist"
-              className="relative flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-pink-400/60 sm:h-10 sm:w-10"
+              className="relative hidden h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-pink-400/60 min-[390px]:flex sm:h-10 sm:w-10"
               aria-label={`Wishlist, ${wishlistCount} items`}
             >
               <span className="text-xs sm:text-sm">♡</span>

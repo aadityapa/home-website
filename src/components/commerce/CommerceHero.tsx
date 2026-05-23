@@ -10,7 +10,7 @@ export function CommerceHero() {
   const { skipInitial } = useMotionReady();
 
   return (
-    <section className="relative min-h-[70vh] overflow-hidden bg-noir-950 md:min-h-[82vh]">
+    <section className="relative min-h-[70vh] overflow-hidden bg-noir-950 md:min-h-screen">
       <motion.div
         className="pointer-events-none absolute inset-0"
         aria-hidden

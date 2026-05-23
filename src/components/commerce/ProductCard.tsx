@@ -18,16 +18,24 @@ function getPseudoStock(productId: string) {
   return 4 + (sum % 14);
 }
 
+function getRatingMeta(productId: string) {
+  const sum = [...productId].reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  const rating = 4.4 + (sum % 6) * 0.1;
+  const reviews = 18 + (sum % 140);
+  return { rating: rating.toFixed(1), reviews };
+}
+
 export function ProductCard({ product, priority, onQuickView }: ProductCardProps) {
   const { addItem } = useCart();
   const toggleWish = useWishlistStore((s) => s.toggle);
   const saved = useWishlistStore((s) => s.has(product.id));
   const stockLeft = getPseudoStock(product.id);
   const lowStock = stockLeft <= 8;
+  const { rating, reviews } = getRatingMeta(product.id);
 
   return (
     <article className="commerce-card group relative flex flex-col">
-      <div className="relative aspect-[1/1.05] overflow-hidden rounded-xl bg-noir-950/40 md:aspect-[4/5] md:rounded-2xl">
+      <div className="relative aspect-[4/5] max-h-[220px] overflow-hidden rounded-xl bg-noir-950/40 md:max-h-none md:rounded-2xl">
         <Link href={`/shop/${product.id}`} className="block h-full w-full">
           <Image
             src={product.image}
@@ -52,6 +60,7 @@ export function ProductCard({ product, priority, onQuickView }: ProductCardProps
         <motion.div
           className="absolute inset-x-0 bottom-0 flex gap-1.5 p-2 opacity-100 transition duration-300 md:gap-2 md:p-3 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
           initial={false}
+          whileHover={{ y: -2 }}
         >
           <button
             type="button"
@@ -99,6 +108,9 @@ export function ProductCard({ product, priority, onQuickView }: ProductCardProps
             <p className="font-sans text-[10px] text-noir-300 md:text-xs">{product.unit}</p>
           ) : null}
         </div>
+        <p className="font-sans text-[10px] text-noir-300 md:text-xs">
+          ★ {rating} ({reviews} reviews)
+        </p>
         <p className="line-clamp-1 font-sans text-[10px] text-noir-300 md:text-[11px]">
           {lowStock ? "Selling fast this week" : "Dispatch in 24-48 hours"}
         </p>

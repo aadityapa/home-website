@@ -33,8 +33,6 @@ export default function CommerceHomePage() {
         subtitle="Customer favourites flying off the shelf this week."
         products={bestSellers}
       />
-      <ProductStorySection />
-      <LifestyleBanner />
       <ProductGridSection
         id="trending"
         eyebrow="Trending now"
@@ -42,6 +40,8 @@ export default function CommerceHomePage() {
         subtitle="Fresh momentum — discover what shoppers are loving right now."
         products={trending}
       />
+      <ProductStorySection />
+      <LifestyleBanner />
       <TestimonialsSection />
       <BrandStorySection />
       <FAQSection />

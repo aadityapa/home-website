@@ -22,7 +22,10 @@ export default function ShopPage() {
   const { addItem } = useCart();
   const { categories: catalogCategories } = useCatalog();
   const categories = useMemo(
-    () => [{ id: "all", label: "All" }, ...catalogCategories.map((c) => ({ id: c.id, label: c.title }))],
+    () => [
+      { id: "all", label: "All", blurb: "Explore our complete premium pantry range." },
+      ...catalogCategories.map((c) => ({ id: c.id, label: c.title, blurb: c.blurb })),
+    ],
     [catalogCategories],
   );
 
@@ -57,6 +60,10 @@ export default function ShopPage() {
       );
     return items;
   }, [activeCat, sort, allItems]);
+  const activeCategoryMeta = useMemo(
+    () => categories.find((c) => c.id === activeCat) ?? categories[0],
+    [categories, activeCat],
+  );
 
   useEffect(() => {
     const cat = searchParams.get("cat") ?? "all";
@@ -153,6 +160,9 @@ export default function ShopPage() {
       </div>
 
       <div className="mx-auto max-w-6xl px-3 py-6 sm:px-6 sm:py-12 md:px-10">
+        <p className="mb-2 line-clamp-2 max-w-xl font-sans text-[11px] text-noir-300 sm:text-xs">
+          {activeCategoryMeta?.blurb}
+        </p>
         <p className="mb-4 font-sans text-xs text-noir-300 sm:mb-6 sm:text-sm">
           {filtered.length} product{filtered.length !== 1 ? "s" : ""} · tap for quick add
         </p>
