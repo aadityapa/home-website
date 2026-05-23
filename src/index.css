@@ -440,7 +440,15 @@ body:has(.theme-immersive) ::-webkit-scrollbar-thumb {
 .theme-commerce,
 body:has(.theme-commerce) {
   background:
-    linear-gradient(156deg, rgb(99, 76, 58) 0%, rgb(99, 76, 58) 50%, rgb(24, 19, 16) 50%, rgb(24, 19, 16) 100%),
+    linear-gradient(
+      156deg,
+      rgb(108, 84, 64) 0%,
+      rgb(103, 79, 60) 38%,
+      rgb(84, 62, 47) 48%,
+      rgb(60, 44, 34) 56%,
+      rgb(35, 27, 22) 72%,
+      rgb(24, 19, 16) 100%
+    ),
     radial-gradient(1200px 620px at 84% -10%, rgba(255, 176, 92, 0.25), transparent 62%),
     radial-gradient(900px 520px at 0% 24%, rgba(237, 134, 92, 0.2), transparent 60%);
   color: #f4f4f8;
@@ -451,7 +459,15 @@ body:has(.theme-commerce) {
   .theme-commerce,
   body:has(.theme-commerce) {
     background:
-      linear-gradient(170deg, rgb(116, 90, 68) 0%, rgb(116, 90, 68) 50%, rgb(32, 24, 19) 50%, rgb(32, 24, 19) 100%),
+      linear-gradient(
+        170deg,
+        rgb(122, 95, 72) 0%,
+        rgb(116, 90, 68) 40%,
+        rgb(98, 74, 56) 50%,
+        rgb(72, 54, 40) 58%,
+        rgb(46, 34, 25) 74%,
+        rgb(32, 24, 19) 100%
+      ),
       radial-gradient(95% 52% at 88% -6%, rgba(255, 193, 107, 0.3), transparent 62%),
       radial-gradient(80% 44% at 8% 22%, rgba(242, 148, 104, 0.26), transparent 62%);
   }
