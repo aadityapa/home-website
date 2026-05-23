@@ -86,7 +86,7 @@ export function ProductCard({ product, priority, onQuickView }: ProductCardProps
             <button
               type="button"
               onClick={() => onQuickView(product)}
-              className="rounded-full border border-white/20 bg-black/40 px-2.5 py-2 font-sans text-[10px] uppercase tracking-[0.1em] text-white backdrop-blur-md md:px-4 md:py-2.5 md:text-[11px] md:tracking-[0.14em]"
+              className="hidden rounded-full border border-white/20 bg-black/40 px-4 py-2.5 font-sans text-[11px] uppercase tracking-[0.14em] text-white backdrop-blur-md md:inline-flex"
             >
               View
             </button>

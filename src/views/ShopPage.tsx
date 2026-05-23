@@ -129,13 +129,13 @@ export default function ShopPage() {
       </section>
 
       <div className="sticky top-[56px] z-30 border-b border-white/[0.08] bg-noir-950/88 backdrop-blur-xl sm:top-[64px]">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-3 py-2 sm:gap-3 sm:px-6 sm:py-3 md:px-10">
-          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-3 py-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3 sm:px-6 sm:py-3 md:px-10">
+          <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 sm:gap-2">
             {categories.map((cat) => (
               <motion.button
                 key={cat.id}
                 onClick={() => handleCat(cat.id)}
-                className={`rounded-full px-3 py-1 font-sans text-[11px] font-semibold transition sm:px-4 sm:py-1.5 sm:text-xs ${
+                className={`shrink-0 rounded-full px-3 py-1 font-sans text-[11px] font-semibold transition sm:px-4 sm:py-1.5 sm:text-xs ${
                   activeCat === cat.id
                     ? "bg-gradient-to-r from-amber-500 to-amber-700 text-black shadow-lg shadow-amber-900/40"
                     : "border border-white/[0.16] bg-white/[0.03] text-noir-200 hover:border-amber-400/60"
@@ -150,7 +150,7 @@ export default function ShopPage() {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as typeof sort)}
-            className="rounded-lg border border-white/[0.16] bg-white/[0.06] px-2.5 py-1 font-sans text-[11px] text-noir-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-xs"
+            className="w-full rounded-lg border border-white/[0.16] bg-white/[0.06] px-2.5 py-1 font-sans text-[11px] text-noir-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 sm:w-auto sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-xs"
           >
             <option value="default">Sort: Default</option>
             <option value="price-asc">Price: Low → High</option>

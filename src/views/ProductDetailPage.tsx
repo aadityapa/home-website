@@ -320,33 +320,33 @@ export default function ProductDetailPage() {
 
       <RecentlyViewedSection products={recentlyViewed} />
 
-      <div className="fixed inset-x-0 bottom-0 z-[65] border-t border-white/[0.14] bg-noir-950/92 p-3 backdrop-blur-xl md:hidden">
-        <div className="mx-auto flex max-w-md items-center gap-3">
+      <div className="fixed inset-x-0 bottom-0 z-[65] border-t border-white/[0.14] bg-noir-950/92 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2.5 backdrop-blur-xl md:hidden">
+        <div className="mx-auto flex max-w-md items-center gap-2.5">
           <button
             type="button"
             onClick={() => setQty((q) => Math.max(1, q - 1))}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.2] text-white"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.2] text-white"
           >
             −
           </button>
-          <span className="w-7 text-center font-display text-lg text-white">{qty}</span>
+          <span className="w-6 text-center font-display text-base text-white">{qty}</span>
           <button
             type="button"
             onClick={() => setQty((q) => q + 1)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.2] text-white"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.2] text-white"
           >
             +
           </button>
           <div className="min-w-0 flex-1">
-            <p className="truncate font-display text-xl text-amber-300">Rs {totalPrice}</p>
-            <p className="truncate font-sans text-[11px] uppercase tracking-[0.22em] text-noir-300">
+            <p className="truncate font-display text-lg text-amber-300">Rs {totalPrice}</p>
+            <p className="truncate font-sans text-[10px] uppercase tracking-[0.18em] text-noir-300">
               {item.name}
             </p>
           </div>
           <button
             type="button"
             onClick={handleAdd}
-            className="glass-btn-primary rounded-full px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-noir-950"
+            className="glass-btn-primary rounded-full px-3.5 py-1.5 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-noir-950"
           >
             Add
           </button>
