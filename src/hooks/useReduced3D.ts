@@ -17,7 +17,8 @@ function computeReduced(): boolean {
  * or reportedly low device memory when exposed by the browser.
  */
 export function useReduced3D(): boolean {
-  const [reduced, setReduced] = useState(computeReduced);
+  // Match SSR (no window) so markup is consistent before hydration.
+  const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
     const evaluate = () => setReduced(computeReduced());

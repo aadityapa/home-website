@@ -64,12 +64,14 @@ type CartContextValue = {
 const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [lines, setLines] = useState<CartLine[]>(() =>
-    typeof window !== "undefined" ? readStoredLines() : [],
-  );
+  const [lines, setLines] = useState<CartLine[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cartToast, setCartToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    setLines(readStoredLines());
+  }, []);
 
   const openCart = useCallback(() => {
     setDrawerOpen(true);

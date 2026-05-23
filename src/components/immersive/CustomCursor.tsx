@@ -1,15 +1,17 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useMouseParallax } from "../../hooks/useMouseParallax";
+import { useMotionReady } from "../../hooks/useMotionReady";
 
 export function CustomCursor() {
   const { x, y } = useMouseParallax();
-  const reduce = useReducedMotion();
+  const { mounted, reduceMotion } = useMotionReady();
   const [interactive, setInteractive] = useState(false);
+  const [coarsePointer, setCoarsePointer] = useState(true);
 
-  if (reduce || typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
-    return null;
-  }
+  useEffect(() => {
+    setCoarsePointer(window.matchMedia("(pointer: coarse)").matches);
+  }, []);
 
   useEffect(() => {
     const selector =
@@ -21,6 +23,10 @@ export function CustomCursor() {
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
+
+  if (!mounted || reduceMotion || coarsePointer) {
+    return null;
+  }
 
   return (
     <>

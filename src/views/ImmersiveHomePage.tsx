@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useMotionReady } from "../hooks/useMotionReady";
 import Link from "next/link";
 import { BRAND } from "../data/brand";
 import { useCatalog } from "../hooks/useCatalog";
@@ -12,7 +13,7 @@ import { trackEvent } from "../lib/analytics";
 const heroEase = [0.16, 1, 0.3, 1] as const;
 
 export default function ImmersiveHomePage() {
-  const reduce = useReducedMotion();
+  const { skipInitial } = useMotionReady();
   const { categories } = useCatalog();
   const [heroVariant, setHeroVariant] = useState<"A" | "B">("A");
 
@@ -81,28 +82,23 @@ export default function ImmersiveHomePage() {
       <section className="relative z-10 grid min-h-[100dvh] items-end gap-10 px-6 pb-20 pt-28 md:grid-cols-[1.05fr_0.95fr] md:px-14 md:pb-24">
         <div className="max-w-3xl">
           <motion.p
-            initial={reduce ? false : { opacity: 0, y: 14 }}
+            initial={skipInitial ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: heroEase }}
             className="font-sans text-[10px] uppercase tracking-[0.52em] text-amber-400/80"
           >
             {heroCopy.preline}
           </motion.p>
-          <motion.p
-            initial={reduce ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.05, ease: heroEase }}
-            className="mt-2 font-sans text-[10px] uppercase tracking-[0.28em] text-noir-400"
-          >
-            Conversion variant {heroVariant}
-          </motion.p>
+          <p className="mt-2 font-sans text-[10px] uppercase tracking-[0.28em] text-noir-400">
+            {BRAND.promise}
+          </p>
           <h1 className="mt-4 font-display text-5xl leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
             <span className="block overflow-hidden text-white">
               {heroCopy.line1.map((word, i) => (
                 <motion.span
                   key={word}
                   className="inline-block pr-[0.24em]"
-                  initial={reduce ? false : { y: "110%", opacity: 0 }}
+                  initial={skipInitial ? false : { y: "110%", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.75, delay: 0.08 + i * 0.06, ease: heroEase }}
                 >
@@ -115,7 +111,7 @@ export default function ImmersiveHomePage() {
                 <motion.span
                   key={word}
                   className="inline-block pr-[0.24em]"
-                  initial={reduce ? false : { y: "110%", opacity: 0 }}
+                  initial={skipInitial ? false : { y: "110%", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.75, delay: 0.22 + i * 0.06, ease: heroEase }}
                 >
@@ -125,7 +121,7 @@ export default function ImmersiveHomePage() {
             </span>
           </h1>
           <motion.p
-            initial={reduce ? false : { opacity: 0, y: 16 }}
+            initial={skipInitial ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.35, ease: heroEase }}
             className="mt-6 max-w-lg font-sans text-base leading-relaxed text-noir-200/90 md:text-lg"
@@ -133,7 +129,7 @@ export default function ImmersiveHomePage() {
             {heroCopy.body}
           </motion.p>
           <motion.div
-            initial={reduce ? false : { opacity: 0, y: 16 }}
+            initial={skipInitial ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.45, ease: heroEase }}
             className="mt-9 flex flex-wrap gap-3"
@@ -172,7 +168,7 @@ export default function ImmersiveHomePage() {
         </div>
 
         <motion.div
-          initial={reduce ? false : { opacity: 0, y: 24, scale: 0.98 }}
+          initial={skipInitial ? false : { opacity: 0, y: 24, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.85, delay: 0.15, ease: heroEase }}
           className="rounded-[2rem] border border-white/[0.12] bg-gradient-to-b from-white/[0.1] to-black/35 p-5"
@@ -208,7 +204,7 @@ export default function ImmersiveHomePage() {
           ].map((item, i) => (
             <motion.div
               key={item.l}
-              initial={reduce ? false : { opacity: 0, y: 12 }}
+              initial={skipInitial ? false : { opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05, duration: 0.45 }}
@@ -229,21 +225,27 @@ export default function ImmersiveHomePage() {
             Smooth horizontal browsing — no empty scroll gaps, just fast 2D product motion.
           </p>
         </div>
-        <div className="horizontal-scroll-track flex gap-5 px-6 pb-2 md:gap-8 md:px-14">
+        <div className="horizontal-scroll-track flex gap-5 px-6 pb-2 md:gap-8 md:px-14 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-14">
           {categories.map((cat, i) => {
             const lead = cat.items[0];
             return (
               <motion.article
                 key={cat.id}
-                initial={reduce ? false : { opacity: 0, x: 24 }}
+                initial={skipInitial ? false : { opacity: 0, x: 24 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-5%" }}
                 transition={{ delay: i * 0.04, duration: 0.5, ease: heroEase }}
-                className="campaign-slide-card w-[82vw] shrink-0 snap-start rounded-[1.7rem] border border-white/[0.12] bg-gradient-to-b from-white/[0.08] to-black/35 p-5 md:w-[36vw]"
+                className="campaign-slide-card w-[82vw] shrink-0 snap-start rounded-[1.7rem] border border-white/[0.12] bg-gradient-to-b from-white/[0.08] to-black/35 p-5 sm:w-[70vw] md:w-[48vw] lg:w-auto lg:shrink"
               >
                 {lead ? (
                   <div className="h-56 overflow-hidden rounded-2xl md:h-72">
-                    <MotionImage src={lead.image} alt={lead.name} width={800} height={640} />
+                    <MotionImage
+                      src={lead.image}
+                      alt={lead.name}
+                      width={800}
+                      height={640}
+                      priority={i < 3}
+                    />
                   </div>
                 ) : null}
                 <p className="mt-4 font-sans text-[10px] uppercase tracking-[0.32em] text-amber-400/80">{cat.title}</p>
@@ -269,7 +271,7 @@ export default function ImmersiveHomePage() {
           </div>
           <Link
             href="/shop"
-            className="hidden rounded-full border border-white/[0.16] px-5 py-2 font-sans text-xs uppercase tracking-[0.22em] text-noir-100 md:inline-flex"
+            className="inline-flex shrink-0 rounded-full border border-white/[0.16] px-5 py-2 font-sans text-xs uppercase tracking-[0.22em] text-noir-100"
           >
             View all
           </Link>

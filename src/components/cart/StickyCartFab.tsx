@@ -1,11 +1,12 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useCart } from "../../context/CartContext";
+import { useMotionReady } from "../../hooks/useMotionReady";
 import { springSoft } from "../../lib/motion";
 
 /** Thumb-reach cart access on small screens; header cart remains on all sizes. */
 export function StickyCartFab() {
   const { itemCount, openCart, drawerOpen } = useCart();
-  const reduce = useReducedMotion();
+  const { skipInitial, reduceMotion } = useMotionReady();
 
   if (drawerOpen) return null;
 
@@ -15,9 +16,9 @@ export function StickyCartFab() {
       onClick={openCart}
       className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-4 z-[55] flex h-14 w-14 items-center justify-center rounded-full border border-saffron-500/30 bg-gradient-to-br from-saffron-600 to-amber-700 text-white shadow-[0_12px_40px_-8px_rgba(180,90,20,0.45)] md:hidden"
       aria-label={`Open cart${itemCount ? `, ${itemCount} items` : ""}`}
-      initial={reduce ? false : { scale: 0.92, opacity: 0 }}
-      animate={reduce ? undefined : { scale: 1, opacity: 1 }}
-      whileTap={{ scale: 0.95 }}
+      initial={skipInitial ? false : { scale: 0.92, opacity: 0 }}
+      animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+      whileTap={reduceMotion ? undefined : { scale: 0.95 }}
       transition={springSoft}
     >
       <svg

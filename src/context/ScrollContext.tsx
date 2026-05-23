@@ -15,9 +15,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const easeOutExpo: (t: number) => number = (t) =>
-  Math.min(1, 1.001 - Math.pow(2, -10 * t));
-
 type ScrollContextValue = {
   scroll: number;
   progress: number;
@@ -36,11 +33,30 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    document.documentElement.classList.add("lenis", "lenis-smooth");
-
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
+    // Native touch scrolling on phones/tablets; Lenis + ScrollTrigger proxy often breaks iOS.
+    if (coarsePointer) {
+      const onScroll = () => {
+        scrollRef.current = window.scrollY;
+        setScroll(window.scrollY);
+        ScrollTrigger.update();
+      };
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      const onResize = () => ScrollTrigger.refresh();
+      window.addEventListener("resize", onResize);
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onResize);
+      };
+    }
+
+    document.documentElement.classList.add("lenis", "lenis-smooth");
 
     const instance = new Lenis(
       reduceMotion
@@ -52,14 +68,17 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
             touchMultiplier: 1,
           }
         : {
-            duration: 0.85,
-            easing: easeOutExpo,
-            lerp: 0.12,
-            smoothWheel: true,
+            // Native-feeling wheel: Lenis tracks scroll without heavy inertia.
+            lerp: 1,
+            smoothWheel: false,
             wheelMultiplier: 1,
             touchMultiplier: 1,
-            syncTouch: true,
-            syncTouchLerp: 0.1,
+            syncTouch: false,
+            anchors: {
+              offset: -84,
+              duration: 0.45,
+              easing: (t: number) => 1 - Math.pow(1 - t, 3),
+            },
           },
     );
 

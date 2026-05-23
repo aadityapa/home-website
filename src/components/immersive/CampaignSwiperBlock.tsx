@@ -29,11 +29,17 @@ export function CampaignSwiperBlock({ products }: { products: Product[] }) {
       }}
       className="campaign-swiper pb-12"
     >
-      {products.slice(0, 9).map((item) => (
+      {products.slice(0, 9).map((item, i) => (
         <SwiperSlide key={item.id}>
           <article className="group overflow-hidden rounded-3xl border border-white/[0.12] bg-gradient-to-b from-white/[0.08] to-black/30 p-4">
             <div className="h-56 overflow-hidden rounded-2xl md:h-64">
-              <MotionImage src={item.image} alt={item.name} width={800} height={640} />
+              <MotionImage
+                src={item.image}
+                alt={item.name}
+                width={800}
+                height={640}
+                priority={i < 3}
+              />
             </div>
             <p className="mt-3 font-sans text-[10px] uppercase tracking-[0.28em] text-amber-400/80">
               {item.category}

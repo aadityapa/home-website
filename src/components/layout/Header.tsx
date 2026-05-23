@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useMotionReady } from "../../hooks/useMotionReady";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PureVegMark } from "../brand/PureVegMark";
@@ -31,7 +32,7 @@ export function AppHeader() {
   const wishlistCount = useWishlistStore((s) => s.ids.length);
   const { scroll } = useAppScroll();
   const pathname = usePathname();
-  const reduceMotion = useReducedMotion();
+  const { reduceMotion, skipInitial } = useMotionReady();
   const prevScroll = useRef(0);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -67,7 +68,7 @@ export function AppHeader() {
     <>
       <motion.header
         className={`fixed left-0 right-0 top-0 z-50 border-b transition-[background-color,box-shadow,border-color] duration-500 ease-out ${headerClass}`}
-        initial={{ y: -28, opacity: 0 }}
+        initial={skipInitial ? false : { y: -28, opacity: 0 }}
         animate={{ y: reduceMotion ? 0 : hidden ? -80 : 0, opacity: 1 }}
         transition={springSoft}
       >
@@ -173,7 +174,7 @@ export function AppHeader() {
 
             <motion.button
               type="button"
-              className="group relative flex h-10 items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-white/5 px-3 font-sans text-xs font-medium uppercase tracking-wider text-noir-100 lg:px-4"
+              className="group relative flex h-10 items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-white/5 px-3 font-sans text-xs font-medium uppercase tracking-wider text-noir-100 lg:hidden"
               onClick={() => setMenuOpen(true)}
               whileTap={{ scale: 0.93 }}
               aria-label="Open menu"
