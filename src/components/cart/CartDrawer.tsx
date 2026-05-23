@@ -497,7 +497,7 @@ export function CartDrawer() {
               ) : null}
             </div>
 
-            <footer className="border-t border-clay-200/80 bg-clay-50/95 px-4 py-3 md:px-6 md:py-4">
+            <footer className="border-t border-clay-200/80 bg-clay-50/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 md:px-6 md:py-4">
               {step === "cart" ? (
                 <div className="flex flex-col gap-3">
                   {lines.length > 0 ? (

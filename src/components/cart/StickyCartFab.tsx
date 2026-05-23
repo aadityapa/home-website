@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useCart } from "../../context/CartContext";
 import { useMotionReady } from "../../hooks/useMotionReady";
 import { springSoft } from "../../lib/motion";
@@ -7,8 +8,10 @@ import { springSoft } from "../../lib/motion";
 export function StickyCartFab() {
   const { itemCount, openCart, drawerOpen } = useCart();
   const { skipInitial, reduceMotion } = useMotionReady();
+  const pathname = usePathname();
 
-  if (drawerOpen) return null;
+  // PDP already has a sticky buy bar; avoid overlap with FAB.
+  if (drawerOpen || pathname.startsWith("/shop/")) return null;
 
   return (
     <motion.button

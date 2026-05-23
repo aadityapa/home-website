@@ -201,7 +201,7 @@ export default function ShopPage() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/[0.16] bg-gradient-to-b from-[#16121a] via-[#120f14] to-[#0b0b10] p-5 md:p-8"
+              className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-3xl border border-white/[0.16] bg-gradient-to-b from-[#16121a] via-[#120f14] to-[#0b0b10] p-4 md:p-8"
               initial={{ y: 24, opacity: 0, scale: 0.98 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
               exit={{ y: 16, opacity: 0, scale: 0.98 }}
@@ -212,7 +212,7 @@ export default function ShopPage() {
                 type="button"
                 aria-label="Close quick view"
                 onClick={() => setSelected(null)}
-                className="absolute right-4 top-4 rounded-full border border-white/[0.2] bg-white/[0.06] px-3 py-1 text-xs text-white"
+                className="absolute right-3 top-3 rounded-full border border-white/[0.2] bg-white/[0.06] px-2.5 py-1 text-[11px] text-white md:right-4 md:top-4 md:px-3 md:text-xs"
               >
                 Close
               </button>
