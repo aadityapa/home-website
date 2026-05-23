@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { FormEvent, useState, lazy, Suspense } from "react";
 import Link from "next/link";

@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { lazy, Suspense, useRef } from "react";
 import Link from "next/link";

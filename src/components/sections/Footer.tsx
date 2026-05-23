@@ -16,6 +16,12 @@ const footerLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
+const policyLinks = [
+  { href: "/shipping", label: "Shipping" },
+  { href: "/refunds", label: "Returns & refunds" },
+  { href: "/privacy", label: "Privacy" },
+];
+
 export function Footer() {
   return (
     <footer className="theme-immersive relative overflow-hidden border-t border-white/[0.06] bg-noir-950 py-14">
@@ -74,6 +80,17 @@ export function Footer() {
             <span className="text-base">💬</span> WhatsApp order
           </a>
           <p className="mt-4 font-sans text-xs text-noir-400">{BRAND.location}</p>
+          <nav className="mt-4 flex flex-wrap gap-x-4 gap-y-1">
+            {policyLinks.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="font-sans text-xs text-noir-400 transition hover:text-amber-300"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
         </motion.div>
       </div>
 

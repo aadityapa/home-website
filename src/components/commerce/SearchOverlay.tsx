@@ -95,6 +95,15 @@ export function SearchOverlay({ open, onClose }: SearchOverlayProps) {
         {results.length === 0 ? (
           <p className="mt-8 font-sans text-sm text-noir-300">No products match your search.</p>
         ) : null}
+        {query.trim() ? (
+          <Link
+            href={`/shop?q=${encodeURIComponent(query.trim())}`}
+            onClick={onClose}
+            className="mt-6 inline-flex rounded-full border border-amber-500/40 bg-amber-500/10 px-5 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-amber-200 transition hover:bg-amber-500/20"
+          >
+            View all results in shop
+          </Link>
+        ) : null}
       </div>
     </div>
   );

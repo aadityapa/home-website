@@ -1,4 +1,6 @@
-import { useState, useMemo, useEffect } from "react";
+"use client";
+
+import { useState, useMemo, useEffect, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -14,6 +16,7 @@ import { useCatalog } from "../hooks/useCatalog";
 export default function ShopPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const searchQuery = searchParams.get("q")?.trim() ?? "";
   const [activeCat, setActiveCat] = useState(searchParams.get("cat") ?? "all");
   const [sort, setSort] = useState<"default" | "price-asc" | "price-desc">(
     "default",
@@ -46,6 +49,15 @@ export default function ShopPage() {
       activeCat === "all"
         ? allItems
         : allItems.filter((i) => i.category === activeCat);
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      items = items.filter(
+        (i) =>
+          i.name.toLowerCase().includes(q) ||
+          i.description.toLowerCase().includes(q) ||
+          i.categoryLabel.toLowerCase().includes(q),
+      );
+    }
     if (sort === "price-asc")
       items = [...items].sort(
         (a, b) =>
@@ -59,7 +71,7 @@ export default function ShopPage() {
           parseInt(a.price.replace(/\D/g, "")),
       );
     return items;
-  }, [activeCat, sort, allItems]);
+  }, [activeCat, sort, allItems, searchQuery]);
   const activeCategoryMeta = useMemo(
     () => categories.find((c) => c.id === activeCat) ?? categories[0],
     [categories, activeCat],
@@ -70,9 +82,24 @@ export default function ShopPage() {
     setActiveCat(cat);
   }, [searchParams]);
 
+  function buildShopUrl(cat: string, q?: string) {
+    const params = new URLSearchParams();
+    if (cat !== "all") params.set("cat", cat);
+    if (q?.trim()) params.set("q", q.trim());
+    const query = params.toString();
+    return query ? `/shop?${query}` : "/shop";
+  }
+
   function handleCat(id: string) {
     setActiveCat(id);
-    router.push(id === "all" ? "/shop" : `/shop?cat=${id}`);
+    router.push(buildShopUrl(id, searchQuery));
+  }
+
+  function handleSearchSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const q = new FormData(form).get("q")?.toString() ?? "";
+    router.push(buildShopUrl(activeCat, q));
   }
 
   function handleAdd(item: CatalogProduct) {
@@ -147,6 +174,26 @@ export default function ShopPage() {
               </motion.button>
             ))}
           </div>
+          <form
+            onSubmit={handleSearchSubmit}
+            className="flex w-full gap-2 sm:max-w-xs sm:flex-1"
+            role="search"
+          >
+            <input
+              type="search"
+              name="q"
+              defaultValue={searchQuery}
+              placeholder="Search products…"
+              className="min-w-0 flex-1 rounded-lg border border-white/[0.16] bg-white/[0.06] px-2.5 py-1 font-sans text-[11px] text-noir-100 placeholder:text-noir-400 focus:outline-none focus:ring-2 focus:ring-amber-500/40 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-xs"
+              aria-label="Search products"
+            />
+            <button
+              type="submit"
+              className="shrink-0 rounded-lg border border-amber-500/40 bg-amber-500/15 px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.12em] text-amber-200 sm:rounded-xl sm:text-xs"
+            >
+              Search
+            </button>
+          </form>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as typeof sort)}
@@ -164,11 +211,12 @@ export default function ShopPage() {
           {activeCategoryMeta?.blurb}
         </p>
         <p className="mb-4 font-sans text-xs text-noir-300 sm:mb-6 sm:text-sm">
-          {filtered.length} product{filtered.length !== 1 ? "s" : ""} · tap for quick add
+          {filtered.length} product{filtered.length !== 1 ? "s" : ""}
+          {searchQuery ? ` for “${searchQuery}”` : ""} · tap for quick add
         </p>
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeCat + sort}
+            key={`${activeCat}-${sort}-${searchQuery}`}
             className="commerce-grid-4"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}

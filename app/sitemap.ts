@@ -16,6 +16,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_ORIGIN}/journey`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_ORIGIN}/wishlist`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
     { url: `${SITE_ORIGIN}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_ORIGIN}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${SITE_ORIGIN}/shipping`, lastModified: now, changeFrequency: "yearly", priority: 0.45 },
+    { url: `${SITE_ORIGIN}/refunds`, lastModified: now, changeFrequency: "yearly", priority: 0.45 },
     { url: `${SITE_ORIGIN}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${SITE_ORIGIN}/compare`, lastModified: now, changeFrequency: "monthly", priority: 0.65 },
   ];

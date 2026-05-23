@@ -4,10 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
+import { ProductCampaignSwiper } from "../components/commerce/ProductCampaignSwiper";
 import { useCatalog } from "../hooks/useCatalog";
 import { TRUST_BADGES, HOME_FAQS } from "../data/commerce";
 import { useCart } from "../context/CartContext";
@@ -26,6 +23,7 @@ export default function ProductDetailPage() {
   const { addItem } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const [pincode, setPincode] = useState("");
   const toggleWish = useWishlistStore((s) => s.toggle);
   const hasWish = useWishlistStore((s) => s.has);
 
@@ -38,6 +36,23 @@ export default function ProductDetailPage() {
     }
     return { item: null, category: null };
   }, [id, categories]);
+
+  const recentIds = useRecentlyViewed(id ?? "");
+  const recentlyViewed = useMemo(
+    () =>
+      item ? mapRecentlyViewedProducts(categories, recentIds, item.id) : [],
+    [categories, recentIds, item],
+  );
+
+  const deliveryEstimate = useMemo(() => {
+    const pin = pincode.replace(/\D/g, "");
+    if (pin.length < 6) return "Enter pincode for delivery estimate";
+    const metroPrefixes = ["40", "11", "56", "60", "70", "50"];
+    const isMetro = metroPrefixes.some((p) => pin.startsWith(p));
+    return isMetro
+      ? "Estimated delivery: 3–5 business days"
+      : "Estimated delivery: 5–7 business days";
+  }, [pincode]);
 
   if (!item || !category) {
     return (
@@ -73,11 +88,6 @@ export default function ProductDetailPage() {
   const priceRaw = parseInt(item.price.replace(/\D/g, ""), 10) || 0;
   const totalPrice = (priceRaw * qty).toLocaleString("en-IN");
   const galleryItems = [item, ...related.slice(0, 4)];
-  const recentIds = useRecentlyViewed(item.id);
-  const recentlyViewed = useMemo(
-    () => mapRecentlyViewedProducts(categories, recentIds, item.id),
-    [categories, recentIds, item.id],
-  );
   const stockLeft = 4 + (item.id.length % 9);
   const rating = (4.6 + (item.id.length % 3) * 0.1).toFixed(1);
   const reviewCount = 38 + item.id.length * 7;
@@ -132,7 +142,7 @@ export default function ProductDetailPage() {
             {item.name}
           </h1>
           <p className="mt-1 font-sans text-xs text-noir-200 md:text-sm">
-            ★ {rating} ({reviewCount} verified reviews)
+            ★ {rating} · {reviewCount} customer ratings
           </p>
           <p className="mt-2 font-sans text-sm leading-relaxed text-noir-300 md:mt-4 md:text-base">
             {item.description}
@@ -230,16 +240,40 @@ export default function ProductDetailPage() {
               </span>
             ))}
           </div>
-          <details className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 md:mt-8 md:px-5 md:py-4">
+          <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4 md:mt-8 md:p-5">
+            <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-noir-400">
+              Delivery estimate
+            </p>
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                placeholder="Enter 6-digit pincode"
+                className="w-full rounded-xl border border-white/15 bg-white/[0.05] px-3 py-2 font-sans text-sm text-white placeholder:text-noir-400 focus:outline-none focus:ring-2 focus:ring-amber-500/40 sm:max-w-[200px]"
+                aria-label="Delivery pincode"
+              />
+              <p className="font-sans text-sm text-amber-200/90">{deliveryEstimate}</p>
+            </div>
+            <Link
+              href="/shipping"
+              className="mt-2 inline-block font-sans text-xs text-amber-300 hover:underline"
+            >
+              View shipping policy →
+            </Link>
+          </div>
+          <details className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 md:mt-5 md:px-5 md:py-4">
             <summary className="cursor-pointer font-sans text-sm font-medium text-white">
               Shipping &amp; returns
             </summary>
             <p className="mt-3 font-sans text-sm text-noir-300">
               Pan-India shipping with careful packaging. Contact us on WhatsApp for delivery timelines to your pincode.
             </p>
-            <p className="mt-2 font-sans text-xs text-noir-400">
-              Estimated delivery: 3-5 business days in metros, 5-7 in other regions.
-            </p>
+            <Link href="/refunds" className="mt-2 inline-block font-sans text-xs text-amber-300 hover:underline">
+              Returns &amp; refunds policy →
+            </Link>
           </details>
           <div className="mt-4 space-y-2 md:mt-6 md:space-y-3">
             <p className="font-sans text-xs uppercase tracking-[0.24em] text-noir-400">Quick answers</p>
@@ -263,29 +297,7 @@ export default function ProductDetailPage() {
             Mobile-first storytelling
           </p>
         </div>
-        <Swiper
-          modules={[Pagination]}
-          pagination={{ clickable: true }}
-          spaceBetween={16}
-          breakpoints={{
-            0: { slidesPerView: 1.1 },
-            640: { slidesPerView: 2.2 },
-            1024: { slidesPerView: 3.1 },
-          }}
-          className="campaign-swiper pb-10"
-        >
-          {galleryItems.map((g) => (
-            <SwiperSlide key={g.id}>
-              <article className="overflow-hidden rounded-2xl border border-white/[0.12] bg-white/[0.04] p-2.5 md:p-3">
-                <div className="h-44 overflow-hidden rounded-xl sm:h-52 md:h-64">
-                  <MotionImage src={g.image} alt={g.name} width={900} height={900} />
-                </div>
-                <p className="mt-2 font-display text-xl text-white md:mt-3 md:text-2xl">{g.name}</p>
-                <p className="font-sans text-xs text-amber-300 md:text-sm">{g.price}</p>
-              </article>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <ProductCampaignSwiper items={galleryItems} />
       </section>
 
       {related.length > 0 && (
