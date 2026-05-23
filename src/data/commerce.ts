@@ -7,6 +7,19 @@ export const TRUST_BADGES = [
   { label: "Pan-India shipping", icon: "📦" },
 ] as const;
 
+export const TRUST_COUNTERS = [
+  { value: "12K+", label: "Happy customers" },
+  { value: "48+", label: "Cities served" },
+  { value: "4.8★", label: "Average rating" },
+  { value: "100%", label: "Vegetarian pantry" },
+] as const;
+
+export const MEDIA_MENTIONS = [
+  "Featured in regional food guides",
+  "Trusted by home chefs nationwide",
+  "Small-batch Telhara craftsmanship",
+] as const;
+
 export const TESTIMONIALS = [
   {
     id: "1",
@@ -131,4 +144,13 @@ export const COMPARISON_PAGES = [
     excerpt:
       "A practical comparison for texture, serving style, and festive menu planning.",
   },
+] as const;
+
+export const SEO_CONTENT_LINKS = [
+  { href: "/blog", label: "Buying guides", desc: "Expert pantry tips" },
+  { href: "/compare", label: "Product comparisons", desc: "Choose with confidence" },
+  { href: "/collections/shrikhand", label: "Shrikhand collection", desc: "Flagship desserts" },
+  { href: "/collections/achaar", label: "Achaar collection", desc: "Bold pickles" },
+  { href: "/faq", label: "FAQ", desc: "Shipping & orders" },
+  { href: "/shipping", label: "Shipping policy", desc: "Delivery timelines" },
 ] as const;

@@ -9,8 +9,10 @@ import { useCatalog } from "../hooks/useCatalog";
 import { TRUST_BADGES, HOME_FAQS } from "../data/commerce";
 import { useCart } from "../context/CartContext";
 import { transitionSection } from "../lib/motion";
-import { MotionImage } from "../components/motion/MotionImage";
-import { ProductCard3D } from "../components/three/ProductCard3D";
+import { ProductImageZoom } from "../components/commerce/ProductImageZoom";
+import { ProductCard } from "../components/commerce/ProductCard";
+import { CrossSellSection } from "../components/commerce/CrossSellSection";
+import { flattenCatalog } from "../lib/catalog-utils";
 import { ImmersivePageLayout } from "../components/layout/ImmersivePageLayout";
 import { Magnetic } from "../components/immersive/Magnetic";
 import { useWishlistStore } from "../stores/wishlist";
@@ -54,6 +56,13 @@ export default function ProductDetailPage() {
       ? "Estimated delivery: 3–5 business days"
       : "Estimated delivery: 5–7 business days";
   }, [pincode]);
+
+  const crossSell = useMemo(() => {
+    if (!item || !category) return [];
+    return flattenCatalog(categories)
+      .filter((p) => p.id !== item.id && p.categoryId !== category.id)
+      .slice(0, 4);
+  }, [categories, item, category]);
 
   if (!item || !category) {
     return (
@@ -104,15 +113,8 @@ export default function ProductDetailPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={transitionSection}
         >
-          <div className="relative h-72 overflow-hidden rounded-2xl border border-white/[0.14] bg-gradient-to-br from-[#1f1110] via-[#0e1019] to-[#09090f] shadow-2xl shadow-black/45 sm:h-80 md:h-[520px] md:rounded-3xl">
-            <MotionImage
-              src={item.image}
-              alt={item.name}
-              width={1200}
-              height={900}
-              priority
-              imageClassName="object-cover"
-            />
+          <div className="relative h-72 sm:h-80 md:h-[520px]">
+            <ProductImageZoom src={item.image} alt={item.name} priority />
           </div>
         </motion.div>
 
@@ -290,35 +292,26 @@ export default function ProductDetailPage() {
         <ProductCampaignSwiper items={galleryItems} />
       </section>
 
-      {related.length > 0 && (
-        <section className="border-t border-white/[0.08] bg-white/[0.02] py-10 md:py-16">
-          <div className="mx-auto max-w-6xl px-3 sm:px-6 md:px-10">
-            <h2 className="mb-5 font-display text-xl text-white md:mb-8 md:text-2xl">
-              More from {category.title}
-            </h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((r) => (
-                <motion.div key={r.id} whileHover={{ y: -4 }}>
-                  <Link
-                    href={`/shop/${r.id}`}
-                    className="group block overflow-hidden rounded-2xl border border-white/[0.12] bg-white/[0.04] shadow-2xl shadow-black/30"
-                  >
-                    <motion.div className="h-48">
-                      <ProductCard3D image={r.image} alt={r.name} />
-                    </motion.div>
-                    <div className="p-4">
-                      <p className="font-display text-lg text-white">{r.name}</p>
-                      <p className="mt-1 font-display text-xl text-amber-300">
-                        {r.price}
-                      </p>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
+      {related.length > 0 ? (
+        <section className="commerce-section border-t border-white/[0.06]">
+          <h2 className="commerce-title mb-6">More from {category.title}</h2>
+          <div className="commerce-grid-4">
+            {related.map((r, i) => (
+              <ProductCard
+                key={r.id}
+                product={{
+                  ...r,
+                  categoryId: category.id,
+                  categoryTitle: category.title,
+                }}
+                priority={i < 2}
+              />
+            ))}
           </div>
         </section>
-      )}
+      ) : null}
+
+      <CrossSellSection products={crossSell} />
 
       <RecentlyViewedSection products={recentlyViewed} />
 

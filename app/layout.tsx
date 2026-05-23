@@ -4,7 +4,7 @@ import { SITE_DEFAULT_DESCRIPTION, SITE_TITLE, OG_IMAGE_PATH } from "@/config/si
 import { Providers } from "./providers";
 import { AppShell } from "@/components/layout/AppShell";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { organizationSchema, websiteSchema } from "@/lib/seo/schema";
+import { localBusinessSchema, organizationSchema, websiteSchema } from "@/lib/seo/schema";
 import "./globals.css";
 
 const display = Cormorant_Garamond({
@@ -46,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en-IN" className={`${display.variable} ${sans.variable}`}>
       <body className="font-sans antialiased">
-        <JsonLd data={[organizationSchema(), websiteSchema()]} />
+        <JsonLd data={[organizationSchema(), localBusinessSchema(), websiteSchema()]} />
         <Providers>
           <AppShell>{children}</AppShell>
         </Providers>

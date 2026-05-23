@@ -7,22 +7,57 @@ export function organizationSchema() {
   const imageUrl = absoluteUrl(OG_IMAGE_PATH);
   return {
     "@context": "https://schema.org",
-    "@type": "FoodEstablishment",
-    "@id": `${absoluteUrl("/")}#business`,
+    "@type": "Organization",
+    "@id": `${absoluteUrl("/")}#organization`,
     name: BRAND.name,
     legalName: BRAND.company,
     description: SITE_DEFAULT_DESCRIPTION,
     url: absoluteUrl("/"),
-    telephone: `+91${BRAND.phone}`,
+    logo: imageUrl,
     image: imageUrl,
+    telephone: `+91${BRAND.phone}`,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Telhara",
       addressRegion: "Maharashtra",
       addressCountry: "IN",
     },
+  };
+}
+
+export function localBusinessSchema() {
+  const imageUrl = absoluteUrl(OG_IMAGE_PATH);
+  return {
+    "@context": "https://schema.org",
+    "@type": "FoodEstablishment",
+    "@id": `${absoluteUrl("/")}#business`,
+    name: BRAND.name,
+    description: SITE_DEFAULT_DESCRIPTION,
+    url: absoluteUrl("/"),
+    telephone: `+91${BRAND.phone}`,
+    image: imageUrl,
     priceRange: "₹₹",
     servesCuisine: "Indian vegetarian",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Telhara",
+      addressLocality: "Telhara",
+      addressRegion: "Maharashtra",
+      postalCode: "444108",
+      addressCountry: "IN",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 21.026,
+      longitude: 77.527,
+    },
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "09:00",
+      closes: "19:00",
+    },
+    parentOrganization: { "@id": `${absoluteUrl("/")}#organization` },
   };
 }
 
