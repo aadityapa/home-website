@@ -35,7 +35,7 @@ export function ProductCard({ product, priority, onQuickView }: ProductCardProps
 
   return (
     <article className="commerce-card group relative flex flex-col">
-      <div className="relative aspect-[4/5] max-h-[220px] overflow-hidden rounded-xl bg-noir-950/40 md:max-h-none md:rounded-2xl">
+      <div className="framer-surface relative aspect-[4/5] max-h-[220px] overflow-hidden rounded-xl md:max-h-none md:rounded-2xl">
         <Link href={`/shop/${product.id}`} className="block h-full w-full">
           <Image
             src={product.image}

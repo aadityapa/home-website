@@ -21,7 +21,16 @@ export default function CommerceHomePage() {
   const trending = getTrendingProducts(4);
 
   return (
-    <div className="theme-commerce bg-noir-950 text-noir-50">
+    <div className="theme-commerce relative overflow-hidden text-noir-50">
+      <div
+        className="pointer-events-none absolute inset-0 z-0 opacity-70"
+        aria-hidden
+        style={{
+          background:
+            "radial-gradient(70% 45% at 20% 12%, rgba(255,255,255,0.06), transparent 65%), radial-gradient(60% 38% at 88% 34%, rgba(251,191,36,0.08), transparent 70%)",
+        }}
+      />
+      <div className="relative z-10">
       <CommerceHero />
       <UrgencyStrip />
       <TrustBar />
@@ -46,6 +55,7 @@ export default function CommerceHomePage() {
       <BrandStorySection />
       <FAQSection />
       <NewsletterCTA />
+      </div>
     </div>
   );
 }

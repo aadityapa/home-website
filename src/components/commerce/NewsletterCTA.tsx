@@ -16,7 +16,7 @@ export function NewsletterCTA() {
 
   return (
     <section className="commerce-section" aria-labelledby="newsletter">
-      <div className="commerce-banner rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/15 via-transparent to-violet-900/10 p-4 md:rounded-3xl md:p-14">
+      <div className="framer-surface commerce-banner rounded-2xl bg-gradient-to-br from-amber-500/15 via-transparent to-violet-900/10 p-4 md:rounded-3xl md:p-14">
         <SectionHeader
           id="newsletter"
           eyebrow="Stay in the loop"

@@ -22,7 +22,7 @@ export function ProductStorySection() {
             ))}
           </ul>
         </div>
-        <div className="relative aspect-[4/2.6] overflow-hidden rounded-xl border border-white/10 md:aspect-[4/3] md:rounded-2xl">
+        <div className="framer-surface relative aspect-[4/2.6] overflow-hidden rounded-xl md:aspect-[4/3] md:rounded-2xl">
           <Image
             src="/images/aam-ka-achar.png"
             alt="Handcrafted achaar"
@@ -39,7 +39,7 @@ export function ProductStorySection() {
 export function LifestyleBanner() {
   return (
     <section className="commerce-section" aria-label="Campaign banner">
-      <div className="commerce-banner relative overflow-hidden rounded-2xl border border-white/10 md:rounded-3xl">
+      <div className="framer-surface commerce-banner relative overflow-hidden rounded-2xl md:rounded-3xl">
         <Image
           src={LIFESTYLE_CAMPAIGN.image}
           alt=""
@@ -47,7 +47,7 @@ export function LifestyleBanner() {
           sizes="100vw"
           className="object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/62 via-black/34 to-transparent" />
         <div className="relative z-10 flex max-w-xl flex-col gap-2.5 p-4 md:gap-4 md:p-14">
           <p className="font-sans text-[9px] uppercase tracking-[0.14em] text-amber-300/90 md:text-[11px] md:tracking-[0.38em]">
             {LIFESTYLE_CAMPAIGN.eyebrow}

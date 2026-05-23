@@ -10,7 +10,7 @@ export function TestimonialsSection() {
         {TESTIMONIALS.map((t) => (
           <blockquote
             key={t.id}
-            className="rounded-xl border border-white/10 bg-white/[0.03] p-4 md:rounded-2xl md:p-8"
+            className="framer-surface rounded-xl p-4 md:rounded-2xl md:p-8"
           >
             <p className="font-sans text-xs leading-relaxed text-noir-100/90 md:text-base">&ldquo;{t.quote}&rdquo;</p>
             <footer className="mt-4 flex items-center justify-between gap-2 md:mt-6">
@@ -40,7 +40,7 @@ export function BrandStorySection() {
             {BRAND_STORY.cta}
           </Link>
         </div>
-        <div className="rounded-xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-transparent p-5 md:rounded-2xl md:p-10">
+        <div className="framer-surface rounded-xl p-5 md:rounded-2xl md:p-10">
           <p className="font-display text-3xl text-amber-300 md:text-6xl">Since Telhara</p>
           <p className="mt-2 font-sans text-xs text-noir-200 md:mt-4 md:text-sm">Homemade · Vegetarian · FSSAI licensed</p>
         </div>
@@ -53,7 +53,7 @@ export function FAQSection() {
   return (
     <section className="commerce-section" aria-labelledby="home-faq">
       <SectionHeader id="home-faq" eyebrow="Support" title="Frequently asked questions" />
-      <div className="mx-auto max-w-3xl divide-y divide-white/10 rounded-xl border border-white/10 md:rounded-2xl">
+      <div className="framer-surface mx-auto max-w-3xl divide-y divide-white/10 rounded-xl md:rounded-2xl">
         {HOME_FAQS.map((faq) => (
           <details key={faq.question} className="group px-4 py-3.5 md:px-6 md:py-5">
             <summary className="cursor-pointer list-none font-sans text-xs font-medium text-white marker:content-none md:text-base">

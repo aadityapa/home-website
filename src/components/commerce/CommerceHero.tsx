@@ -10,7 +10,7 @@ export function CommerceHero() {
   const { skipInitial } = useMotionReady();
 
   return (
-    <section className="relative min-h-[70vh] overflow-hidden bg-noir-950 md:min-h-screen">
+    <section className="relative min-h-[70vh] overflow-hidden md:min-h-screen">
       <motion.div
         className="pointer-events-none absolute inset-0"
         aria-hidden
@@ -18,7 +18,7 @@ export function CommerceHero() {
         animate={{ opacity: 1 }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_20%,rgba(245,158,11,0.14),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,6,12,0.2)_0%,rgba(6,6,12,1)_85%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,19,32,0.18)_0%,rgba(13,16,27,0.86)_82%)]" />
       </motion.div>
 
       <motion.div
@@ -52,7 +52,7 @@ export function CommerceHero() {
         </motion.div>
 
         <div className="relative mx-auto w-full max-w-sm md:max-w-none">
-          <div className="relative aspect-[4/4.1] max-h-[48vh] overflow-hidden rounded-2xl border border-white/10 shadow-[0_24px_56px_-32px_rgba(0,0,0,0.8)] md:aspect-[4/5] md:max-h-none md:rounded-[1.75rem] md:shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)]">
+          <div className="framer-surface relative aspect-[4/4.1] max-h-[48vh] overflow-hidden rounded-2xl shadow-[0_24px_56px_-32px_rgba(0,0,0,0.8)] md:aspect-[4/5] md:max-h-none md:rounded-[1.75rem] md:shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)]">
             <Image
               src="/images/shrikhand-kesar-ilaichi.png"
               alt={`${BRAND.name} flagship shrikhand`}
@@ -62,7 +62,7 @@ export function CommerceHero() {
               className="object-cover"
             />
             <motion.div
-              className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-4 md:p-6"
+              className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent p-4 md:p-6"
               initial={skipInitial ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
