@@ -181,22 +181,19 @@ export function CartDrawer() {
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 320, damping: 34 }}
           >
-            <header className="flex items-start justify-between gap-4 border-b border-clay-200/70 px-5 pb-4 pt-5 md:px-6">
+            <header className="flex items-start justify-between gap-3 border-b border-clay-200/70 px-4 pb-3 pt-4 md:gap-4 md:px-6 md:pb-4 md:pt-5">
               <div>
                 <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-saffron-700">
                   Your basket
                 </p>
-                <h2
-                  id="cart-drawer-title"
-                  className="mt-1 font-display text-2xl text-ink"
-                >
+                <h2 id="cart-drawer-title" className="mt-1 font-display text-xl text-ink md:text-2xl">
                   {step === "cart"
                     ? "Cart"
                     : step === "checkout"
                       ? "Checkout"
                       : "Order placed"}
                 </h2>
-                <p className="mt-1 font-sans text-xs text-clay-500">
+                <p className="mt-1 font-sans text-[11px] text-clay-500 md:text-xs">
                   {itemCount > 0
                     ? `${itemCount} item${itemCount === 1 ? "" : "s"} · ${formatInr(subtotalRupees)}`
                     : "Add products from the catalogue"}
@@ -204,14 +201,14 @@ export function CartDrawer() {
               </div>
               <button
                 type="button"
-                className="focus-ring rounded-full border border-clay-200 bg-white/90 px-3 py-1.5 font-sans text-xs font-medium text-clay-600 transition hover:bg-white"
+                className="focus-ring rounded-full border border-clay-200 bg-white/90 px-2.5 py-1 font-sans text-[11px] font-medium text-clay-600 transition hover:bg-white md:px-3 md:py-1.5 md:text-xs"
                 onClick={closeCart}
               >
                 Close
               </button>
             </header>
 
-            <div className="border-b border-clay-200/50 bg-gradient-to-r from-white/90 via-saffron-50/35 to-amber-50/25 px-5 py-2.5 md:px-6">
+            <div className="border-b border-clay-200/50 bg-gradient-to-r from-white/90 via-saffron-50/35 to-amber-50/25 px-4 py-2 md:px-6 md:py-2.5">
               <ul className="flex flex-wrap items-center gap-x-4 gap-y-1 font-sans text-[10px] font-medium uppercase tracking-[0.18em] text-clay-600">
                 <li className="flex items-center gap-1.5">
                   <span className="text-emerald-600" aria-hidden>
@@ -229,11 +226,11 @@ export function CartDrawer() {
               </ul>
             </div>
 
-            <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 py-5 md:px-6">
+            <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-4 md:px-6 md:py-5">
               {step === "cart" ? (
                 <>
                   {lines.length > 0 ? (
-                    <div className="mb-4 rounded-2xl border border-saffron-200/80 bg-gradient-to-r from-saffron-50/90 to-white/90 px-4 py-3">
+                    <div className="mb-3 rounded-xl border border-saffron-200/80 bg-gradient-to-r from-saffron-50/90 to-white/90 px-3 py-2.5 md:mb-4 md:rounded-2xl md:px-4 md:py-3">
                       <p className="font-sans text-[11px] uppercase tracking-[0.22em] text-clay-500">
                         Checkout motivator
                       </p>
@@ -264,7 +261,7 @@ export function CartDrawer() {
                       and tap Add to cart.
                     </p>
                   ) : (
-                    <ul className="space-y-4">
+                    <ul className="space-y-3 md:space-y-4">
                       <AnimatePresence mode="popLayout">
                         {lines.map((line) => (
                           <m.li
@@ -274,32 +271,32 @@ export function CartDrawer() {
                             initial="hidden"
                             animate="visible"
                             exit="exit"
-                            className="flex gap-3 rounded-2xl border border-white/70 bg-white/75 p-3 shadow-sm"
+                            className="flex gap-2.5 rounded-xl border border-white/70 bg-white/75 p-2.5 shadow-sm md:gap-3 md:rounded-2xl md:p-3"
                           >
                           <img
                             src={line.image}
                             alt=""
-                            className="h-16 w-16 shrink-0 rounded-xl object-cover"
+                            className="h-14 w-14 shrink-0 rounded-lg object-cover md:h-16 md:w-16 md:rounded-xl"
                           />
                           <div className="min-w-0 flex-1">
-                            <p className="font-display text-lg leading-tight text-ink">
+                            <p className="font-display text-base leading-tight text-ink md:text-lg">
                               {line.name}
                             </p>
-                            <p className="font-sans text-[11px] uppercase tracking-wider text-clay-500">
+                            <p className="font-sans text-[10px] uppercase tracking-[0.14em] text-clay-500 md:text-[11px] md:tracking-wider">
                               {line.categoryLabel}
                               {line.unit ? ` · ${line.unit}` : ""}
                             </p>
-                            <p className="mt-1 font-sans text-sm tabular-nums text-saffron-800">
+                            <p className="mt-1 font-sans text-xs tabular-nums text-saffron-800 md:text-sm">
                               {line.priceLabel}{" "}
                               <span className="text-clay-500">
                                 × {line.quantity}
                               </span>
                             </p>
-                            <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <div className="mt-1.5 flex flex-wrap items-center gap-1.5 md:mt-2 md:gap-2">
                               <div className="inline-flex items-center rounded-full border border-clay-200 bg-white/90">
                                 <button
                                   type="button"
-                                  className="px-2.5 py-1 font-sans text-sm text-clay-700 hover:bg-clay-50"
+                                  className="px-2 py-0.5 font-sans text-xs text-clay-700 hover:bg-clay-50 md:px-2.5 md:py-1 md:text-sm"
                                   onClick={() =>
                                     setQuantity(
                                       line.productId,
@@ -310,12 +307,12 @@ export function CartDrawer() {
                                 >
                                   −
                                 </button>
-                                <span className="min-w-[2rem] text-center font-sans text-sm tabular-nums">
+                                <span className="min-w-[1.75rem] text-center font-sans text-xs tabular-nums md:min-w-[2rem] md:text-sm">
                                   {line.quantity}
                                 </span>
                                 <button
                                   type="button"
-                                  className="px-2.5 py-1 font-sans text-sm text-clay-700 hover:bg-clay-50"
+                                  className="px-2 py-0.5 font-sans text-xs text-clay-700 hover:bg-clay-50 md:px-2.5 md:py-1 md:text-sm"
                                   onClick={() =>
                                     setQuantity(
                                       line.productId,
@@ -329,7 +326,7 @@ export function CartDrawer() {
                               </div>
                               <button
                                 type="button"
-                                className="font-sans text-xs font-medium text-clay-500 underline-offset-2 hover:text-ink hover:underline"
+                                className="font-sans text-[11px] font-medium text-clay-500 underline-offset-2 hover:text-ink hover:underline md:text-xs"
                                 onClick={() => removeLine(line.productId)}
                               >
                                 Remove
@@ -345,8 +342,8 @@ export function CartDrawer() {
               ) : null}
 
               {step === "checkout" ? (
-                <div className="space-y-4">
-                  <div className="rounded-2xl border border-saffron-200/80 bg-saffron-50/90 px-4 py-3 font-sans text-xs text-clay-700">
+                <div className="space-y-3 md:space-y-4">
+                    <div className="rounded-xl border border-saffron-200/80 bg-saffron-50/90 px-3 py-2.5 font-sans text-[11px] text-clay-700 md:rounded-2xl md:px-4 md:py-3 md:text-xs">
                     <p className="font-semibold text-ink">
                       Complete your order in under 60 seconds.
                     </p>
@@ -355,7 +352,7 @@ export function CartDrawer() {
                     </p>
                   </div>
                   {payment === "online" ? (
-                    <div className="rounded-2xl border border-amber-200/80 bg-amber-50/90 px-4 py-3 font-sans text-xs leading-relaxed text-amber-950/90">
+                    <div className="rounded-xl border border-amber-200/80 bg-amber-50/90 px-3 py-2.5 font-sans text-[11px] leading-relaxed text-amber-950/90 md:rounded-2xl md:px-4 md:py-3 md:text-xs">
                       <strong className="font-semibold">Demo checkout:</strong>{" "}
                       Connect{" "}
                       <span className="font-mono text-[11px]">Razorpay</span>{" "}
@@ -373,7 +370,7 @@ export function CartDrawer() {
                       Full name
                     </span>
                     <input
-                      className="focus-ring mt-1 w-full rounded-xl border border-clay-200 bg-white/95 px-3 py-2.5 font-sans text-sm text-ink shadow-inner shadow-white/40"
+                      className="focus-ring mt-1 w-full rounded-lg border border-clay-200 bg-white/95 px-3 py-2 font-sans text-sm text-ink shadow-inner shadow-white/40 md:rounded-xl md:py-2.5"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       autoComplete="name"
@@ -384,7 +381,7 @@ export function CartDrawer() {
                       Phone (WhatsApp preferred)
                     </span>
                     <input
-                      className="focus-ring mt-1 w-full rounded-xl border border-clay-200 bg-white/95 px-3 py-2.5 font-sans text-sm text-ink shadow-inner shadow-white/40"
+                      className="focus-ring mt-1 w-full rounded-lg border border-clay-200 bg-white/95 px-3 py-2 font-sans text-sm text-ink shadow-inner shadow-white/40 md:rounded-xl md:py-2.5"
                       inputMode="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
@@ -397,7 +394,7 @@ export function CartDrawer() {
                       Delivery address
                     </span>
                     <textarea
-                      className="focus-ring mt-1 min-h-[88px] w-full resize-y rounded-xl border border-clay-200 bg-white/95 px-3 py-2.5 font-sans text-sm text-ink shadow-inner shadow-white/40"
+                      className="focus-ring mt-1 min-h-[78px] w-full resize-y rounded-lg border border-clay-200 bg-white/95 px-3 py-2 font-sans text-sm text-ink shadow-inner shadow-white/40 md:min-h-[88px] md:rounded-xl md:py-2.5"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
                       autoComplete="street-address"
@@ -408,7 +405,7 @@ export function CartDrawer() {
                       PIN code
                     </span>
                     <input
-                      className="focus-ring mt-1 w-full rounded-xl border border-clay-200 bg-white/95 px-3 py-2.5 font-sans text-sm text-ink shadow-inner shadow-white/40"
+                      className="focus-ring mt-1 w-full rounded-lg border border-clay-200 bg-white/95 px-3 py-2 font-sans text-sm text-ink shadow-inner shadow-white/40 md:rounded-xl md:py-2.5"
                       inputMode="numeric"
                       value={pincode}
                       onChange={(e) => setPincode(e.target.value)}
@@ -424,7 +421,7 @@ export function CartDrawer() {
                       {PAYMENT_OPTIONS.map((opt) => (
                         <label
                           key={opt.id}
-                          className={`flex cursor-pointer gap-3 rounded-2xl border px-3 py-2.5 font-sans text-sm transition ${
+                          className={`flex cursor-pointer gap-2.5 rounded-xl border px-3 py-2 font-sans text-xs transition md:gap-3 md:rounded-2xl md:py-2.5 md:text-sm ${
                             payment === opt.id
                               ? "border-saffron-400 bg-saffron-50/90 text-ink"
                               : "border-clay-200 bg-white/70 text-clay-700 hover:border-clay-300"
@@ -453,7 +450,7 @@ export function CartDrawer() {
                       Note (optional)
                     </span>
                     <input
-                      className="focus-ring mt-1 w-full rounded-xl border border-clay-200 bg-white/95 px-3 py-2.5 font-sans text-sm text-ink shadow-inner shadow-white/40"
+                      className="focus-ring mt-1 w-full rounded-lg border border-clay-200 bg-white/95 px-3 py-2 font-sans text-sm text-ink shadow-inner shadow-white/40 md:rounded-xl md:py-2.5"
                       value={note}
                       onChange={(e) => setNote(e.target.value)}
                       placeholder="Delivery window, batch preference…"
@@ -500,7 +497,7 @@ export function CartDrawer() {
               ) : null}
             </div>
 
-            <footer className="border-t border-clay-200/80 bg-clay-50/95 px-5 py-4 md:px-6">
+            <footer className="border-t border-clay-200/80 bg-clay-50/95 px-4 py-3 md:px-6 md:py-4">
               {step === "cart" ? (
                 <div className="flex flex-col gap-3">
                   {lines.length > 0 ? (
@@ -522,13 +519,13 @@ export function CartDrawer() {
                       <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-clay-500">
                         Subtotal
                       </p>
-                      <p className="font-display text-3xl tabular-nums text-ink">
+                      <p className="font-display text-2xl tabular-nums text-ink md:text-3xl">
                         {formatInr(subtotalRupees)}
                       </p>
                     </div>
                     <a
                       href="#contact"
-                      className="focus-ring shrink-0 rounded-full border border-clay-300 bg-white/80 px-4 py-2 font-sans text-xs font-medium text-clay-700 transition hover:border-saffron-400"
+                      className="focus-ring shrink-0 rounded-full border border-clay-300 bg-white/80 px-3 py-1.5 font-sans text-[11px] font-medium text-clay-700 transition hover:border-saffron-400 md:px-4 md:py-2 md:text-xs"
                       onClick={closeCart}
                     >
                       Enquire only

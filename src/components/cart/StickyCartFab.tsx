@@ -14,7 +14,7 @@ export function StickyCartFab() {
     <motion.button
       type="button"
       onClick={openCart}
-      className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-4 z-[55] flex h-14 w-14 items-center justify-center rounded-full border border-saffron-500/30 bg-gradient-to-br from-saffron-600 to-amber-700 text-white shadow-[0_12px_40px_-8px_rgba(180,90,20,0.45)] md:hidden"
+      className="fixed bottom-[max(0.9rem,env(safe-area-inset-bottom))] right-3 z-[55] flex h-12 w-12 items-center justify-center rounded-full border border-saffron-500/30 bg-gradient-to-br from-saffron-600 to-amber-700 text-white shadow-[0_10px_30px_-10px_rgba(180,90,20,0.45)] md:hidden"
       aria-label={`Open cart${itemCount ? `, ${itemCount} items` : ""}`}
       initial={skipInitial ? false : { scale: 0.92, opacity: 0 }}
       animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
@@ -22,7 +22,7 @@ export function StickyCartFab() {
       transition={springSoft}
     >
       <svg
-        className="h-6 w-6"
+        className="h-5 w-5 md:h-6 md:w-6"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -38,7 +38,7 @@ export function StickyCartFab() {
         <circle cx="18" cy="20" r="1" />
       </svg>
       {itemCount > 0 ? (
-        <span className="absolute -right-1 -top-1 flex h-[22px] min-w-[22px] items-center justify-center rounded-full bg-white px-1 font-sans text-[11px] font-bold tabular-nums text-saffron-800 shadow-md">
+        <span className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-white px-1 font-sans text-[10px] font-bold tabular-nums text-saffron-800 shadow-md md:h-[22px] md:min-w-[22px] md:text-[11px]">
           {itemCount > 99 ? "99+" : itemCount}
         </span>
       ) : null}

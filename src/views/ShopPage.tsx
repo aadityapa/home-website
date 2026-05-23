@@ -154,7 +154,7 @@ export default function ShopPage() {
 
       <div className="mx-auto max-w-6xl px-3 py-6 sm:px-6 sm:py-12 md:px-10">
         <p className="mb-4 font-sans text-xs text-noir-300 sm:mb-6 sm:text-sm">
-          {filtered.length} product{filtered.length !== 1 ? "s" : ""} · hover to quick add
+          {filtered.length} product{filtered.length !== 1 ? "s" : ""} · tap for quick add
         </p>
         <AnimatePresence mode="wait">
           <motion.div

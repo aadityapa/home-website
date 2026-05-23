@@ -16,7 +16,7 @@ export function NewsletterCTA() {
 
   return (
     <section className="commerce-section" aria-labelledby="newsletter">
-      <div className="commerce-banner rounded-3xl border border-amber-500/25 bg-gradient-to-br from-amber-500/15 via-transparent to-violet-900/10 p-8 md:p-14">
+      <div className="commerce-banner rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/15 via-transparent to-violet-900/10 p-4 md:rounded-3xl md:p-14">
         <SectionHeader
           id="newsletter"
           eyebrow="Stay in the loop"
@@ -24,9 +24,9 @@ export function NewsletterCTA() {
           subtitle={`Join the ${BRAND.name} list for launch alerts and kitchen stories.`}
         />
         {done ? (
-          <p className="mt-6 font-sans text-sm text-amber-200">Thank you — you&apos;re on the list.</p>
+          <p className="mt-4 font-sans text-xs text-amber-200 md:mt-6 md:text-sm">Thank you — you&apos;re on the list.</p>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-8 flex max-w-md flex-col gap-3 sm:flex-row">
+          <form onSubmit={handleSubmit} className="mt-4 flex max-w-md flex-col gap-2 md:mt-8 md:gap-3 sm:flex-row">
             <label className="sr-only" htmlFor="newsletter-email">
               Email address
             </label>
@@ -37,9 +37,9 @@ export function NewsletterCTA() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@email.com"
-              className="flex-1 rounded-full border border-white/15 bg-black/30 px-5 py-3 font-sans text-sm text-white placeholder:text-noir-400 focus:border-amber-500/50 focus:outline-none"
+              className="flex-1 rounded-full border border-white/15 bg-black/30 px-4 py-2.5 font-sans text-xs text-white placeholder:text-noir-400 focus:border-amber-500/50 focus:outline-none md:px-5 md:py-3 md:text-sm"
             />
-            <button type="submit" className="commerce-btn-primary rounded-full px-8 py-3 font-sans text-xs font-semibold uppercase tracking-[0.2em]">
+            <button type="submit" className="commerce-btn-primary rounded-full px-4 py-2.5 font-sans text-[10px] font-semibold uppercase tracking-[0.12em] md:px-8 md:py-3 md:text-xs md:tracking-[0.2em]">
               Subscribe
             </button>
           </form>
